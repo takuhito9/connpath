@@ -77,14 +77,7 @@ export default Vue.extend({
     accessGoalPage(goalId: string, goal: object) {
       this.$store.commit("setSelectingGoal", goal);
       this.$router
-        .push({
-          name: "Goal",
-          params: {
-            id: goalId,
-            // By using "fromListPageFlag", Goal.vue will know that the transition is from the list page.
-            fromListPageFlag: "1",
-          },
-        })
+        .push({ name: "Goal", params: { id: goalId } })
         .catch((err) => {
           console.log(err);
         });

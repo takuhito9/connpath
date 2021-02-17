@@ -48,8 +48,6 @@ export default Vue.extend({
               name: "Goal",
               params: {
                 id: docRef.id,
-                //  By using "newGoalFlag", Goal.vue will know that the transition is from the new creation screen.
-                newGoalFlag: "1",
               },
             });
           })
