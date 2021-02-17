@@ -41,7 +41,7 @@ pre {
 </style>
 <script lang="ts">
 import Vue from "vue";
-import { auth, db } from "@/main";
+import { auth } from "@/main";
 export default Vue.extend({
   created() {
     const vm = this;

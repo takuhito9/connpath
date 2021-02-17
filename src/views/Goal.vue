@@ -6,8 +6,11 @@
     <div class="conditionOfSuccess">
       <template v-if="goal.cos">
         <div v-for="condition in goal.cos" :key="condition.id">
+          <button @click="deleteCondition(condition.cond, goal.docId)">
+            Delete
+          </button>
           {{ condition.cond }} :
-          <template v-if="condition.stat">✅</template>
+          <template v-if="condition.stat">✅ : </template>
           <template v-else>⬜</template>
         </div>
       </template>
@@ -30,7 +33,7 @@
       <template #footer>
         <div class="con-footer">
           <vs-button
-            @click="(cosDialog = false), addCondition(cosInput)"
+            @click="(cosDialog = false), addCondition(cosInput, goal.docId)"
             transparent
           >
             Ok
@@ -53,17 +56,13 @@ import { db, firestore } from "../main";
 
 interface dataType {
   goal: object;
-
   cosDialog: boolean;
   cosInput: string;
 }
 
 export default Vue.extend({
   components: {},
-  props: {
-    newGoalFlag: String, // from "NewGoal.vue"
-    fromListPageFlag: String, // from "Home.vue"
-  },
+  props: {},
   data(): dataType {
     return {
       goal: {},
@@ -72,15 +71,14 @@ export default Vue.extend({
     };
   },
   methods: {
-    addCondition: function(condition: string) {
+    addCondition: function(condition: string, docId: string) {
       const vm = this;
       const docRef = db
         .collection("users")
         .doc(vm.$store.state.user.uid)
         .collection("goals")
-        .doc(vm.$store.state.selectingGoal.docId);
+        .doc(docId);
       console.log(docRef);
-
       docRef
         .update({
           cos: firestore.FieldValue.arrayUnion({
@@ -95,40 +93,39 @@ export default Vue.extend({
           console.log(err);
         });
     },
+    deleteCondition: function(condition: string, docId: string) {
+      const vm = this;
+      const userUId = vm.$store.state.user.uid;
+      const docRef = db
+        .collection("users")
+        .doc(userUId)
+        .collection("goals")
+        .doc(docId);
+      docRef.update({
+        cos: firestore.FieldValue.arrayRemove({
+          cond: condition,
+          stat: false,
+        }),
+      });
+    },
   },
   created() {
     const vm = this;
-    /* When you move from New to Detail page.
-        When a specific detail page is accessed without going through the list page.
-          -> Access Firebase.
-
-        When accessed from the details page.
-         -> Display it using the "selectingGoal", saved in Vuex. */
-
-    // if Access by typing in a URL, or Access by creating a new one.
-    if (true) {
-      //vm.newGoalFlag || !vm.fromListPageFlag
-      const goalId = vm.$route.params.id;
-      const docRef = db
-        .collection(`users/${vm.$store.state.user.uid}/goals`)
-        .doc(goalId);
-
-      // const documentSnapshot = docRef.get();
-      docRef.onSnapshot(function(doc) {
-        const docData = doc.data();
-        if (docData) {
-          docData.docId = goalId;
-          vm.goal = docData;
-          vm.$store.commit("setSelectingGoal", vm.goal);
-          console.log("Firebaseにアクセスしてデータを取得しました");
-        } else {
-          console.log(Error);
-        }
-      });
-    } else {
-      vm.goal = vm.$store.state.selectingGoal;
-      console.log("一覧ページから来ました");
-    }
+    const goalId = vm.$route.params.id;
+    const docRef = db
+      .collection(`users/${vm.$store.state.user.uid}/goals`)
+      .doc(goalId);
+    docRef.onSnapshot(function(doc) {
+      const docData = doc.data();
+      if (docData) {
+        docData.docId = goalId;
+        vm.goal = docData;
+        vm.$store.commit("setSelectingGoal", vm.goal);
+        console.log(doc, "Firebaseにアクセスしてデータを取得しました");
+      } else {
+        console.log(Error);
+      }
+    });
   },
 });
 </script>
