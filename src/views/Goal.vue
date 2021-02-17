@@ -53,6 +53,7 @@ import { db, firestore } from "../main";
 
 interface dataType {
   goal: object;
+
   cosDialog: boolean;
   cosInput: string;
 }
