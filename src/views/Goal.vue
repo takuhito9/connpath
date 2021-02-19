@@ -5,40 +5,78 @@
 
     <div class="conditionOfSuccess">
       <template v-if="goal.cos">
-        <div v-for="condition in goal.cos" :key="condition.id">
-          <button @click="deleteCondition(condition.cond, goal.docId)">
-            Delete
+        <div v-for="(condition, index) in goal.cos" :key="condition.id">
+          <button @click="deleteCondition(condition, goal.docId)">
+            🗑
+          </button>
+          <button @click="showUpdateCondition(condition.cond, index)">
+            🖋
           </button>
           {{ condition.cond }} :
-          <template v-if="condition.stat">✅ : </template>
+          <template v-if="condition.cmplt">✅ : </template>
           <template v-else>⬜</template>
         </div>
       </template>
       <template v-else>
         <p>Not Exist Condition of Success</p>
       </template>
-      <button @click="cosDialog = !cosDialog">Add Condition of Success</button>
+      <button @click="cosAddDialog = !cosAddDialog">
+        ➕
+      </button>
     </div>
-    <!-- Dialog -->
-    <vs-dialog width="300px" not-center v-model="cosDialog">
+
+    <!-- Update Conditon of Dialog -->
+    <vs-dialog width="" not-center v-model="cosUpdateDialog">
       <template #header>
-        <h4 class="not-margin">Input Condition of Success</h4>
+        <h4 class="not-margin">
+          <p>{{ cosUpdateBaseInput }}</p>
+        </h4>
       </template>
       <div class="con-content">
         <vs-input
-          v-model="cosInput"
+          v-model="cosUpdateNewInput"
           placeholder="condition of success"
         ></vs-input>
       </div>
       <template #footer>
         <div class="con-footer">
           <vs-button
-            @click="(cosDialog = false), addCondition(cosInput, goal.docId)"
+            @click="
+              (cosUpdateDialog = false), updateCondition(cosUpdateNewInput, nth)
+            "
             transparent
           >
             Ok
           </vs-button>
-          <vs-button @click="cosDialog = false" dark transparent>
+          <vs-button @click="cosUpdateDialog = false" dark transparent>
+            Cancel
+          </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
+
+    <!-- Add Conditon of Dialog -->
+    <vs-dialog width="300px" not-center v-model="cosAddDialog">
+      <template #header>
+        <h4 class="not-margin">Input Condition of Success</h4>
+      </template>
+      <div class="con-content">
+        <vs-input
+          v-model="cosAddInput"
+          placeholder="condition of success"
+        ></vs-input>
+      </div>
+      <template #footer>
+        <div class="con-footer">
+          <vs-button
+            @click="
+              (cosAddDialog = false), addCondition(cosAddInput, goal.docId)
+            "
+            transparent
+          >
+            Ok
+          </vs-button>
+          <vs-button @click="cosAddDialog = false" dark transparent>
             Cancel
           </vs-button>
         </div>
@@ -46,7 +84,7 @@
     </vs-dialog>
 
     <pre>goal: {{ goal }}</pre>
-    <pre>selectingGoal :{{ $store.state.selectingGoal }}</pre>
+    <!-- <pre>selectingGoal :{{ $store.state.selectingGoal }}</pre> -->
   </div>
 </template>
 
@@ -56,8 +94,12 @@ import { db, firestore } from "../main";
 
 interface dataType {
   goal: object;
-  cosDialog: boolean;
-  cosInput: string;
+  cosAddDialog: boolean;
+  cosAddInput: string;
+  cosUpdateDialog: boolean;
+  cosUpdateBaseInput: string;
+  cosUpdateNewInput: string;
+  nth: number;
 }
 
 export default Vue.extend({
@@ -66,12 +108,16 @@ export default Vue.extend({
   data(): dataType {
     return {
       goal: {},
-      cosDialog: false,
-      cosInput: "",
+      cosAddDialog: false,
+      cosAddInput: "",
+      cosUpdateDialog: false,
+      cosUpdateBaseInput: "",
+      cosUpdateNewInput: "",
+      nth: 0,
     };
   },
   methods: {
-    addCondition: function(condition: string, docId: string) {
+    addCondition: function(cond: string, docId: string) {
       const vm = this;
       const docRef = db
         .collection("users")
@@ -82,7 +128,7 @@ export default Vue.extend({
       docRef
         .update({
           cos: firestore.FieldValue.arrayUnion({
-            cond: condition,
+            cond: cond,
             stat: false,
           }),
         })
@@ -102,11 +148,33 @@ export default Vue.extend({
         .collection("goals")
         .doc(docId);
       docRef.update({
-        cos: firestore.FieldValue.arrayRemove({
-          cond: condition,
-          stat: false,
-        }),
+        cos: firestore.FieldValue.arrayRemove(condition),
       });
+    },
+    showUpdateCondition: function(cond: string, index: number) {
+      this.cosUpdateDialog = true;
+      this.cosUpdateBaseInput = cond;
+      this.nth = index;
+    },
+    updateCondition: function(cond: string, nth: number) {
+      const vm = this;
+      const docId = vm.goal.docId;
+      const userUId = vm.$store.state.user.uid;
+      const docRef = db
+        .collection("users")
+        .doc(userUId)
+        .collection("goals")
+        .doc(docId);
+      let originalCos = vm.goal.cos;
+      originalCos[nth] = { cond: cond, cmplt: false };
+
+      docRef
+        .update({ cos: originalCos })
+        .then((el) => {
+          console.log(el);
+          vm.cosUpdateNewInput = "";
+        })
+        .catch((err) => console.log(err));
     },
   },
   created() {
@@ -121,7 +189,7 @@ export default Vue.extend({
         docData.docId = goalId;
         vm.goal = docData;
         vm.$store.commit("setSelectingGoal", vm.goal);
-        console.log(doc, "Firebaseにアクセスしてデータを取得しました");
+        console.log("Firebaseにアクセスしてデータを取得しました");
       } else {
         console.log(Error);
       }
