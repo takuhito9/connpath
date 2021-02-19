@@ -119,11 +119,8 @@ export default Vue.extend({
   methods: {
     addCondition: function(cond: string, docId: string) {
       const vm = this;
-      const docRef = db
-        .collection("users")
-        .doc(vm.$store.state.user.uid)
-        .collection("goals")
-        .doc(docId);
+      const userUId = vm.$store.state.user.uid;
+      const docRef = db.doc(`users/${userUId}/goals/${docId}`);
       console.log(docRef);
       docRef
         .update({
@@ -139,16 +136,12 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteCondition: function(condition: string, docId: string) {
+    deleteCondition: function(cond: string, docId: string) {
       const vm = this;
       const userUId = vm.$store.state.user.uid;
-      const docRef = db
-        .collection("users")
-        .doc(userUId)
-        .collection("goals")
-        .doc(docId);
+      const docRef = db.doc(`users/${userUId}/goals/${docId}`);
       docRef.update({
-        cos: firestore.FieldValue.arrayRemove(condition),
+        cos: firestore.FieldValue.arrayRemove(cond),
       });
     },
     showUpdateCondition: function(cond: string, index: number) {
@@ -160,11 +153,7 @@ export default Vue.extend({
       const vm = this;
       const docId = vm.goal.docId;
       const userUId = vm.$store.state.user.uid;
-      const docRef = db
-        .collection("users")
-        .doc(userUId)
-        .collection("goals")
-        .doc(docId);
+      const docRef = db.doc(`users/${userUId}/goals/${docId}`);
       let originalCos = vm.goal.cos;
       originalCos[nth] = { cond: cond, cmplt: false };
 
@@ -180,9 +169,7 @@ export default Vue.extend({
   created() {
     const vm = this;
     const goalId = vm.$route.params.id;
-    const docRef = db
-      .collection(`users/${vm.$store.state.user.uid}/goals`)
-      .doc(goalId);
+    const docRef = db.doc(`users/${vm.$store.state.user.uid}/goals/${goalId}`);
     docRef.onSnapshot(function(doc) {
       const docData = doc.data();
       if (docData) {
