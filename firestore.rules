@@ -15,9 +15,11 @@ service cloud.firestore {
       
       match /goals/{goalID}{
       	 allow read, write: if isUserAuthenticated(userID);
+
+         match /tasks/{taskId}{
+           allow read, write: if isUserAuthenticated(userID);
+         }
       }
-
-
     }
   }
 }

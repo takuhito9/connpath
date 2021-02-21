@@ -82,7 +82,7 @@
         </div>
       </template>
     </vs-dialog>
-
+    <tasks></tasks>
     <pre>goal: {{ goal }}</pre>
     <!-- <pre>selectingGoal :{{ $store.state.selectingGoal }}</pre> -->
   </div>
@@ -90,10 +90,26 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { observable } from "vue/types/umd";
 import { db, firestore } from "../main";
+import tasks from "@/views/Goal/Tasks.vue";
+
+interface goalObjectType {
+  goal: string;
+  cos: Array<{
+    cond: string;
+    cmplt: boolean;
+  }>;
+  deets: string;
+  cre_at: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  docId: string;
+}
 
 interface dataType {
-  goal: object;
+  goal: goalObjectType;
   cosAddDialog: boolean;
   cosAddInput: string;
   cosUpdateDialog: boolean;
@@ -103,11 +119,20 @@ interface dataType {
 }
 
 export default Vue.extend({
-  components: {},
+  components: { tasks },
   props: {},
   data(): dataType {
     return {
-      goal: {},
+      goal: {
+        goal: "",
+        cos: [],
+        deets: "",
+        cre_at: {
+          seconds: 0,
+          nanoseconds: 0,
+        },
+        docId: "",
+      },
       cosAddDialog: false,
       cosAddInput: "",
       cosUpdateDialog: false,
@@ -126,11 +151,12 @@ export default Vue.extend({
         .update({
           cos: firestore.FieldValue.arrayUnion({
             cond: cond,
-            stat: false,
+            cmplt: false,
           }),
         })
         .then((result) => {
           console.log(result);
+          vm.cosAddInput = "";
         })
         .catch((err) => {
           console.log(err);
@@ -156,7 +182,6 @@ export default Vue.extend({
       const docRef = db.doc(`users/${userUId}/goals/${docId}`);
       let originalCos = vm.goal.cos;
       originalCos[nth] = { cond: cond, cmplt: false };
-
       docRef
         .update({ cos: originalCos })
         .then((el) => {
@@ -174,7 +199,7 @@ export default Vue.extend({
       const docData = doc.data();
       if (docData) {
         docData.docId = goalId;
-        vm.goal = docData;
+        vm.goal = docData as goalObjectType;
         vm.$store.commit("setSelectingGoal", vm.goal);
         console.log("Firebaseにアクセスしてデータを取得しました");
       } else {
