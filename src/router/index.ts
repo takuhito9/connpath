@@ -6,6 +6,11 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/Editor',
+    name: 'Editor',
+    component:()=>import('@/components/Editor.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,
@@ -21,6 +26,21 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Goal.vue'),
     props: true
   },
+  {
+    path: '/goal/:goalId/NewTask',
+    name: 'NewTask',
+    component:() => import('../views/Goal/NewTask.vue')
+  },
+    {
+    path: '/goal/:goalId/task/:taskId',
+    name: 'Task',
+    component:() => import('../views/Goal/Task.vue')
+  },
+  // {
+  //   path: '/goal/:goalId/task/:taskId/note/CreateNote',
+  //   name: 'CreateNote',
+  //   component:() => import('../views/Goal/CreateNote.vue')
+  // },
   {
     path: '/signup',
     name: 'Signup',

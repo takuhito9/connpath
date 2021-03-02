@@ -115,7 +115,7 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tile {
   border: 1px black solid;
   margin: 10px;
