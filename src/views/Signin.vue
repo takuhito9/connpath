@@ -13,6 +13,11 @@
       <h2>Google Auth</h2>
       <button @click="googleSignin">Google Sign in</button>
     </template>
+
+    <template>
+      <h2>Sign Out</h2>
+      <button @click="signOut">SignOut</button>
+    </template>
   </div>
 </template>
 
@@ -45,6 +50,18 @@ export default Vue.extend({
         })
         .catch((error) => {
           alert(error.message);
+        });
+    },
+    signOut: function() {
+      auth
+        .signOut()
+        .then((ms) => {
+          alert("サインアウトしました");
+          // Sign-out successful.
+        })
+        .catch((error) => {
+          console.log(error);
+          // An error happened.
         });
     },
     googleSignin: function() {

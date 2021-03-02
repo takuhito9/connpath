@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     user: {},
     selectingGoal: {},
+    currentTask: {},
   },
   mutations: {
     setUser(state, user) {
@@ -16,6 +17,9 @@ export default new Vuex.Store({
     },
     setSelectingGoal(state, goal) {
       state.selectingGoal = goal
+    },
+    setCurrentTask(state, task) {
+      state.currentTask = task
     }
   },
   actions: {

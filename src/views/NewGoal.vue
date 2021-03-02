@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>📈　New Goal</h1>
     <h1>👉 {{ goal }}</h1>
     <input required border v-model="goal" placeholder="Goal" /><br />
     <input border v-model="deets" placeholder="Deets" /><br />

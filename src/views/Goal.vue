@@ -1,28 +1,34 @@
 <template>
   <div>
-    <h1 class="goalTitle">{{ goal.goal }}</h1>
-    <h3>{{ goal.deets }}</h3>
+    <h2 class="goalTitle">📈 {{ goal.goal }}</h2>
+    <h3 class="deets">{{ goal.deets }}</h3>
 
-    <div class="conditionOfSuccess">
-      <template v-if="goal.cos">
+    <br />
+    <div id="conditionOfSuccess">
+      <h3>
+        📌 Condition of Success
+        <span style="cursor: pointer" @click="cosAddDialog = !cosAddDialog">
+          ➕
+        </span>
+      </h3>
+      <div v-if="goal.cos" id="conditions">
         <div v-for="(condition, index) in goal.cos" :key="condition.id">
-          <button @click="deleteCondition(condition, goal.docId)">
-            🗑
-          </button>
-          <button @click="showUpdateCondition(condition.cond, index)">
-            🖋
-          </button>
-          {{ condition.cond }} :
           <template v-if="condition.cmplt">✅ : </template>
-          <template v-else>⬜</template>
+          <template v-else>□</template>
+          <span style="position: relative"> {{ condition.cond }}</span>
+          <span style="position: absolute; right: 10%">
+            <a @click="deleteCondition(condition, goal.docId)">
+              🗑
+            </a>
+            <a @click="showUpdateCondition(condition.cond, index)">
+              🖋
+            </a>
+          </span>
         </div>
-      </template>
+      </div>
       <template v-else>
         <p>Not Exist Condition of Success</p>
       </template>
-      <button @click="cosAddDialog = !cosAddDialog">
-        ➕
-      </button>
     </div>
 
     <!-- Update Conditon of Dialog -->
@@ -83,14 +89,14 @@
       </template>
     </vs-dialog>
     <tasks></tasks>
-    <pre>goal: {{ goal }}</pre>
+    <!-- <pre>goal: {{ goal }}</pre> -->
     <!-- <pre>selectingGoal :{{ $store.state.selectingGoal }}</pre> -->
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { observable } from "vue/types/umd";
+const Vuesax = require("vuesax");
 import { db, firestore } from "../main";
 import tasks from "@/views/Goal/Tasks.vue";
 
@@ -194,7 +200,8 @@ export default Vue.extend({
   created() {
     const vm = this;
     const goalId = vm.$route.params.id;
-    const docRef = db.doc(`users/${vm.$store.state.user.uid}/goals/${goalId}`);
+    const userId = vm.$store.state.user.uid;
+    const docRef = db.doc(`users/${userId}/goals/${goalId}`);
     docRef.onSnapshot(function(doc) {
       const docData = doc.data();
       if (docData) {
@@ -210,8 +217,22 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-.conditionOfSuccess {
-  background: rgba(192, 241, 225, 0.562);
+<style lang="scss" scoped>
+.goalTitle {
+  color: #50c38f;
+  padding-left: 1em;
+  text-indent: -1em;
+}
+.deets {
+  font-weight: 500;
+  margin: 0em 0em 0em 3em;
+}
+#conditionOfSuccess {
+  text-align: left;
+  font-weight: normal;
+
+  #conditions {
+    margin: 0em 0em 0em 3em;
+  }
 }
 </style>

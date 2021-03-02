@@ -1,50 +1,37 @@
 <template>
   <div>
-    <br />
-    <button @click="taskAddDialog = !taskAddDialog">
-      ➕
-    </button>
-    <template v-if="isEmpty">
-      <h1>you need add tasks</h1>
-    </template>
+    <h3>
+      🏃🏻 Task
+      <router-link
+        style="text-decoration: none; color: rgb(44, 62, 80);"
+        :to="{
+          name: 'NewTask',
+          params: { goalId: $store.state.selectingGoal.docId },
+        }"
+      >
+        <span style="cursor: pointer;">➕</span>
+      </router-link>
+      <router-view />
+    </h3>
 
-    <template v-else>
-      <div>
-        <div v-for="task in tasks" :key="task.id">
+    <div class="grid taskMargin">
+      <template v-if="isEmpty">
+        <h2>you need add tasks</h2>
+      </template>
+
+      <template v-else>
+        <div
+          @click="accessTaskPage(task.docId, task)"
+          class="item"
+          v-for="task in tasks"
+          :key="task.id"
+        >
           <div class="tasks">
-            <h3>{{ task.task }} : {{ task.status }}</h3>
-            <h4>{{ task.fdbk }}</h4>
-            <p>{{ isEmpty }}</p>
+            <h4>{{ task.task }}</h4>
           </div>
         </div>
-      </div>
-    </template>
-
-    <!-- Add Conditon of Dialog -->
-    <vs-dialog
-      :width="dialogWidth"
-      full-screen
-      scroll
-      not-center
-      v-model="taskAddDialog"
-    >
-      <template #header>
-        <h4 class="not-margin">Input Task</h4>
       </template>
-      <div class="con-content">
-        <vs-input v-model="taskAddInput" placeholder="Task"></vs-input>
-      </div>
-      <template #footer>
-        <div class="con-footer">
-          <vs-button @click="addTask(taskAddInput)" transparent>
-            Ok
-          </vs-button>
-          <vs-button @click="taskAddDialog = false" dark transparent>
-            Cancel
-          </vs-button>
-        </div>
-      </template>
-    </vs-dialog>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -55,39 +42,19 @@ export default Vue.extend({
     return {
       tasks: {},
       isEmpty: false,
-      taskAddDialog: false,
       taskAddInput: "",
       dialogWidth: "600px",
     };
   },
   methods: {
-    addTask: function(task: string) {
-      const vm = this;
-      const userUId = vm.$store.state.user.uid;
-      const goalId = vm.$store.state.selectingGoal.docId;
-      const docRef = db.collection(`users/${userUId}/goals/${goalId}/tasks`);
-      const data = {
-        task: task,
-        cre_at: firestore.FieldValue.serverTimestamp(),
-        fdbk: {
-          pre_dfclt: 0,
-          pre_satis: 0,
-          post_satis: 0,
-          post_dfclt: 0,
-        },
-        // 0 -> in_Progress, 1-> Not Started,  2 -> Done
-        status: "in_progress",
-      };
-      docRef
-        .add(data)
-        .then((el) => {
-          console.log(el, "追加できたよ");
-        })
+    accessTaskPage(taskId: string, task: object) {
+      const goalId = this.$store.state.selectingGoal.docId;
+      this.$store.commit("setCurrentTask", task);
+      this.$router
+        .push({ name: "Task", params: { goalId: goalId, taskId: taskId } })
         .catch((err) => {
           console.log(err);
         });
-      // vm.taskAddDialog = false
-      vm.dialogWidth = "1600px";
     },
   },
   created() {
@@ -100,7 +67,7 @@ export default Vue.extend({
         in_progress -> not_started -> done
         Limit items to eight. (Give priority to in_progress.) */
     CollectionRef.orderBy("status")
-      .limit(6)
+      .limit(12)
       .get()
       .then(function(querysnapshot) {
         const dataList = querysnapshot.docs.map((doc) => ({
@@ -116,8 +83,21 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-.tasks {
-  background: rgba(100, 148, 237, 0.486);
+<style lg="scss" scoped>
+.grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.item {
+  border-radius: 10px;
+  background: rgb(235, 238, 239);
+  padding: 5px 20px;
+  margin: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.taskMargin {
+  margin: 0em 0em 0em 3em;
 }
 </style>
