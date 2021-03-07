@@ -83,8 +83,12 @@
               </span>
             </h3>
             <template v-if="task.reasons">
-              <div id="reason" v-if="task.reasons.length">
-                <div v-for="(reason, index) in task.reasons" :key="reason.id">
+              <div v-if="task.reasons.length">
+                <div
+                  id="reason"
+                  v-for="(reason, index) in task.reasons"
+                  :key="reason.id"
+                >
                   <span style="position: relative">{{ reason }}</span
                   ><span style="position: absolute; right: 20%">
                     <a @click="deleteReason(reason)">
@@ -112,8 +116,9 @@
               </span>
             </h3>
             <template v-if="task.feedbacks">
-              <div id="feedback" v-if="task.feedbacks.length">
+              <div v-if="task.feedbacks.length">
                 <div
+                  id="feedback"
                   v-for="(feedback, index) in task.feedbacks"
                   :key="feedback.id"
                 >
@@ -138,11 +143,11 @@
     </div>
 
     <div v-if="isActive == '2'">
-      <div class="board">2</div>
+      <div class="board"><Hurdles></Hurdles></div>
     </div>
 
     <div v-if="isActive == '3'">
-      <div class="board">3</div>
+      <div class="board"><Notes></Notes></div>
     </div>
 
     <!-- Update Conditon of Dialog -->
@@ -318,6 +323,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { db, firestore } from "@/main";
+import Hurdles from "@/views/Goal/Hurdle.vue";
+import Notes from "@/views/Goal/Note.vue";
 interface taskObjectType {
   task: string;
   deets: string;
@@ -367,6 +374,8 @@ interface dataType {
 }
 
 export default Vue.extend({
+  components: { Hurdles, Notes },
+
   data(): dataType {
     return {
       task: {
@@ -641,10 +650,10 @@ $status-font-size: 0.7em;
   margin: 0em 0em 0em 3em;
 }
 #reason {
-  margin: 0em 0em 0em 3em;
+  margin: 0.2em 0em 0em 3em;
 }
 #feedback {
-  margin: 0em 0em 0em 3em;
+  margin: 0.2em 0em 0em 3em;
 }
 #predict {
   text-align: right;
@@ -671,6 +680,13 @@ $status-font-size: 0.7em;
 #tabs label:hover {
   background: #4a4a4a10;
   color: rgb(41, 41, 41);
+}
+#group {
+  margin: 0em 0em 0.5em 0em;
+  background: #f4f7f8;
+  border-radius: 10px;
+  padding: 1em 1em;
+  word-break: normal;
 }
 ul {
   list-style: none;

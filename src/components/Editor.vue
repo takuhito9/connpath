@@ -1,150 +1,180 @@
 <template>
-  <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
-      <div class="menubar">
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bold() }"
-          @click="commands.bold"
-        >
-          <!-- <icon name="bold" /> -->
-          bold
-        </button>
+  <div>
+    <div class="editor">
+      <editor-menu-bar
+        :editor="editor"
+        v-slot="{ commands, isActive, getMarkAttrs }"
+      >
+        <div class="menubar">
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bold() }"
+            @click="commands.bold"
+          >
+            <!-- <icon name="bold" /> -->
+            bold
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.italic() }"
-          @click="commands.italic"
-        >
-          <!-- <icon name="italic" /> -->
-          italic
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.italic() }"
+            @click="commands.italic"
+          >
+            <!-- <icon name="italic" /> -->
+            italic
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.strike() }"
-          @click="commands.strike"
-        >
-          <!-- <icon name="strike" /> -->
-          strike
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.strike() }"
+            @click="commands.strike"
+          >
+            <!-- <icon name="strike" /> -->
+            strike
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.underline() }"
-          @click="commands.underline"
-        >
-          <!-- <icon name="underline" /> -->
-          underline
-        </button>
+          <button
+            :class="{ 'is-active': isActive.link() }"
+            class="menubar__button"
+            @click="showLinkPrompt(commands.link, getMarkAttrs('link'))"
+          >
+            <!-- <icon-link class="menubar__icon" /> -->
+            Link
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.code() }"
-          @click="commands.code"
-        >
-          <!-- <icon name="code" /> -->
-          code
-        </button>
+          <button
+            :disabled="!isActive.link()"
+            :class="{ 'is-disabled': !isActive.link() }"
+            class="menubar__button"
+            @click="removeLink(commands.link)"
+          >
+            <!-- <icon-link-off class="menubar__icon" /> -->
+            Link Off
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.paragraph() }"
-          @click="commands.paragraph"
-        >
-          <!-- <icon name="paragraph" /> -->
-          paragraph
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.underline() }"
+            @click="commands.underline"
+          >
+            <!-- <icon name="underline" /> -->
+            underline
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-          @click="commands.heading({ level: 1 })"
-        >
-          H1
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.code() }"
+            @click="commands.code"
+          >
+            <!-- <icon name="code" /> -->
+            code
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-          @click="commands.heading({ level: 2 })"
-        >
-          H2
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.paragraph() }"
+            @click="commands.paragraph"
+          >
+            <!-- <icon name="paragraph" /> -->
+            paragraph
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-          @click="commands.heading({ level: 3 })"
-        >
-          H3
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            @click="commands.heading({ level: 1 })"
+          >
+            H1
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.bullet_list() }"
-          @click="commands.bullet_list"
-        >
-          <!-- <icon name="ul" /> -->
-          ul
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            @click="commands.heading({ level: 2 })"
+          >
+            H2
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.ordered_list() }"
-          @click="commands.ordered_list"
-        >
-          <!-- <icon name="ol" /> -->
-          ol
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            @click="commands.heading({ level: 3 })"
+          >
+            H3
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.blockquote() }"
-          @click="commands.blockquote"
-        >
-          <!-- <icon name="quote" /> -->
-          quote
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.bullet_list() }"
+            @click="commands.bullet_list"
+          >
+            <!-- <icon name="ul" /> -->
+            ul
+          </button>
 
-        <button
-          class="menubar__button"
-          :class="{ 'is-active': isActive.code_block() }"
-          @click="commands.code_block"
-        >
-          <!-- <icon name="code" /> -->
-          code block
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.ordered_list() }"
+            @click="commands.ordered_list"
+          >
+            <!-- <icon name="ol" /> -->
+            ol
+          </button>
 
-        <button class="menubar__button" @click="commands.horizontal_rule">
-          <!-- <icon name="hr" /> -->
-          hr
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.blockquote() }"
+            @click="commands.blockquote"
+          >
+            <!-- <icon name="quote" /> -->
+            quote
+          </button>
 
-        <button class="menubar__button" @click="commands.undo">
-          <!-- <icon name="undo" /> -->
-          ←
-        </button>
+          <button
+            class="menubar__button"
+            :class="{ 'is-active': isActive.code_block() }"
+            @click="commands.code_block"
+          >
+            <!-- <icon name="code" /> -->
+            code block
+          </button>
 
-        <button class="menubar__button" @click="commands.redo">
-          <!-- <icon name="redo" /> -->
-          →
-        </button>
-      </div>
-    </editor-menu-bar>
+          <button class="menubar__button" @click="commands.horizontal_rule">
+            <!-- <icon name="hr" /> -->
+            hr
+          </button>
 
-    <editor-content class="editor__content" :editor="editor" />
+          <button class="menubar__button" @click="commands.undo">
+            <!-- <icon name="undo" /> -->
+            ←
+          </button>
+
+          <button class="menubar__button" @click="commands.redo">
+            <!-- <icon name="redo" /> -->
+            →
+          </button>
+        </div>
+      </editor-menu-bar>
+
+      <editor-content class="editor__content" :editor="editor" />
+    </div>
   </div>
 </template>
 
 <script>
-// import "normalize.css";
-
-// Import the basic building blocks
+import bash from "highlight.js/lib/languages/bash";
+import css from "highlight.js/lib/languages/css";
+import typescript from "highlight.js/lib/languages/typescript";
+import javascript from "highlight.js/lib/languages/javascript";
+import python from "highlight.js/lib/languages/python";
+import shell from "highlight.js/lib/languages/shell";
+import xml from "highlight.js/lib/languages/xml";
+import json from "highlight.js/lib/languages/json";
 import { Editor, EditorContent, EditorMenuBar } from "tiptap";
 import {
   Blockquote,
   CodeBlock,
+  CodeBlockHighlight,
   HardBreak,
   Heading,
   HorizontalRule,
@@ -172,6 +202,37 @@ export default {
       // Create an `Editor` instance with some default content. The editor is
       // then passed to the `EditorContent` component as a `prop`
       editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new CodeBlockHighlight({
+            languages: {
+              typescript,
+              javascript,
+              python,
+              css,
+              xml,
+              json,
+              bash,
+              shell,
+            },
+          }),
+          new HardBreak(),
+          new Heading(),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
         content: `
           <h2>
             Hi there,
@@ -194,31 +255,24 @@ export default {
             – mom
           </blockquote>
         `,
-        extensions: [
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading(),
-          new HorizontalRule(),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History(),
-        ],
       }),
     };
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
     this.editor.destroy();
+  },
+  methods: {
+    showLinkPrompt(command, attrs) {
+      // eslint-disable-next-line no-alert
+      const href = prompt("Enter the URL", attrs.href);
+      if (href !== null) {
+        command({ href });
+      }
+    },
+    removeLink(command) {
+      command({ href: null });
+    },
   },
 };
 </script>

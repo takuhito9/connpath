@@ -18,6 +18,10 @@ service cloud.firestore {
 
          match /tasks/{taskId}{
            allow read, write: if isUserAuthenticated(userID);
+
+           match /hurdles/{hurdleId}{
+             allow read, write: if isUserAuthenticated(userID);
+           }
          }
       }
     }
