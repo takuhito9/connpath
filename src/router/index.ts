@@ -6,41 +6,31 @@ Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/Editor',
-    name: 'Editor',
-    component:()=>import('@/components/Editor.vue')
-  },
-  {
     path: '/',
-    name: 'home',
-    component: Home,
+    name: 'goallist',
+    component: () => import('@/views/Goal/GoalList.vue'),
   },
   {
-    path: '/NewGoal',
-    name: "NewGoal",
-    component: () => import('../views/NewGoal.vue')
+    path: '/goalcreate',
+    name: "GoalCreate",
+    component: () => import('../views/Goal/GoalCreate.vue')
   },
   {
     path: '/goal/:id',
-    name: 'Goal',
-    component: () => import('../views/Goal.vue'),
+    name: 'GoalDetail',
+    component: () => import('../views/Goal/GoalDetail.vue'),
     props: true
   },
   {
-    path: '/goal/:goalId/NewTask',
-    name: 'NewTask',
-    component:() => import('../views/Goal/NewTask.vue')
+    path: '/goallist/:goalId/taskcreate',
+    name: 'TaskCreate',
+    component:() => import('../views/Goal/Task/TaskCreate.vue')
   },
     {
-    path: '/goal/:goalId/task/:taskId',
-    name: 'Task',
-    component:() => import('../views/Goal/Task.vue')
+    path: '/goallist/:goalId/tasklist/:taskId',
+    name: 'TaskDetail',
+    component:() => import('../views/Goal/Task/TaskDetail.vue')
   },
-  // {
-  //   path: '/goal/:goalId/task/:taskId/note/CreateNote',
-  //   name: 'CreateNote',
-  //   component:() => import('../views/Goal/CreateNote.vue')
-  // },
   {
     path: '/signup',
     name: 'Signup',

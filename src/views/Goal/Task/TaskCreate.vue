@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h4 class="goalTitle">📈 {{ $store.state.selectingGoal.goal }}</h4>
+    <h4 class="goal__title">📈 {{ $store.state.selectingGoal.goal }}</h4>
     <h2>🏃🏻New Task</h2>
     <p>Enter the new task and its details.</p>
-    <h1 id="taskTitle">👉 {{ task }}</h1>
+    <h1 id="task__title">👉 {{ task }}</h1>
 
     <input
-      class="task-input-design"
+      class="input__design"
       required
       border
       v-model="task"
       placeholder="Task"
     /><br />
     <textarea
-      class="textarea-design"
+      class="input__design"
       border
       v-model="deets"
       placeholder="Details"
@@ -29,27 +29,49 @@
 
       <div v-for="(reason, index) in reasons" :key="reason.id">
         <input
-          class="task-input-design"
+          class="input__design"
           required
           border
           v-model="reasons[index]"
           placeholder="❶ Reason"
-        /><a @click="deleteReasonForm(index)">🗑</a>
+        /><button
+          class="button__design material-icons"
+          @click="deleteReasonForm(index)"
+        >
+          delete
+        </button>
       </div>
-      <a style="margin-left: 85%;" @click="addReasonForm">➕</a>
+      <button
+        class="button__design material-icons"
+        style="margin-left: 85%;"
+        @click="addReasonForm"
+      >
+        add_circle
+      </button>
 
       <br /><br />
 
       <div v-for="(feedback, index) in feedbacks" :key="feedback.id">
         <input
-          class="task-input-design"
+          class="input__design"
           required
           border
           v-model="feedbacks[index]"
           placeholder="❷ Feedback"
-        /><a @click="deleteFeedbackForm(index)">🗑</a>
+        /><button
+          class="button__design material-icons"
+          @click="deleteFeedbackForm(index)"
+        >
+          delete
+        </button>
       </div>
-      <a style="margin-left: 85%;" @click="addFeedbackForm">➕</a>
+      <button
+        class="button__design material-icons"
+        style="margin-left: 85%;"
+        @click="addFeedbackForm"
+      >
+        add_circle
+      </button>
     </div>
 
     <div name="pre" class="predict">
@@ -100,7 +122,7 @@
       <h2>Status:{{ status }}</h2>
       <label for="0">
         <input
-          class="radio-button"
+          class="radio__button"
           type="radio"
           name="status"
           value="0"
@@ -111,7 +133,7 @@
       <br />
       <label for="1">
         <input
-          class="radio-button"
+          class="radio__button"
           type="radio"
           name="status"
           value="1"
@@ -122,7 +144,9 @@
     </div>
 
     <br />
-    <button @click="setTask">Register</button>
+    <button class="button__register material-icons" @click="setTask">
+      done
+    </button>
     <router-view></router-view>
 
     <div>
@@ -233,31 +257,21 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.goalTitle {
+.goal__title {
   color: #42b983;
 }
-#taskTitle {
+.task__title {
   padding-left: 1em;
   text-indent: -1em;
   margin: 0em 9% 1em 0em;
 }
-.task-input-design {
+.input__design {
   width: 80%;
   padding: 0.5em;
   font-size: 16px;
   border: solid 2px #e1e3e8;
   border-radius: 4px;
-  margin: 0em 0em 0em 2em;
-}
-.textarea-design {
-  width: 80%;
-  height: 60px;
-  margin: 1em 0;
-  padding: 0.5em;
-  font-size: 16px;
-  border: solid 2px #e1e3e8;
-  border-radius: 4px;
-  margin: 1em 0em 0em 2em;
+  margin: 0.5em 0em 0em 2em;
 }
 .number-input {
   padding: 0.5em;
@@ -266,12 +280,36 @@ export default Vue.extend({
   border-radius: 4px;
   margin: 0em 0em 0em 2em;
 }
-.radio-button {
+.button__design {
+  border: none;
+  background: none;
+  color: #4c4c4c;
+}
+.button__design:hover,
+.button__design:focus {
+  color: #50c38f;
+  transition: 0.2s;
+}
+.radio__button {
   height: 25px;
   width: 25px;
   cursor: pointer;
   margin-right: 10px;
   vertical-align: -7px;
   margin: 1em 1em 1em 2em;
+}
+.button__register {
+  margin: 10px 20px;
+  padding: 0.5em 3em;
+  border-radius: 20px;
+  border: 2px solid #4c4c4c5f;
+  font-weight: bold;
+  color: #4c4c4c;
+}
+.button__register:hover,
+.button__register:focus {
+  color: #f6f6f6;
+  background: #42b983;
+  transition: 0.2s;
 }
 </style>
