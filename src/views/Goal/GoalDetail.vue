@@ -1,51 +1,65 @@
 <template>
   <div>
-    <h2 class="goalTitle">📈 {{ goal.goal }}</h2>
-    <h3 class="deets">{{ goal.deets }}</h3>
+    <div class="goal">
+      <h2 class="goal__title">📈 {{ goal.goal }}</h2>
+      <h3 class="goal__detail">{{ goal.deets }}</h3>
+    </div>
 
     <br />
-    <div id="conditionOfSuccess">
-      <h3>
-        📌 Condition of Success
-        <span style="cursor: pointer" @click="cosAddDialog = !cosAddDialog">
-          ➕
+
+    <h3>
+      📌 Condition of Success
+      <button
+        @click="cosAddDialog = !cosAddDialog"
+        class="button__design material-icons"
+        style="vertical-align: -5px"
+      >
+        add_circle
+      </button>
+    </h3>
+    <div v-if="goal.cos" class="condition__content_left-margin">
+      <div v-for="(condition, index) in goal.cos" :key="condition.id">
+        <template v-if="condition.cmplt">✔ : </template>
+        <template v-else>□</template>
+        <span style="position: relative"> {{ condition.cond }}</span>
+        <span style="position: absolute; right: 10%">
+          <button
+            @click="deleteCondition(condition, goal.docId)"
+            class="button__design  material-icons"
+          >
+            delete
+          </button>
+
+          <button
+            @click="showUpdateCondition(condition.cond, index)"
+            class="button__design material-icons"
+          >
+            edit
+          </button>
         </span>
-      </h3>
-      <div v-if="goal.cos" id="conditions">
-        <div v-for="(condition, index) in goal.cos" :key="condition.id">
-          <template v-if="condition.cmplt">✅ : </template>
-          <template v-else>□</template>
-          <span style="position: relative"> {{ condition.cond }}</span>
-          <span style="position: absolute; right: 10%">
-            <a @click="deleteCondition(condition, goal.docId)">
-              🗑
-            </a>
-            <a @click="showUpdateCondition(condition.cond, index)">
-              🖋
-            </a>
-          </span>
-        </div>
       </div>
-      <template v-else>
-        <p>Not Exist Condition of Success</p>
-      </template>
     </div>
+    <template v-else>
+      <p>Not Exist Condition of Success</p>
+    </template>
+
+    <TaskList></TaskList>
 
     <!-- Update Conditon of Dialog -->
     <vs-dialog width="" not-center v-model="cosUpdateDialog">
       <template #header>
-        <h4 class="not-margin">
+        <h4>
           <p>{{ cosUpdateBaseInput }}</p>
         </h4>
       </template>
-      <div class="con-content">
+      <div>
         <vs-input
           v-model="cosUpdateNewInput"
           placeholder="condition of success"
         ></vs-input>
       </div>
       <template #footer>
-        <div class="con-footer">
+        <div>
           <vs-button
             @click="
               (cosUpdateDialog = false), updateCondition(cosUpdateNewInput, nth)
@@ -64,16 +78,16 @@
     <!-- Add Conditon of Dialog -->
     <vs-dialog width="300px" not-center v-model="cosAddDialog">
       <template #header>
-        <h4 class="not-margin">Input Condition of Success</h4>
+        <h4>Input Condition of Success</h4>
       </template>
-      <div class="con-content">
+      <div>
         <vs-input
           v-model="cosAddInput"
           placeholder="condition of success"
         ></vs-input>
       </div>
       <template #footer>
-        <div class="con-footer">
+        <div>
           <vs-button
             @click="
               (cosAddDialog = false), addCondition(cosAddInput, goal.docId)
@@ -88,7 +102,7 @@
         </div>
       </template>
     </vs-dialog>
-    <tasks></tasks>
+
     <!-- <pre>goal: {{ goal }}</pre> -->
     <!-- <pre>selectingGoal :{{ $store.state.selectingGoal }}</pre> -->
   </div>
@@ -97,8 +111,8 @@
 <script lang="ts">
 import Vue from "vue";
 const Vuesax = require("vuesax");
-import { db, firestore } from "../main";
-import tasks from "@/views/Goal/Tasks.vue";
+import { db, firestore } from "@/main";
+import TaskList from "@/views/Goal/Task/TaskList.vue";
 
 interface goalObjectType {
   goal: string;
@@ -125,7 +139,7 @@ interface dataType {
 }
 
 export default Vue.extend({
-  components: { tasks },
+  components: { TaskList },
   props: {},
   data(): dataType {
     return {
@@ -218,21 +232,26 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.goalTitle {
+.goal__title {
   color: #50c38f;
   padding-left: 1em;
   text-indent: -1em;
 }
-.deets {
+.goal__detail {
   font-weight: 500;
   margin: 0em 0em 0em 3em;
 }
-#conditionOfSuccess {
-  text-align: left;
-  font-weight: normal;
-
-  #conditions {
-    margin: 0em 0em 0em 3em;
-  }
+.condition__content_left-margin {
+  margin: 0em 0em 0em 3em;
+}
+.button__design {
+  border: none;
+  background: none;
+  color: #4c4c4c;
+}
+.button__design:hover,
+.button__design:focus {
+  color: #50c38f;
+  transition: 0.2s;
 }
 </style>

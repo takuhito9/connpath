@@ -2,7 +2,7 @@
   <div>
     <h1>User Name : {{ $store.state.user.displayName }}</h1>
     <br />
-    <router-link to="NewGoal"><button>New Goal</button></router-link>
+    <router-link to="GoalCreate"><button>GoalCreate</button></router-link>
     <router-view />
 
     <div v-if="isEmpty">
@@ -77,7 +77,7 @@ export default Vue.extend({
     accessGoalPage(goalId: string, goal: object) {
       this.$store.commit("setSelectingGoal", goal);
       this.$router
-        .push({ name: "Goal", params: { id: goalId } })
+        .push({ name: "GoalDetail", params: { id: goalId } })
         .catch((err) => {
           console.log(err);
         });

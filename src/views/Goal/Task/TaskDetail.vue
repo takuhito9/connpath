@@ -1,17 +1,30 @@
 <template>
   <div>
-    <h3 class="goalTitle">📈 {{ $store.state.selectingGoal.goal }}</h3>
+    <h3 id="goal__title">
+      <span class="material-icons" style="vertical-align: -5px; ">flag</span>
+      {{ $store.state.selectingGoal.goal }}
+    </h3>
 
     <div id="predict" name="predict">
       <h4>
-        <vs-tooltip class="float-item">
-          <span>😊 {{ task.fdbk.pre_satis }} %</span>
+        <vs-tooltip class="predict__status-horizontal">
+          <span class="material-icons" style="vertical-align: -5px;">
+            sentiment_very_satisfied
+          </span>
+          <span>{{ task.fdbk.pre_satis }} %</span>
           <template #tooltip>
             Satisfaction
           </template>
         </vs-tooltip>
-        <vs-tooltip class="float-item">
-          <span>🌋 Level {{ task.fdbk.pre_dfclt }}</span>
+
+        <vs-tooltip class="predict__status-horizontal">
+          <span
+            class="material-icons"
+            style="vertical-align: -5px; margin-left: 20px;"
+          >
+            landscape
+          </span>
+          <span> Level {{ task.fdbk.pre_dfclt }}</span>
           <template #tooltip>
             Difficulty
           </template>
@@ -20,8 +33,14 @@
     </div>
     <br />
 
-    <h2 id="taskTitle">
-      🏃🏻 {{ task.task }}
+    <h2 id="task__title">
+      <i
+        class="material-icons task__title__icon"
+        style="vertical-align: -5px; margin-left: 10px;"
+      >
+        directions_run</i
+      >
+      {{ task.task }}
       <template>
         <span v-if="task.status == 0" class="in_progress">in progress</span>
         <span v-if="task.status == 1" class="not_started">not started</span>
@@ -29,27 +48,42 @@
       </template>
     </h2>
 
-    <p id="deetsText">{{ task.deets }}</p>
-    <div id="conditionOfSuccess">
+    <p id="task__detail">{{ task.deets }}</p>
+    <div id="task__condition-of-success">
       <h3>
-        🔑 Condition of Success
-        <span @click="cosAddDialog = !cosAddDialog">
-          ➕
-        </span>
+        <i
+          class="material-icons task__condition-of-success__icon"
+          style="vertical-align: -5px; margin-left: 10px;"
+          >rule</i
+        >
+        Condition of Success
+        <button
+          class="button__design material-icons"
+          @click="cosAddDialog = !cosAddDialog"
+          style="vertical-align: -5px;"
+        >
+          add_circle
+        </button>
       </h3>
-      <div id="conditions" v-if="task.cos">
+      <div id="task__condition-of-success__list" v-if="task.cos">
         <template v-if="task.cos.length">
           <div v-for="(condition, index) in task.cos" :key="condition.id">
             <template v-if="condition.cmplt">✔</template>
             <template v-else>□</template>
             <span style="position: relative"> {{ condition.cond }}</span>
-            <span style="position: absolute; right: 20%">
-              <a @click="deleteCondition(condition)">
-                🗑
-              </a>
-              <a @click="showUpdateCondition(condition.cond, index)">
-                🖋
-              </a>
+            <span style="position: absolute; right: 11%">
+              <button
+                class="button__design material-icons button__design-right-leaning"
+                @click="deleteCondition(condition)"
+              >
+                delete
+              </button>
+              <button
+                class="button__design material-icons button__design-right-leaning"
+                @click="showUpdateCondition(condition.cond, index)"
+              >
+                edit
+              </button>
             </span>
           </div>
         </template>
@@ -72,31 +106,45 @@
       <label for="tab3">Notes</label>
     </div>
 
+    <!-- <keep-alive> -->
     <div id="contents">
       <div v-if="isActive == '1'">
-        <div class="board">
+        <div class="multi-content-board">
           <div>
             <h3>
-              ❓ Reason
-              <span @click="reasonAddDialog = !reasonAddDialog">
-                ➕
-              </span>
+              <span class="material-icons" style="vertical-align: -5px; ">
+                help_outline</span
+              >
+              Reason
+              <button
+                @click="reasonAddDialog = !reasonAddDialog"
+                class="material-icons button__design"
+                style="vertical-align: -5px;"
+              >
+                add_circle
+              </button>
             </h3>
             <template v-if="task.reasons">
               <div v-if="task.reasons.length">
                 <div
-                  id="reason"
+                  id="task__reason"
                   v-for="(reason, index) in task.reasons"
                   :key="reason.id"
                 >
                   <span style="position: relative">{{ reason }}</span
-                  ><span style="position: absolute; right: 20%">
-                    <a @click="deleteReason(reason)">
-                      🗑
-                    </a>
-                    <a @click="showUpdateReason(reason, index)">
-                      🖋
-                    </a>
+                  ><span style="position: absolute; right: 11%">
+                    <button
+                      class="button__design material-icons button__design-right-leaning"
+                      @click="deleteReason(reason)"
+                    >
+                      delete
+                    </button>
+                    <button
+                      class="button__design material-icons button__design-right-leaning"
+                      @click="showUpdateReason(reason, index)"
+                    >
+                      edit
+                    </button>
                   </span>
                 </div>
               </div>
@@ -110,26 +158,39 @@
 
           <div>
             <h3>
-              💎 Feedback
-              <span @click="feedbackAddDialog = !feedbackAddDialog">
-                ➕
-              </span>
+              <span class="material-icons" style="vertical-align: -5px;"
+                >card_giftcard</span
+              >
+              Feedback
+              <button
+                @click="feedbackAddDialog = !feedbackAddDialog"
+                class="material-icons button__design"
+                style="vertical-align: -5px;"
+              >
+                add_circle
+              </button>
             </h3>
             <template v-if="task.feedbacks">
               <div v-if="task.feedbacks.length">
                 <div
-                  id="feedback"
+                  id="task__feedback"
                   v-for="(feedback, index) in task.feedbacks"
                   :key="feedback.id"
                 >
                   <span style="position: relative">{{ feedback }}</span
-                  ><span style="position: absolute; right: 20%">
-                    <a @click="deleteFeedback(feedback)">
-                      🗑
-                    </a>
-                    <a @click="showUpdateFeedback(feedback, index)">
-                      🖋
-                    </a>
+                  ><span style="position: absolute; right: 11%">
+                    <button
+                      class="button__design material-icons button__design-right-leaning"
+                      @click="deleteFeedback(feedback)"
+                    >
+                      delete
+                    </button>
+                    <button
+                      class="button__design material-icons button__design-right-leaning"
+                      @click="showUpdateFeedback(feedback, index)"
+                    >
+                      edit
+                    </button>
                   </span>
                 </div>
               </div>
@@ -143,13 +204,13 @@
     </div>
 
     <div v-if="isActive == '2'">
-      <div class="board"><Hurdles></Hurdles></div>
+      <div class="multi-content-board"><TaskHurdleList></TaskHurdleList></div>
     </div>
 
     <div v-if="isActive == '3'">
-      <div class="board"><Notes></Notes></div>
+      <div class="multi-content-board"><Notes></Notes></div>
     </div>
-
+    <!-- </keep-alive> -->
     <!-- Update Conditon of Dialog -->
     <vs-dialog width="" not-center v-model="cosUpdateDialog">
       <template #header>
@@ -323,7 +384,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { db, firestore } from "@/main";
-import Hurdles from "@/views/Goal/Hurdle.vue";
+import TaskHurdleList from "@/views/Goal/Task/TaskHurdleList.vue";
 import Notes from "@/views/Goal/Note.vue";
 interface taskObjectType {
   task: string;
@@ -374,7 +435,7 @@ interface dataType {
 }
 
 export default Vue.extend({
-  components: { Hurdles, Notes },
+  components: { TaskHurdleList, Notes },
 
   data(): dataType {
     return {
@@ -626,40 +687,59 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-$status-font-size: 0.7em;
-.goalTitle {
+#goal__title {
   color: #42b983;
-  padding-left: 1em;
+  padding-left: 2em;
   text-indent: -1em;
-}
-#taskTitle {
-  padding-left: 1em;
-  text-indent: -1em;
-}
-
-#deetsText {
-  text-align: left;
-  font-weight: 500;
-  margin: 0em 0em 0em 3em;
-}
-#conditionOfSuccess {
-  text-align: left;
-  font-weight: normal;
-}
-#conditions {
-  margin: 0em 0em 0em 3em;
-}
-#reason {
-  margin: 0.2em 0em 0em 3em;
-}
-#feedback {
-  margin: 0.2em 0em 0em 3em;
 }
 #predict {
   text-align: right;
   font-weight: normal;
-  //   margin-left: 70%;
 }
+.predict__status-horizontal {
+  float: left;
+}
+#task__title {
+  padding-left: 2em;
+  text-indent: -1em;
+}
+#task__detail {
+  text-align: left;
+  font-weight: 500;
+  margin: 0em 1em 0em 3em;
+}
+#task__condition-of-success {
+  text-align: left;
+  font-weight: normal;
+}
+#task__condition-of-success__list {
+  margin: 0em 4em 0em 3em;
+}
+#task__reason {
+  margin: 0.2em 4em 0em 3em;
+}
+#task__feedback {
+  margin: 0.2em 4em 0em 3em;
+}
+.multi-content-board {
+  background: #4a4a4a10;
+  padding: 20px 40px 40px 40px;
+  border-radius: 0% 20px 20px 20px;
+}
+.button__design {
+  border: none;
+  background: none;
+  color: #4c4c4c;
+}
+.button__design:hover,
+.button__design:focus {
+  color: #50c38f;
+  transition: 0.2s;
+}
+ul {
+  list-style: none;
+}
+
 #tabs {
   overflow: hidden;
 }
@@ -688,25 +768,12 @@ $status-font-size: 0.7em;
   padding: 1em 1em;
   word-break: normal;
 }
-ul {
-  list-style: none;
-}
-.board {
-  background: #4a4a4a10;
-  padding: 20px 40px 40px 40px;
-  border-radius: 0% 20px 20px 20px;
-}
-.icon {
-  text-align: right;
-}
-.float-item {
-  float: left;
-}
+
 .in_progress {
   background: rgba(84, 207, 255, 0.511);
   padding: 0.3rem;
   border-radius: 10%;
-  font-size: $status-font-size;
+  font-size: 0.7em;
   vertical-align: 5px;
   white-space: nowrap;
 }
@@ -714,7 +781,7 @@ ul {
   background: rgba(134, 133, 133, 0.301);
   padding: 0.3rem;
   border-radius: 10%;
-  font-size: $status-font-size;
+  font-size: 0.7em;
   vertical-align: 5px;
   white-space: nowrap;
 }
@@ -722,7 +789,7 @@ ul {
   background: #42b983;
   padding: 0.3rem;
   border-radius: 10%;
-  font-size: $status-font-size;
+  font-size: 0.7em;
   vertical-align: 5px;
   white-space: nowrap;
 }

@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <div class="grid-container">
       <div class="sidebar">
         <div id="nav">
@@ -14,6 +18,28 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+import { auth } from "@/main";
+export default Vue.extend({
+  data() {
+    return {
+      active: true,
+    };
+  },
+  created() {
+    const vm = this;
+    auth.onAuthStateChanged(function(user) {
+      if (user) {
+        auth.onAuthStateChanged((user) => {
+          vm.$store.commit("setUser", user);
+        });
+      }
+    });
+  },
+});
+</script>
 
 <style>
 @media screen and (min-width: 480px) {
@@ -101,29 +127,4 @@ body {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-
-/* .goalTitle {
-  color: #42b983;
-} */
 </style>
-<script lang="ts">
-import Vue from "vue";
-import { auth } from "@/main";
-export default Vue.extend({
-  data() {
-    return {
-      active: true,
-    };
-  },
-  created() {
-    const vm = this;
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
-        auth.onAuthStateChanged((user) => {
-          vm.$store.commit("setUser", user);
-        });
-      }
-    });
-  },
-});
-</script>
