@@ -54,6 +54,9 @@
         </div>
 
         <button class="button__register" @click="createHurdle">Submit</button>
+        <button class="button__register" @click="closeHurdleSolutionForm">
+          Close
+        </button>
       </div>
     </div>
 
@@ -130,7 +133,7 @@
       </template>
     </div>
 
-    <pre>{{ hurdles }}</pre>
+    <!-- <pre>{{ hurdles }}</pre> -->
   </div>
 </template>
 
@@ -166,12 +169,21 @@ export default Vue.extend({
     addSolutionForm() {
       this.CreateSolutions.push({
         worked: false,
-        // cre_at: 0,
         sol: "",
       });
     },
     deleteSolutionForm(index: number) {
       this.CreateSolutions.splice(index, 1);
+    },
+    closeHurdleSolutionForm() {
+      this.CreateHurdle = "";
+      this.CreateSolutions = [
+        {
+          worked: false,
+          sol: "",
+        },
+      ];
+      this.isCreateNewHurdle = false;
     },
     createHurdle() {
       const vm = this;

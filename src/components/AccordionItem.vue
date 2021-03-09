@@ -63,13 +63,16 @@ export default {
 
 <style lang="scss" scoped>
 .accordion__item {
-  cursor: pointer;
-  padding: 10px 10px 10px 10px;
+  // cursor: pointer;
+
+  padding: 0px 0px 0px 0px;
   border-bottom: 1px solid #ebebeb;
-  position: relative;
+  // position: relative;
 }
 
 .accordion__trigger {
+  margin: 0px;
+  padding: 0px;
   display: flex;
   justify-content: space-between;
 }
@@ -85,5 +88,11 @@ export default {
 .accordion-leave-to {
   height: 0 !important;
   opacity: 0;
+}
+
+ul,
+li {
+  padding: 0px 0px 0px 0px;
+  margin: 0px;
 }
 </style>
