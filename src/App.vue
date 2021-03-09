@@ -68,7 +68,7 @@ export default Vue.extend({
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 80px 1fr;
+    grid-template-rows: 60px 1fr;
     gap: 0px 0px;
     grid-template-areas:
       "sidebar"
@@ -76,7 +76,7 @@ export default Vue.extend({
   }
   .content {
     grid-area: content;
-    margin: 3em 5em;
+    margin: 1em 5em;
   }
   .sidebar {
     grid-area: sidebar;
@@ -89,7 +89,7 @@ export default Vue.extend({
   .grid-container {
     display: grid;
     grid-template-columns: 0.7fr 1.9fr 1fr 1fr;
-    grid-template-rows: 0.1fr 1.9fr 1fr;
+    grid-template-rows: 60px 1.9fr 1fr;
     gap: 0px 0px;
     grid-template-areas:
       "sidebar . . ."
@@ -98,7 +98,7 @@ export default Vue.extend({
   }
   .content {
     grid-area: content;
-    margin: 3em 6em;
+    margin: 0em 6em;
   }
   .sidebar {
     grid-area: sidebar;
