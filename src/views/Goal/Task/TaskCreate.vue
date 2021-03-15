@@ -240,7 +240,7 @@ export default Vue.extend({
           .then(function(docRef) {
             console.log(docRef, "Document Successfully Written!!!");
             vm.$router.push({
-              name: "Task",
+              name: "TaskDetail ",
               params: {
                 goalId: goalId,
                 taskId: docRef.id,
@@ -305,6 +305,7 @@ export default Vue.extend({
   border: 2px solid #4c4c4c5f;
   font-weight: bold;
   color: #4c4c4c;
+  background: #f6f6f6;
 }
 .button__register:hover,
 .button__register:focus {

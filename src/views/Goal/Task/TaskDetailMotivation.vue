@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="task__motivation__position">
     <div>
       <h3>
-        <span class="material-icons" style="vertical-align: -5px; ">
+        <i class="material-icons" style="vertical-align: -5px; ">
           help_outline
-        </span>
+        </i>
         Reason
         <button
           @click="reasonAddDialog = !reasonAddDialog"
@@ -89,6 +89,7 @@
         <p>Not Exist Feedback</p>
       </template>
     </div>
+    <br />
 
     <!-- Update Reason -->
     <vs-dialog not-center v-model="reasonUpdateDialog">
@@ -352,6 +353,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.task__motivation__position {
+  margin: 0px 0px 0px 10px;
+}
 #task__reason {
   margin: 0.2em 4em 0em 3em;
 }

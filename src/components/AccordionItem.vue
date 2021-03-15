@@ -73,6 +73,8 @@ export default {
 .accordion__trigger {
   margin: 0px;
   padding: 0px;
+  cursor: pointer;
+
   display: flex;
   justify-content: space-between;
 }

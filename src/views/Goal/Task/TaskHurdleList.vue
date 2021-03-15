@@ -37,6 +37,11 @@
               placeholder="👉  NewSolution"
               v-model="CreateSolutions[index].sol"
             />
+            <input
+              class="input-design input-design-ref-link"
+              placeholder="🔗 URL"
+              v-model="CreateSolutions[index].ref"
+            />
             <button
               class="material-icons button__design"
               @click="deleteSolutionForm(index)"
@@ -66,52 +71,79 @@
       </template>
 
       <template v-else>
-        <div v-for="hurdle in hurdles" :key="hurdle.id">
+        <div v-for="(hurdle, hurdleIndex) in hurdles" :key="hurdle.id">
           <template>
             <div class="hurdle-solution__list">
               <Accordion>
                 <AccordionItem>
                   <!-- This slot will handle the title/header of the accordion and is the part you click on -->
                   <template slot="accordion-trigger">
-                    <ul class="hurdle-solution__list-left-space">
-                      <div>
+                    <ul>
+                      <span
+                        class="hurdle-solution__settled unresolved"
+                        v-if="hurdle.settled"
+                      >
+                        solved
+                      </span>
+                      <span
+                        class="hurdle-solution__settled solved "
+                        v-if="!hurdle.settled"
+                        @click="hurdleSolve()"
+                      >
+                        unresolved
+                      </span>
+                      <div class="hurdle-solution__title">
                         <h4>
                           {{ hurdle.hurdle }}
-                          <span>
-                            {{
-                              hurdle.cre_at.toDate().toLocaleDateString("ja-JP")
-                            }}
-                          </span>
-                          <span
-                            class="hurdle-solution__settled"
-                            v-if="hurdle.settled"
-                            >solved
-                          </span>
-                          <span
-                            class="hurdle-solution__settled"
-                            v-if="!hurdle.settled"
-                          >
-                            unresolved
-                          </span>
                         </h4>
                       </div>
                     </ul>
                   </template>
                   <!-- This slot will handle all the content that is passed to the accordion -->
                   <template slot="accordion-content">
-                    <div v-for="sol in hurdle.sols" :key="sol.id">
+                    <div v-for="(sol, solIndex) in hurdle.sols" :key="sol.id">
                       <ul>
                         <li class="solution__list">
-                          <template v-if="!sol.sol"
-                            >Not Exist Solution</template
-                          >
-                          <template v-else
-                            >{{ sol.sol }} :
-                            <span>{{ sol.worked }}</span></template
-                          >
+                          <template v-if="!sol.sol">
+                            Not Exist Solution
+                          </template>
+                          <template v-else>
+                            {{ sol.sol }}
+                            <vs-tooltip style="display: inline;">
+                              <span
+                                class="solution__userful"
+                                v-if="
+                                  hurdle.useful &&
+                                    hurdle.useful.includes(solIndex)
+                                "
+                              >
+                                ★
+                              </span>
+                              <template #tooltip>Useful</template>
+                            </vs-tooltip>
+                            <br />
+                            <a
+                              :href="sol.ref"
+                              rel="noopener"
+                              target="_blank"
+                              class="solution__ref-link"
+                              >{{ sol.ref }}</a
+                            >
+                          </template>
                         </li>
                       </ul>
                     </div>
+
+                    <template v-if="hurdle.mini_note">
+                      <hr class="hr__design" />
+                      <div class="solution__mini-note">
+                        <p>How was it resolved ?</p>
+                        <p style="padding: 0em 0em 0em 1.5em;">
+                          {{ hurdle.mini_note }}
+                        </p>
+                      </div>
+                    </template>
+
                     <button
                       class="material-icons button__design"
                       @click="deleteHurdleAndSolutions(hurdle.docId)"
@@ -124,6 +156,13 @@
                     >
                       edit
                     </button>
+                    <button
+                      v-if="!hurdle.settled"
+                      class="material-icons button__design"
+                      @click="showDoneHurdle(hurdle.docId, hurdleIndex)"
+                    >
+                      done
+                    </button>
                   </template>
                 </AccordionItem>
               </Accordion>
@@ -133,6 +172,53 @@
       </template>
     </div>
 
+    <vs-dialog v-model="doneHurdleDialog">
+      <template #header>Make the hurdle resolved.</template>
+      <div class="dialog__design">
+        <h3>
+          {{ hurdles[doneHurdleIndex].hurdle }}
+        </h3>
+        <p>
+          Choose a solution that was effective.
+          <span>{{ checkedSolutions }}</span>
+        </p>
+        <div
+          v-for="(sol, solIndex) in hurdles[doneHurdleIndex].sols"
+          :key="sol.id"
+        >
+          <ul>
+            <span>
+              <input
+                type="checkbox"
+                class="check_box"
+                :value="solIndex"
+                :id="sol.sol"
+                v-model="checkedSolutions"
+              />
+              {{ sol.sol }}
+              <br />
+              <a
+                :href="sol.ref"
+                rel="noopener"
+                target="_blank"
+                class="solution__ref-link"
+                >{{ sol.ref }}
+              </a>
+            </span>
+          </ul>
+        </div>
+        <br />
+        <template>
+          <p>Please record how you solved the problem.</p>
+          <input class="input__design" v-model="miniNote" />
+          <div>
+            <i>If you don't have enough characters, record them in a Note.</i>
+            <p><input type="checkbox" />Record the Note.</p>
+          </div>
+        </template>
+        <button class="button__register" @click="doneHurdle">Solve</button>
+      </div>
+    </vs-dialog>
     <!-- <pre>{{ hurdles }}</pre> -->
   </div>
 </template>
@@ -154,8 +240,14 @@ export default Vue.extend({
         {
           worked: false,
           sol: "",
+          ref: "",
         },
       ],
+      doneHurdleDialog: false,
+      doneHurdleIndex: 0,
+      doneHurdleDocId: "",
+      checkedSolutions: [],
+      miniNote: "",
     };
   },
   components: {
@@ -170,6 +262,7 @@ export default Vue.extend({
       this.CreateSolutions.push({
         worked: false,
         sol: "",
+        ref: "",
       });
     },
     deleteSolutionForm(index: number) {
@@ -181,6 +274,7 @@ export default Vue.extend({
         {
           worked: false,
           sol: "",
+          ref: "",
         },
       ];
       this.isCreateNewHurdle = false;
@@ -207,10 +301,44 @@ export default Vue.extend({
           vm.CreateSolutions = [
             {
               worked: false,
-              //   cre_at: 0,
               sol: "",
+              ref: "",
             },
           ];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showDoneHurdle(docId: string, index: number) {
+      this.checkedSolutions = [];
+      this.doneHurdleDialog = true;
+      this.doneHurdleIndex = index;
+      this.doneHurdleDocId = docId;
+    },
+    doneHurdle() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdleId = vm.doneHurdleDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
+      );
+      docRef
+        .set(
+          {
+            settled: true,
+            useful: vm.checkedSolutions,
+            mini_note: vm.miniNote,
+          },
+          { merge: true }
+        )
+        .then((result) => {
+          console.log(result);
+          vm.doneHurdleDialog = false;
+          vm.checkedSolutions = [];
+          vm.miniNote = "";
         })
         .catch((err) => {
           console.log(err);
@@ -292,13 +420,23 @@ h4 {
 }
 AccordionItem {
   position: relative;
+  z-index: -1;
 }
 .hurdle-solution__settled {
-  background: #42b983;
+  z-index: 10;
   color: #f6f6f6;
-  padding: 4px 12px;
-  border-radius: 10px;
+  padding: 3px 12px;
+  border-radius: 10px 0px 10px 0px;
   position: absolute;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.unresolved {
+  background: #42b983ce;
+}
+.solved {
+  background: #5b5b5b;
 }
 .hurdle-solution__grid {
   display: grid;
@@ -309,16 +447,38 @@ AccordionItem {
   margin: 0em 0em 0.5em 0em;
   background: #f4f7f8;
   border-radius: 10px;
-  padding: 1em 1em;
+  // padding: 1em 1em;
   word-break: normal;
 }
-.hurdle-solution__list-left-space {
-  padding: 0;
+.hurdle-solution__title {
+  margin: 0px;
+  padding: 2em 1.5em 1.5em 1.5em;
+}
+.solution__mini-note {
+  margin: 0px;
+  padding: 0em 4em 0em 4em;
+  text-align: left;
 }
 .solution__list {
-  margin: 0.5em 1.5em 0em 1em;
+  margin: 0em 3em 1em 3em;
   word-wrap: break-word;
   word-break: normal;
+}
+.solution__userful {
+  color: #42b983;
+}
+.solution__ref-link {
+  font-size: 14px;
+  color: gray;
+  text-decoration: none;
+}
+.solution__ref-link:hover,
+.solution__ref-link:focus {
+  color: #42b983;
+}
+.hr__design {
+  margin: 1em 4em;
+  border-top: 1px solid #cfcfcf72;
 }
 .input-design {
   width: 85%;
@@ -326,6 +486,10 @@ AccordionItem {
   font-size: 16px;
   border: solid 0px #f4f7f8;
   background: #f4f7f8;
+}
+.input-design-ref-link {
+  color: gray;
+  font-size: 14px;
 }
 .button__design {
   border: none;
@@ -350,5 +514,16 @@ AccordionItem {
   color: #f6f6f6;
   background: #42b983;
   transition: 0.2s;
+}
+.dialog__design {
+  padding: 5em;
+}
+.input__design {
+  width: 80%;
+  padding: 0.5em;
+  font-size: 16px;
+  border: solid 2px #e1e3e8;
+  border-radius: 4px;
+  margin: 0.5em 0em 0em 2em;
 }
 </style>
