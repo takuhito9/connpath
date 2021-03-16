@@ -18,9 +18,17 @@
       </h3>
       <div id="task__condition-of-success__list" v-if="cos">
         <template v-if="cos.length">
-          <div v-for="(condition, index) in cos" :key="condition.id">
-            <template v-if="condition.cmplt">✔</template>
-            <template v-else>□</template>
+          <div
+            v-for="(condition, index) in cos"
+            :key="condition.id"
+            class="task__condition-of-success__item"
+          >
+            <template v-if="condition.cmplt"
+              ><span @click="showNotYetCondition(index)">✔</span></template
+            >
+            <template v-else
+              ><span @click="showDoneCondition(index)">□</span></template
+            >
             <span style="position: relative"> {{ condition.cond }}</span>
             <span style="position: absolute; right: 11%">
               <button
@@ -46,11 +54,9 @@
 
     <!-- Update Conditon of Dialog -->
     <vs-dialog width="" not-center v-model="cosUpdateDialog">
-      <template #header>
-        <h4>
-          <p>{{ cosUpdateBaseInput }}</p>
-        </h4>
-      </template>
+      <h4>
+        <p>{{ cosUpdateBaseInput }}</p>
+      </h4>
       <div>
         <vs-input
           v-model="cosUpdateNewInput"
@@ -62,7 +68,7 @@
           <vs-button
             @click="
               (cosUpdateDialog = false),
-                updateCondition(cosUpdateNewInput, cosNth)
+                updateCondition(cosUpdateNewInput, cosUpdateNth)
             "
             transparent
           >
@@ -100,6 +106,48 @@
         </div>
       </template>
     </vs-dialog>
+
+    <!-- Done Conditon of Dialog -->
+    <vs-dialog width="300px" not-center v-model="cosDoneDialog">
+      <template #header>
+        <h4>Done ?</h4>
+      </template>
+      <div></div>
+      <template #footer>
+        <div>
+          <vs-button
+            @click="(cosDoneDialog = false), doneCondition(cosDoneNth)"
+            transparent
+          >
+            Done
+          </vs-button>
+          <vs-button @click="cosDoneDialog = false" dark transparent>
+            Cancel
+          </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
+
+    <!-- Not Yet Conditon of Dialog -->
+    <vs-dialog width="300px" not-center v-model="cosNotYetDialog">
+      <template #header>
+        <h4>Not Yet ?</h4>
+      </template>
+      <div></div>
+      <template #footer>
+        <div>
+          <vs-button
+            @click="(cosNotYetDialog = false), NotYetCondition(cosNotYetNth)"
+            transparent
+          >
+            Not Yet
+          </vs-button>
+          <vs-button @click="cosNotYetDialog = false" dark transparent>
+            Cancel
+          </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
   </div>
 </template>
 
@@ -118,7 +166,11 @@ interface dataType {
   cosUpdateDialog: boolean;
   cosUpdateBaseInput: string;
   cosUpdateNewInput: string;
-  cosNth: number;
+  cosUpdateNth: number;
+  cosDoneDialog: boolean;
+  cosDoneNth: number;
+  cosNotYetDialog: boolean;
+  cosNotYetNth: number;
 }
 
 export default Vue.extend({
@@ -133,7 +185,13 @@ export default Vue.extend({
       cosUpdateDialog: false,
       cosUpdateBaseInput: "",
       cosUpdateNewInput: "",
-      cosNth: 0,
+      cosUpdateNth: 0,
+
+      cosDoneDialog: false,
+      cosDoneNth: 0,
+
+      cosNotYetDialog: false,
+      cosNotYetNth: 0,
     };
   },
   methods: {
@@ -172,21 +230,63 @@ export default Vue.extend({
     showUpdateCondition: function(cond: string, index: number) {
       this.cosUpdateDialog = true;
       this.cosUpdateBaseInput = cond;
-      this.cosNth = index;
+      this.cosUpdateNth = index;
     },
-    updateCondition: function(cond: string, cosNth: number) {
+    updateCondition: function(cond: string, cosUpdateNth: number) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
       const userId = vm.$store.state.user.uid;
       const docRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
       let originalCos = vm.cos;
-      originalCos[cosNth] = { cond: cond, cmplt: false };
+      // Do not change the boolean value.
+      const nowCmplt = vm.cos[cosUpdateNth].cmplt;
+      originalCos[cosUpdateNth] = { cond: cond, cmplt: nowCmplt };
       docRef
         .update({ cos: originalCos })
         .then((el) => {
           console.log(el);
           vm.cosUpdateNewInput = "";
+        })
+        .catch((err) => console.log(err));
+    },
+    showDoneCondition(index: number) {
+      this.cosDoneDialog = true;
+      this.cosDoneNth = index;
+    },
+    doneCondition(cosDoneNth: number) {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const docRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
+      let originalCos = vm.cos;
+      const nowCond = vm.cos[cosDoneNth].cond;
+      originalCos[cosDoneNth] = { cond: nowCond, cmplt: true };
+      docRef
+        .update({ cos: originalCos })
+        .then((el) => {
+          console.log(el);
+        })
+        .catch((err) => console.log(err));
+    },
+    showNotYetCondition(index: number) {
+      this.cosNotYetDialog = true;
+      this.cosNotYetNth = index;
+    },
+    NotYetCondition(cosNotYetNth: number) {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const docRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
+      let originalCos = vm.cos;
+      const nowCond = vm.cos[cosNotYetNth].cond;
+      originalCos[cosNotYetNth] = { cond: nowCond, cmplt: false };
+      docRef
+        .update({ cos: originalCos })
+        .then((el) => {
+          console.log(el);
         })
         .catch((err) => console.log(err));
     },
@@ -211,5 +311,8 @@ export default Vue.extend({
 }
 #task__condition-of-success__list {
   margin: 0em 4em 0em 3em;
+}
+.task__condition-of-success__item {
+  margin: 0.5em 0em;
 }
 </style>
