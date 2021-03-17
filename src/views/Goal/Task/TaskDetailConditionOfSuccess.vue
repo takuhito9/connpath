@@ -24,16 +24,37 @@
             class="task__condition-of-success__item"
           >
             <template v-if="condition.cmplt"
-              ><span @click="showNotYetCondition(index)">✔</span></template
-            >
+              ><button
+                @click="showNotYetCondition(index)"
+                class="button__design material-icons"
+                style="vertical-align: -6px;"
+              >
+                check_box
+              </button>
+            </template>
             <template v-else
-              ><span @click="showDoneCondition(index)">□</span></template
+              ><button
+                @click="showDoneCondition(index)"
+                class="button__design material-icons"
+                style="vertical-align: -6px;"
+              >
+                indeterminate_check_box
+              </button>
+            </template>
+            <span
+              :class="{
+                doneCosStyle: condition.cmplt,
+              }"
             >
-            <span style="position: relative"> {{ condition.cond }}</span>
+              {{ condition.cond }}</span
+            >
+
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons"
+                class="button__design material-icons button__design__delete"
                 @click="deleteCondition(condition)"
+                @mouseover="deleteActive = true"
+                @mouseout="deleteActive = false"
               >
                 delete
               </button>
@@ -54,29 +75,24 @@
 
     <!-- Update Conditon of Dialog -->
     <vs-dialog width="" not-center v-model="cosUpdateDialog">
-      <h4>
-        <p>{{ cosUpdateBaseInput }}</p>
-      </h4>
+      <h4>Before change : {{ cosUpdateBaseInput }}</h4>
       <div>
-        <vs-input
-          v-model="cosUpdateNewInput"
-          placeholder="condition of success"
-        ></vs-input>
+        Before change :
+        <input v-model="cosUpdateNewInput" placeholder="condition of success" />
       </div>
       <template #footer>
         <div>
-          <vs-button
+          <button
             @click="
               (cosUpdateDialog = false),
                 updateCondition(cosUpdateNewInput, cosUpdateNth)
             "
-            transparent
           >
             Ok
-          </vs-button>
-          <vs-button @click="cosUpdateDialog = false" dark transparent>
+          </button>
+          <button @click="cosUpdateDialog = false">
             Cancel
-          </vs-button>
+          </button>
         </div>
       </template>
     </vs-dialog>
@@ -195,7 +211,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    addCondition: function(cond: string) {
+    addCondition(cond: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -217,7 +233,7 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteCondition: function(cond: string) {
+    deleteCondition(cond: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -227,12 +243,12 @@ export default Vue.extend({
         cos: firestore.FieldValue.arrayRemove(cond),
       });
     },
-    showUpdateCondition: function(cond: string, index: number) {
+    showUpdateCondition(cond: string, index: number) {
       this.cosUpdateDialog = true;
       this.cosUpdateBaseInput = cond;
       this.cosUpdateNth = index;
     },
-    updateCondition: function(cond: string, cosUpdateNth: number) {
+    updateCondition(cond: string, cosUpdateNth: number) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -298,11 +314,17 @@ export default Vue.extend({
 .button__design {
   border: none;
   background: none;
-  color: #4c4c4c;
+  color: #4f4f4f;
 }
 .button__design:hover,
 .button__design:focus {
   color: #50c38f;
+  transition: 0.2s;
+}
+
+.button__design__delete:hover,
+.button__design__delete:focus {
+  color: #d44343fb;
   transition: 0.2s;
 }
 #task__condition-of-success {
@@ -314,5 +336,9 @@ export default Vue.extend({
 }
 .task__condition-of-success__item {
   margin: 0.5em 0em;
+}
+.doneCosStyle {
+  color: #757575fb;
+  text-decoration: line-through;
 }
 </style>

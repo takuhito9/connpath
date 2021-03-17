@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Title -->
     <h3>
       <span class="material-icons" style="vertical-align: -5px;">hiking</span>
       Hurdle &
@@ -7,39 +8,45 @@
         >lightbulb</span
       >
       Solution
-      <button
-        @click="createNewHurdle"
-        class="material-icons button__design"
-        style="vertical-align: -5px;"
-      >
-        add_circle
-      </button>
     </h3>
+    <div>
+      <button
+        style="width: 93%;"
+        @click="createNewHurdle"
+        class="button__new__hurdle"
+      >
+        + Add Hurdle
+      </button>
+    </div>
+    <!-- Create New Hurdle and Solution -->
     <div v-show="isCreateNewHurdle">
       <div class="hurdle-solution-create">
         <h4>
+          <!-- Hurdle Form -->
+          <i class="material-icons" style="vertical-align: -6px;">hiking</i>
           <input
-            class="hurdle-solution-create__field input-design"
-            placeholder="👉  NewHurdle"
+            class="hurdle-solution-create__field input__design_create"
+            placeholder="Please tell me what obstacles and hurdle I need to overcome."
             v-model="CreateHurdle"
             v-once
           />
         </h4>
-
-        <div v-show="CreateHurdle">
-          <div
-            class="hurdle-solution-create__solution-field"
-            v-for="(solution, index) in CreateSolutions"
-            :key="solution.id"
-          >
+        <div
+          class="hurdle-solution-create__solution-field"
+          v-for="(solution, index) in CreateSolutions"
+          :key="solution.id"
+        >
+          <!-- Solution Form -->
+          <div class="Bracket">
             <input
-              class="input-design"
-              placeholder="👉  NewSolution"
+              class="input__design_create"
+              placeholder="Enter your solution."
               v-model="CreateSolutions[index].sol"
             />
+            <br />
             <input
-              class="input-design input-design-ref-link"
-              placeholder="🔗 URL"
+              class="input__design_create input-design-ref-link"
+              placeholder="URL of reference material."
               v-model="CreateSolutions[index].ref"
             />
             <button
@@ -49,22 +56,30 @@
               delete
             </button>
           </div>
-          <button
-            class="material-icons button__design"
-            style="margin-left: 85%;"
-            @click="addSolutionForm"
-          >
-            add_circle
-          </button>
         </div>
 
-        <button class="button__register" @click="createHurdle">Submit</button>
-        <button class="button__register" @click="closeHurdleSolutionForm">
-          Close
+        <!--  Increment Solution Buttom -->
+        <button class="button__register" @click="addSolutionForm">
+          <span class="material-icons " style="vertical-align: -6px;"
+            >lightbulb</span
+          >
+          + Add Solution
         </button>
+
+        <!-- Register Buttom -->
+        <div>
+          <button class="button__register" @click="createHurdle">Submit</button>
+          <button
+            class="button__register close__button"
+            @click="closeHurdleSolutionForm"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- Display Hurdle and Solution -->
     <div class="hurdle-solution__grid">
       <template v-if="isEmpty">
         <p>Not Exist Hurdle</p>
@@ -79,26 +94,59 @@
                   <!-- This slot will handle the title/header of the accordion and is the part you click on -->
                   <template slot="accordion-trigger">
                     <ul>
-                      <span
-                        class="hurdle-solution__settled unresolved"
+                      <!-- Hurdle Settled Status bar -->
+                      <button
+                        class="hurdle-solution__settled solved "
                         v-if="hurdle.settled"
+                        @click.stop="showSolvedToUnsolved(hurdle.docId)"
                       >
                         solved
-                      </span>
-                      <span
-                        class="hurdle-solution__settled solved "
+                      </button>
+                      <button
+                        class="hurdle-solution__settled unsolved "
                         v-if="!hurdle.settled"
-                        @click="hurdleSolve()"
+                        @click.stop=""
                       >
-                        unresolved
-                      </span>
+                        unsolved
+                      </button>
+
+                      <!-- hurdle Title and Edit, Delete Buttom -->
                       <div class="hurdle-solution__title">
                         <h4>
                           {{ hurdle.hurdle }}
+                          <vs-tooltip class="hurdle__update__tooltip">
+                            <button
+                              @click.stop="
+                                hurdleUpdateTooltip = !hurdleUpdateTooltip
+                              "
+                              class="material-icons button__design hurdle__update"
+                            >
+                              more_horiz
+                            </button>
+                            <template #tooltip>{{ hurdle.settled }}</template>
+                          </vs-tooltip>
+
+                          <button
+                            class="material-icons button__design"
+                            style="vertical-align: -6px;"
+                            @click="deleteHurdleAndSolutions(hurdle.docId)"
+                          >
+                            delete
+                          </button>
+                          <button
+                            class="material-icons button__design"
+                            style="vertical-align: -6px;"
+                            @click.stop="
+                              showUpdateHurdleTitle(hurdle.hurdle, hurdle.docId)
+                            "
+                          >
+                            edit
+                          </button>
                         </h4>
                       </div>
                     </ul>
                   </template>
+
                   <!-- This slot will handle all the content that is passed to the accordion -->
                   <template slot="accordion-content">
                     <div v-for="(sol, solIndex) in hurdle.sols" :key="sol.id">
@@ -121,6 +169,27 @@
                               </span>
                               <template #tooltip>Useful</template>
                             </vs-tooltip>
+                            <button
+                              class="material-icons button__design__delete"
+                              style="vertical-align: -6px;"
+                              @click="showDeleteSolution(sol, hurdle.docId)"
+                            >
+                              delete
+                            </button>
+                            <button
+                              class="material-icons button__design"
+                              style="vertical-align: -6px;"
+                              @click="
+                                showUpdateSolution(
+                                  sol,
+                                  hurdle.docId,
+                                  hurdleIndex,
+                                  solIndex
+                                )
+                              "
+                            >
+                              edit
+                            </button>
                             <br />
                             <a
                               :href="sol.ref"
@@ -134,6 +203,13 @@
                       </ul>
                     </div>
 
+                    <button
+                      class="button__new__hurdle"
+                      @click="showAddSolution(hurdle.docId)"
+                    >
+                      + Add Solution
+                    </button>
+
                     <template v-if="hurdle.mini_note">
                       <hr class="hr__design" />
                       <div class="solution__mini-note">
@@ -144,25 +220,15 @@
                       </div>
                     </template>
 
-                    <button
-                      class="material-icons button__design"
-                      @click="deleteHurdleAndSolutions(hurdle.docId)"
-                    >
-                      delete
-                    </button>
-                    <button
-                      class="material-icons button__design"
-                      @click="updateHurdleAndSolutions(hurdle.docId)"
-                    >
-                      edit
-                    </button>
-                    <button
-                      v-if="!hurdle.settled"
-                      class="material-icons button__design"
-                      @click="showDoneHurdle(hurdle.docId, hurdleIndex)"
-                    >
-                      done
-                    </button>
+                    <div style="padding: 0px 30px 20px 0px;">
+                      <button
+                        v-if="!hurdle.settled"
+                        class="  solved__button"
+                        @click="showDoneHurdle(hurdle.docId, hurdleIndex)"
+                      >
+                        Solved
+                      </button>
+                    </div>
                   </template>
                 </AccordionItem>
               </Accordion>
@@ -172,53 +238,129 @@
       </template>
     </div>
 
-    <vs-dialog v-model="doneHurdleDialog">
-      <template #header>Make the hurdle resolved.</template>
-      <div class="dialog__design">
-        <h3>
-          {{ hurdles[doneHurdleIndex].hurdle }}
-        </h3>
-        <p>
-          Choose a solution that was effective.
-          <span>{{ checkedSolutions }}</span>
-        </p>
-        <div
-          v-for="(sol, solIndex) in hurdles[doneHurdleIndex].sols"
-          :key="sol.id"
-        >
-          <ul>
-            <span>
-              <input
-                type="checkbox"
-                class="check_box"
-                :value="solIndex"
-                :id="sol.sol"
-                v-model="checkedSolutions"
-              />
-              {{ sol.sol }}
-              <br />
-              <a
-                :href="sol.ref"
-                rel="noopener"
-                target="_blank"
-                class="solution__ref-link"
-                >{{ sol.ref }}
-              </a>
-            </span>
-          </ul>
-        </div>
-        <br />
-        <template>
-          <p>Please record how you solved the problem.</p>
-          <input class="input__design" v-model="miniNote" />
-          <div>
-            <i>If you don't have enough characters, record them in a Note.</i>
-            <p><input type="checkbox" />Record the Note.</p>
+    <!-- Dialog done hurdle -->
+    <template v-if="hurdles[doneHurdleIndex]">
+      <vs-dialog v-model="doneHurdleDialog">
+        <div class="dialog__design">
+          <h3>
+            {{ hurdles[doneHurdleIndex].hurdle }}
+          </h3>
+          <p>
+            Choose a solution that was effective.
+            <span>{{ checkedSolutions }}</span>
+          </p>
+          <div
+            v-for="(sol, solIndex) in hurdles[doneHurdleIndex].sols"
+            :key="sol.id"
+          >
+            <ul>
+              <span>
+                <input
+                  type="checkbox"
+                  class="check_box"
+                  :value="solIndex"
+                  :id="sol.sol"
+                  v-model="checkedSolutions"
+                />
+                {{ sol.sol }}
+                <br />
+                <a
+                  :href="sol.ref"
+                  rel="noopener"
+                  target="_blank"
+                  class="solution__ref-link"
+                  >{{ sol.ref }}
+                </a>
+              </span>
+            </ul>
           </div>
-        </template>
-        <button class="button__register" @click="doneHurdle">Solve</button>
-      </div>
-    </vs-dialog>
+          <br />
+          <template>
+            <p>Please record how you solved the problem.</p>
+            <input class="input__design" v-model="miniNote" />
+            <div>
+              <i>If you don't have enough characters, record them in a Note.</i>
+              <p><input type="checkbox" />Record the Note.</p>
+            </div>
+          </template>
+
+          <button class="button__register" @click="doneHurdle">
+            👍 Solved.
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="solvedToUnsolvedDialog">
+        <div>
+          <p>
+            Solved -> un solved ?
+          </p>
+          <button class="button__register" @click="solvedToUnsolved">
+            un Solved.
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="updateHurdleTitleDialog">
+        <div>
+          <p>Current Title : {{ currentHurdleTitle }}</p>
+          <input class="input__design" v-model="updateHurdleTitleText" />
+          <button class="button__register" @click="updateHurdleTitle()">
+            Update Title
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="addSolutionDialog">
+        <div>
+          <p>Add New Solution</p>
+          <input class="input__design" v-model="addSolutionContent.sol" />
+          <input class="input__design" v-model="addSolutionContent.ref" />
+          <button class="button__register" @click="addSolution()">
+            Add Solution
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="deleteSolutionDialog">
+        <div>
+          <p>Delete Solution ?</p>
+          <button class="button__register" @click="deleteSolution()">
+            Delete
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="updateSolutionDialog">
+        <div>
+          <p>Update?</p>
+          <p>{{ updateSolutionBaseContent.sol }}</p>
+          <p>{{ updateSolutionBaseContent.ref }}</p>
+
+          <input v-model="updateSolutionNewContent.sol" />
+          <input v-model="updateSolutionNewContent.ref" />
+          <button class="button__register" @click="updateSolution()">
+            Update
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
     <!-- <pre>{{ hurdles }}</pre> -->
   </div>
 </template>
@@ -228,6 +370,89 @@ import Vue from "vue";
 import Accordion from "@/components/Accordion.vue";
 import AccordionItem from "@/components/AccordionItem.vue";
 import { db, firestore } from "@/main";
+
+// interface hurdleSolutionDataType {
+//   docId: string;
+//   hurdle: string;
+//   cre_at: {
+//     second: number;
+//     nanosecond: number;
+//   };
+//   useful?: Array<number>;
+//   settled: boolean;
+//   mini_note?: string;
+//   sols: [
+//     {
+//       ref: string;
+//       sol: string;
+//       worked: boolean;
+//     }
+//   ];
+// }
+
+interface SolutionContentType {
+  worked: boolean;
+  sol: string;
+  ref: string;
+}
+
+// interface dataType {
+//   hurdles: hurdleSolutionDataType;
+//   newHurdle: string;
+//   isEmpty: boolean;
+
+//   isCreateNewHurdle: boolean;
+//   CreateHurdle: string;
+//   CreateSolutions: SolutionContentType;
+
+//   doneHurdleDialog: boolean;
+//   doneHurdleIndex: number;
+//   doneHurdleDocId: string;
+//   checkedSolutions: [number];
+//   miniNote: string;
+
+//   hurdleUpdateTooltip: boolean;
+//   solvedToUnsolvedDialog: boolean;
+//   solvedToUnsolvedHurdleDocId: string;
+
+//   updateHurdleTitleDialog: boolean;
+//   currentHurdleTitle: string;
+//   currentHurdleDocId: string;
+//   updateHurdleTitleText: string;
+
+//   addSolutionDialog: boolean;
+//   addSolutionIndex: number;
+//   addSolutionDocId: string;
+//   addSolutionContent: {
+//     ref: string;
+//     sol: string;
+//     worked: boolean;
+//   };
+
+//   deleteSolutionDialog: boolean;
+//   deleteSolutionDocId: string;
+//   deleteSolutionContent: {
+//     ref: string;
+//     sol: string;
+//     worked: boolean;
+//   };
+
+//   updateSolutionDialog: boolean;
+//   updateHurdleDocId: string;
+//   updateHurdleNth: number;
+//   updateSolutionNth: number;
+//   updateSolutionBaseContent: {
+//     ref: string;
+//     sol: string;
+//     worked: boolean;
+//   };
+//   updateSolutionNewContent: {
+//     ref: string;
+//     sol: string;
+//     worked: boolean;
+//   };
+// }
+
 export default Vue.extend({
   data() {
     return {
@@ -248,8 +473,50 @@ export default Vue.extend({
       doneHurdleDocId: "",
       checkedSolutions: [],
       miniNote: "",
+
+      hurdleUpdateTooltip: false,
+      solvedToUnsolvedDialog: false,
+      solvedToUnsolvedHurdleDocId: "",
+
+      updateHurdleTitleDialog: false,
+      currentHurdleTitle: "",
+      currentHurdleDocId: "",
+      updateHurdleTitleText: "",
+
+      addSolutionDialog: false,
+      addSolutionIndex: 0,
+      addSolutionDocId: "",
+      addSolutionContent: {
+        ref: "",
+        sol: "",
+        worked: false,
+      },
+
+      deleteSolutionDialog: false,
+      deleteSolutionDocId: "",
+      deleteSolutionContent: {
+        ref: "",
+        sol: "",
+        worked: false,
+      },
+
+      updateSolutionDialog: false,
+      updateHurdleDocId: "",
+      updateHurdleNth: 0,
+      updateSolutionNth: 0,
+      updateSolutionBaseContent: {
+        ref: "",
+        sol: "",
+        worked: false,
+      },
+      updateSolutionNewContent: {
+        ref: "",
+        sol: "",
+        worked: false,
+      },
     };
   },
+
   components: {
     Accordion,
     AccordionItem,
@@ -310,6 +577,109 @@ export default Vue.extend({
           console.log(err);
         });
     },
+    showAddSolution(docId: string) {
+      this.addSolutionDialog = true;
+      this.addSolutionDocId = docId;
+    },
+    addSolution() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdleId = vm.addSolutionDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
+      );
+      docRef
+        .update({
+          sols: firestore.FieldValue.arrayUnion(vm.addSolutionContent),
+        })
+        .then((result) => {
+          console.log(result);
+          vm.addSolutionContent = {
+            ref: "",
+            sol: "",
+            worked: false,
+          };
+          vm.addSolutionDialog = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showDeleteSolution(content: SolutionContentType, docId: string) {
+      this.deleteSolutionDialog = true;
+      this.deleteSolutionDocId = docId;
+      this.deleteSolutionContent = content;
+    },
+    deleteSolution() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdleId = vm.deleteSolutionDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
+      );
+      docRef
+        .update({
+          sols: firestore.FieldValue.arrayRemove(vm.deleteSolutionContent),
+        })
+        .then((result) => {
+          console.log(result);
+          vm.addSolutionContent = {
+            ref: "",
+            sol: "",
+            worked: false,
+          };
+          vm.deleteSolutionDialog = false;
+          vm.deleteSolutionContent = {
+            ref: "",
+            sol: "",
+            worked: false,
+          };
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showUpdateSolution(
+      baseContent: SolutionContentType,
+      hurdleDocId: string,
+      hurdleIndex: number,
+      solutionIndex: number
+    ) {
+      this.updateSolutionDialog = true;
+      this.updateHurdleDocId = hurdleDocId;
+      this.updateHurdleNth = hurdleIndex;
+      this.updateSolutionNth = solutionIndex;
+      this.updateSolutionBaseContent = baseContent;
+    },
+    updateSolution() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdleId = vm.updateHurdleDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
+      );
+      let baseSolutions = vm.hurdles[vm.updateHurdleNth].sols;
+      baseSolutions[vm.updateSolutionNth] = vm.updateSolutionNewContent;
+      docRef
+        .update({ sols: baseSolutions })
+        .then((el) => {
+          console.log(el);
+          vm.updateSolutionDialog = false;
+          vm.updateSolutionNewContent = {
+            ref: "",
+            sol: "",
+            worked: false,
+          };
+        })
+        .catch((err) => console.log(err));
+    },
+
     showDoneHurdle(docId: string, index: number) {
       this.checkedSolutions = [];
       this.doneHurdleDialog = true;
@@ -344,14 +714,63 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    updateHurdleAndSolutions(hurdle: string) {
+    showSolvedToUnsolved(docId: string) {
+      this.solvedToUnsolvedDialog = true;
+      this.solvedToUnsolvedHurdleDocId = docId;
+    },
+    solvedToUnsolved() {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
       const userId = vm.$store.state.user.uid;
+      const hurdleId = vm.solvedToUnsolvedHurdleDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
+      );
+      docRef
+        .set(
+          {
+            settled: false,
+          },
+          { merge: true }
+        )
+        .then((result) => {
+          console.log("complete", result);
+          vm.solvedToUnsolvedDialog = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showUpdateHurdleTitle(hurdle: string, docId: string) {
+      this.updateHurdleTitleDialog = true;
+      this.currentHurdleTitle = hurdle;
+      this.currentHurdleDocId = docId;
+    },
+    updateHurdleTitle() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdle = vm.currentHurdleDocId;
       const docRef = db.doc(
         `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdle}/`
       );
+      docRef
+        .set(
+          {
+            hurdle: vm.updateHurdleTitleText,
+          },
+          { merge: true }
+        )
+        .then((result) => {
+          console.log("complete", result);
+          vm.updateHurdleTitleDialog = false;
+          vm.updateHurdleTitleText = "";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     deleteHurdleAndSolutions(hurdle: string) {
       const vm = this;
@@ -391,8 +810,12 @@ export default Vue.extend({
           docId: doc.id,
           ...doc.data(), // spread
         }));
-        console.log("Hurdle : firebaseにアクセスしました");
         vm.hurdles = dataList;
+        console.log(
+          "Hurdle : firebaseにアクセスしました",
+          "hurdlesの型は" + typeof vm.hurdles
+        );
+        console.log(vm.hurdles);
         vm.isEmpty = querysnapshot.empty;
       });
   },
@@ -425,24 +848,38 @@ AccordionItem {
 .hurdle-solution__settled {
   z-index: 10;
   color: #f6f6f6;
-  padding: 3px 12px;
+  padding: 4px 12px;
   border-radius: 10px 0px 10px 0px;
   position: absolute;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
+  box-shadow: none;
   cursor: pointer;
-}
-.unresolved {
-  background: #42b983ce;
+  border: none;
 }
 .solved {
+  background: #42b983ce;
+}
+.solved:hover,
+.solved:focus {
+  background: orange;
+  transition: 0.2s;
+}
+
+.unsolved {
   background: #5b5b5b;
+}
+.unsolved:hover,
+.unsolved:focus {
+  background: orange;
+  transition: 0.2s;
 }
 .hurdle-solution__grid {
   display: grid;
   gap: 0px 10px;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
 }
+
 .hurdle-solution__list {
   margin: 0em 0em 0.5em 0em;
   background: #f4f7f8;
@@ -453,6 +890,13 @@ AccordionItem {
 .hurdle-solution__title {
   margin: 0px;
   padding: 2em 1.5em 1.5em 1.5em;
+}
+.hurdle__update__tooltip {
+  padding: 3px 12px;
+  position: absolute;
+  right: 0;
+  top: 3px;
+  top: 3px;
 }
 .solution__mini-note {
   margin: 0px;
@@ -491,14 +935,34 @@ AccordionItem {
   color: gray;
   font-size: 14px;
 }
+.create__button {
+  color: #4c4c4c;
+  border: none;
+  background: none;
+}
+.create__button:hover,
+.create__button:focus {
+  color: #50c38f;
+  transition: 0.2s;
+}
 .button__design {
   border: none;
   background: none;
-  color: #4c4c4c;
+  color: #4c4c4c68;
 }
 .button__design:hover,
 .button__design:focus {
   color: #50c38f;
+  transition: 0.2s;
+}
+.button__design__delete {
+  border: none;
+  background: none;
+  color: #4c4c4c68;
+}
+.button__design__delete:hover,
+.button__design__delete:focus {
+  color: #d44343fb;
   transition: 0.2s;
 }
 .button__register {
@@ -515,6 +979,25 @@ AccordionItem {
   background: #42b983;
   transition: 0.2s;
 }
+.button__new__hurdle {
+  margin: 10px 20px;
+  padding: 0.5em 2em;
+  border-radius: 20px;
+  border: 2px solid #4c4c4c5f;
+  font-weight: bold;
+  color: #4c4c4c;
+}
+.button__new__hurdle:hover,
+.button__new__hurdle:focus {
+  color: #f6f6f6;
+  background: #42b983;
+  transition: 0.2s;
+}
+.close__button:hover,
+.close__button:focus {
+  background: #d44343fb;
+  transition: 0.2s;
+}
 .dialog__design {
   padding: 5em;
 }
@@ -525,5 +1008,32 @@ AccordionItem {
   border: solid 2px #e1e3e8;
   border-radius: 4px;
   margin: 0.5em 0em 0em 2em;
+}
+.input__design_create {
+  width: 80%;
+  padding: 0.5em;
+  font-size: 16px;
+  border: solid 2px #dedddd;
+  border-radius: 4px;
+  margin: 0.5em 0em 0em 2em;
+  background: #f4f7f8;
+}
+.Bracket {
+  border-left: 2px solid #dedddd;
+  // border-bottom: 2px solid #dedddd;
+}
+.solved__button {
+  padding: 0.5em 2em;
+  font-size: 16px;
+  border: solid 2px #989898;
+  border-radius: 20px;
+  display: block;
+  margin: 0 0 0 auto;
+}
+.solved__button:hover,
+.solved__button:focus {
+  background: #50c38f;
+  color: #f6f6f6;
+  transition: 0.2s;
 }
 </style>

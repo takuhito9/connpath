@@ -77,6 +77,7 @@ export default {
 
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .accordion-enter-active,

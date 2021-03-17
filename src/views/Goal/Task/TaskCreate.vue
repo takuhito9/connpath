@@ -21,11 +21,7 @@
 
     <div name="reason">
       <h2>Reason and Feedback</h2>
-      <p>
-        ❶ Reason : why you are doing this task. <br />
-        ❷ Feedback : what you will get in return for completing the task.<br />
-        Please tell us the above.
-      </p>
+      <p>❶ Reason : why you are doing this task. <br /></p>
 
       <div v-for="(reason, index) in reasons" :key="reason.id">
         <input
@@ -50,6 +46,10 @@
       </button>
 
       <br /><br />
+
+      <p>
+        ❷ Feedback : what you will get in return for completing the task.<br />
+      </p>
 
       <div v-for="(feedback, index) in feedbacks" :key="feedback.id">
         <input
@@ -240,7 +240,7 @@ export default Vue.extend({
           .then(function(docRef) {
             console.log(docRef, "Document Successfully Written!!!");
             vm.$router.push({
-              name: "TaskDetail ",
+              name: "TaskDetail",
               params: {
                 goalId: goalId,
                 taskId: docRef.id,

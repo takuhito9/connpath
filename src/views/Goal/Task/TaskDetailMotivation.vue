@@ -24,7 +24,7 @@
             <span style="position: relative">{{ reason }}</span>
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons "
+                class="button__design material-icons button__design__delete"
                 @click="deleteReason(reason)"
               >
                 delete
@@ -70,7 +70,7 @@
             <span style="position: relative">{{ feedback }}</span>
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons"
+                class="button__design material-icons button__design__delete"
                 @click="deleteFeedback(feedback)"
               >
                 delete
@@ -370,6 +370,11 @@ export default Vue.extend({
 .button__design:hover,
 .button__design:focus {
   color: #50c38f;
+  transition: 0.2s;
+}
+.button__design__delete:hover,
+.button__design__delete:focus {
+  color: #d44343fb;
   transition: 0.2s;
 }
 </style>
