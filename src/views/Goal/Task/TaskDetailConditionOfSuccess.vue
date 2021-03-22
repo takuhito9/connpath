@@ -52,7 +52,7 @@
             <span style="position: absolute; right: 11%">
               <button
                 class="button__design material-icons button__design__delete"
-                @click="deleteCondition(condition)"
+                @click="showDeleteCondition(condition)"
                 @mouseover="deleteActive = true"
                 @mouseout="deleteActive = false"
               >
@@ -123,6 +123,29 @@
       </template>
     </vs-dialog>
 
+    <!-- Delete Conditon of Dialog -->
+    <vs-dialog width="300px" not-center v-model="deleteConditionDialog">
+      <template #header>
+        <h4>Delete ?</h4>
+      </template>
+      <div></div>
+      <template #footer>
+        <div>
+          <button
+            @click="
+              (deleteConditionDialog = false), deleteCondition(cosDoneNth)
+            "
+            transparent
+          >
+            Delete
+          </button>
+          <vs-button @click="deleteConditionDialog = false" dark transparent>
+            Cancel
+          </vs-button>
+        </div>
+      </template>
+    </vs-dialog>
+
     <!-- Done Conditon of Dialog -->
     <vs-dialog width="300px" not-center v-model="cosDoneDialog">
       <template #header>
@@ -179,12 +202,18 @@ interface conditionOfSuccessType {
 interface dataType {
   cosAddDialog: boolean;
   cosAddInput: string;
+
   cosUpdateDialog: boolean;
   cosUpdateBaseInput: string;
   cosUpdateNewInput: string;
   cosUpdateNth: number;
+
+  deleteConditionDialog: boolean;
+  deleteConditionContent: object;
+
   cosDoneDialog: boolean;
   cosDoneNth: number;
+
   cosNotYetDialog: boolean;
   cosNotYetNth: number;
 }
@@ -198,6 +227,10 @@ export default Vue.extend({
     return {
       cosAddDialog: false,
       cosAddInput: "",
+
+      deleteConditionDialog: false,
+      deleteConditionContent: [],
+
       cosUpdateDialog: false,
       cosUpdateBaseInput: "",
       cosUpdateNewInput: "",
@@ -233,15 +266,20 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteCondition(cond: string) {
+    showDeleteCondition(content: object) {
+      this.deleteConditionDialog = true;
+      this.deleteConditionContent = content;
+    },
+    deleteCondition() {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
       const userId = vm.$store.state.user.uid;
       const docRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
       docRef.update({
-        cos: firestore.FieldValue.arrayRemove(cond),
+        cos: firestore.FieldValue.arrayRemove(vm.deleteConditionContent),
       });
+      vm.deleteConditionDialog = false;
     },
     showUpdateCondition(cond: string, index: number) {
       this.cosUpdateDialog = true;

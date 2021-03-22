@@ -129,7 +129,7 @@
                           <button
                             class="material-icons button__design"
                             style="vertical-align: -6px;"
-                            @click="deleteHurdleAndSolutions(hurdle.docId)"
+                            @click.stop="showDeleteHurdle(hurdle.docId)"
                           >
                             delete
                           </button>
@@ -172,7 +172,14 @@
                             <button
                               class="material-icons button__design__delete"
                               style="vertical-align: -6px;"
-                              @click="showDeleteSolution(sol, hurdle.docId)"
+                              @click="
+                                showDeleteSolution(
+                                  sol,
+                                  sol,
+                                  index,
+                                  hurdle.docId
+                                )
+                              "
                             >
                               delete
                             </button>
@@ -224,7 +231,14 @@
                       <button
                         v-if="!hurdle.settled"
                         class="  solved__button"
-                        @click="showDoneHurdle(hurdle.docId, hurdleIndex)"
+                        @click="
+                          showDoneHurdle(
+                            hurdle.docId,
+                            hurdleIndex,
+                            hurdle.mini_note,
+                            hurdle.useful
+                          )
+                        "
                       >
                         Solved
                       </button>
@@ -283,9 +297,20 @@
               <p><input type="checkbox" />Record the Note.</p>
             </div>
           </template>
-
           <button class="button__register" @click="doneHurdle">
             👍 Solved.
+          </button>
+        </div>
+      </vs-dialog>
+    </template>
+
+    <!--  -->
+    <template>
+      <vs-dialog v-model="deleteHurdleDialog">
+        <div>
+          <p>Delete Hurdle ?</p>
+          <button class="button__register" @click="deleteHurdleAndSolutions()">
+            Delete
           </button>
         </div>
       </vs-dialog>
@@ -361,7 +386,7 @@
       </vs-dialog>
     </template>
 
-    <!-- <pre>{{ hurdles }}</pre> -->
+    <pre>{{ hurdles }}</pre>
   </div>
 </template>
 
@@ -371,24 +396,28 @@ import Accordion from "@/components/Accordion.vue";
 import AccordionItem from "@/components/AccordionItem.vue";
 import { db, firestore } from "@/main";
 
-// interface hurdleSolutionDataType {
-//   docId: string;
-//   hurdle: string;
-//   cre_at: {
-//     second: number;
-//     nanosecond: number;
-//   };
-//   useful?: Array<number>;
-//   settled: boolean;
-//   mini_note?: string;
-//   sols: [
-//     {
-//       ref: string;
-//       sol: string;
-//       worked: boolean;
-//     }
-//   ];
-// }
+interface solsDataType {
+  worked: boolean;
+  sol: string;
+  ref: string;
+}
+
+interface solsDataTypeArray extends Array<solsDataType> {}
+
+interface hurdleSolutionDataType {
+  settled: boolean;
+  hurdle: string;
+  cre_at: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  useful?: Array<number>;
+  mini_note?: string;
+  sols: solsDataTypeArray;
+  docId: string;
+}
+
+interface hurdleSolutionsDataType extends Array<hurdleSolutionDataType> {}
 
 interface SolutionContentType {
   worked: boolean;
@@ -396,67 +425,90 @@ interface SolutionContentType {
   ref: string;
 }
 
-// interface dataType {
-//   hurdles: hurdleSolutionDataType;
-//   newHurdle: string;
-//   isEmpty: boolean;
+interface dataType {
+  hurdles: hurdleSolutionsDataType;
+  newHurdle: string;
+  isEmpty: boolean;
 
-//   isCreateNewHurdle: boolean;
-//   CreateHurdle: string;
-//   CreateSolutions: SolutionContentType;
+  isCreateNewHurdle: boolean;
+  CreateHurdle: string;
+  CreateSolutions: SolutionContentType[];
 
-//   doneHurdleDialog: boolean;
-//   doneHurdleIndex: number;
-//   doneHurdleDocId: string;
-//   checkedSolutions: [number];
-//   miniNote: string;
+  deleteHurdleDialog: boolean;
+  deleteHurdleDocId: string;
 
-//   hurdleUpdateTooltip: boolean;
-//   solvedToUnsolvedDialog: boolean;
-//   solvedToUnsolvedHurdleDocId: string;
+  doneHurdleDialog: boolean;
+  doneHurdleIndex: number;
+  doneHurdleDocId: string;
+  checkedSolutions: number[];
+  miniNote: string;
 
-//   updateHurdleTitleDialog: boolean;
-//   currentHurdleTitle: string;
-//   currentHurdleDocId: string;
-//   updateHurdleTitleText: string;
+  hurdleUpdateTooltip: boolean;
+  solvedToUnsolvedDialog: boolean;
+  solvedToUnsolvedHurdleDocId: string;
 
-//   addSolutionDialog: boolean;
-//   addSolutionIndex: number;
-//   addSolutionDocId: string;
-//   addSolutionContent: {
-//     ref: string;
-//     sol: string;
-//     worked: boolean;
-//   };
+  updateHurdleTitleDialog: boolean;
+  currentHurdleTitle: string;
+  currentHurdleDocId: string;
+  updateHurdleTitleText: string;
 
-//   deleteSolutionDialog: boolean;
-//   deleteSolutionDocId: string;
-//   deleteSolutionContent: {
-//     ref: string;
-//     sol: string;
-//     worked: boolean;
-//   };
+  addSolutionDialog: boolean;
+  addSolutionIndex: number;
+  addSolutionDocId: string;
+  addSolutionContent: {
+    ref: string;
+    sol: string;
+    worked: boolean;
+  };
 
-//   updateSolutionDialog: boolean;
-//   updateHurdleDocId: string;
-//   updateHurdleNth: number;
-//   updateSolutionNth: number;
-//   updateSolutionBaseContent: {
-//     ref: string;
-//     sol: string;
-//     worked: boolean;
-//   };
-//   updateSolutionNewContent: {
-//     ref: string;
-//     sol: string;
-//     worked: boolean;
-//   };
-// }
+  deleteSolutionDialog: boolean;
+  deleteSolutionNth: number;
+  deleteSolutionDocId: string;
+  deleteSolutionContent: {
+    ref: string;
+    sol: string;
+    worked: boolean;
+  };
+
+  updateSolutionDialog: boolean;
+  updateHurdleDocId: string;
+  updateHurdleNth: number;
+  updateSolutionNth: number;
+  updateSolutionBaseContent: {
+    ref: string;
+    sol: string;
+    worked: boolean;
+  };
+  updateSolutionNewContent: {
+    ref: string;
+    sol: string;
+    worked: boolean;
+  };
+}
 
 export default Vue.extend({
-  data() {
+  data(): dataType {
     return {
-      hurdles: {},
+      hurdles: [
+        {
+          docId: "",
+          hurdle: "",
+          cre_at: {
+            seconds: 0,
+            nanoseconds: 0,
+          },
+          useful: [],
+          settled: false,
+          mini_note: "",
+          sols: [
+            {
+              ref: "",
+              sol: "",
+              worked: false,
+            },
+          ],
+        },
+      ],
       newHurdle: "",
       isEmpty: false,
       isCreateNewHurdle: false,
@@ -468,6 +520,10 @@ export default Vue.extend({
           ref: "",
         },
       ],
+
+      deleteHurdleDialog: false,
+      deleteHurdleDocId: "",
+
       doneHurdleDialog: false,
       doneHurdleIndex: 0,
       doneHurdleDocId: "",
@@ -494,6 +550,7 @@ export default Vue.extend({
 
       deleteSolutionDialog: false,
       deleteSolutionDocId: "",
+      deleteSolutionNth: 0,
       deleteSolutionContent: {
         ref: "",
         sol: "",
@@ -560,6 +617,7 @@ export default Vue.extend({
           settled: false,
           cre_at: firestore.FieldValue.serverTimestamp(),
           sols: vm.CreateSolutions,
+          useful: [],
         })
         .then((result) => {
           console.log(result);
@@ -577,6 +635,30 @@ export default Vue.extend({
           console.log(err);
         });
     },
+    showDeleteHurdle(docId: string) {
+      this.deleteHurdleDialog = true;
+      this.deleteHurdleDocId = docId;
+    },
+    deleteHurdleAndSolutions() {
+      const vm = this;
+      const goalId = vm.$route.params.goalId;
+      const taskId = vm.$route.params.taskId;
+      const userId = vm.$store.state.user.uid;
+      const hurdle = vm.deleteHurdleDocId;
+      const docRef = db.doc(
+        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdle}/`
+      );
+      docRef
+        .delete()
+        .then(function() {
+          console.log("Delete");
+          vm.deleteHurdleDialog = false;
+        })
+        .catch(function(error) {
+          console.error("Don't Delete", error);
+        });
+    },
+
     showAddSolution(docId: string) {
       this.addSolutionDialog = true;
       this.addSolutionDocId = docId;
@@ -607,8 +689,13 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    showDeleteSolution(content: SolutionContentType, docId: string) {
+    showDeleteSolution(
+      content: SolutionContentType,
+      solutionIndex: number,
+      docId: string
+    ) {
       this.deleteSolutionDialog = true;
+      this.deleteSolutionNth = solutionIndex;
       this.deleteSolutionDocId = docId;
       this.deleteSolutionContent = content;
     },
@@ -655,7 +742,7 @@ export default Vue.extend({
       this.updateSolutionNth = solutionIndex;
       this.updateSolutionBaseContent = baseContent;
     },
-    updateSolution() {
+    updateSolution(updateHurdleNth: number) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -664,7 +751,7 @@ export default Vue.extend({
       const docRef = db.doc(
         `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdleId}/`
       );
-      let baseSolutions = vm.hurdles[vm.updateHurdleNth].sols;
+      let baseSolutions = vm.hurdles[updateHurdleNth].sols;
       baseSolutions[vm.updateSolutionNth] = vm.updateSolutionNewContent;
       docRef
         .update({ sols: baseSolutions })
@@ -680,11 +767,23 @@ export default Vue.extend({
         .catch((err) => console.log(err));
     },
 
-    showDoneHurdle(docId: string, index: number) {
-      this.checkedSolutions = [];
+    showDoneHurdle(
+      docId: string,
+      index: number,
+      mini_note: string,
+      checkedUsefulList: number[]
+    ) {
       this.doneHurdleDialog = true;
       this.doneHurdleIndex = index;
       this.doneHurdleDocId = docId;
+      if (mini_note) {
+        this.miniNote = mini_note;
+      }
+      if (checkedUsefulList.length) {
+        this.checkedSolutions = checkedUsefulList;
+      } else {
+        this.checkedSolutions = [];
+      }
     },
     doneHurdle() {
       const vm = this;
@@ -772,23 +871,6 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteHurdleAndSolutions(hurdle: string) {
-      const vm = this;
-      const goalId = vm.$route.params.goalId;
-      const taskId = vm.$route.params.taskId;
-      const userId = vm.$store.state.user.uid;
-      const docRef = db.doc(
-        `users/${userId}/goals/${goalId}/tasks/${taskId}/hurdles/${hurdle}/`
-      );
-      docRef
-        .delete()
-        .then(function() {
-          console.log("Delete");
-        })
-        .catch(function(error) {
-          console.error("Don't Delete", error);
-        });
-    },
   },
   created() {
     const vm = this;
@@ -807,14 +889,15 @@ export default Vue.extend({
       .limit(20)
       .onSnapshot(function(querysnapshot) {
         const dataList = querysnapshot.docs.map((doc) => ({
-          docId: doc.id,
           ...doc.data(), // spread
+          docId: doc.id,
         }));
-        vm.hurdles = dataList;
+        vm.hurdles = dataList as hurdleSolutionsDataType;
         console.log(
           "Hurdle : firebaseにアクセスしました",
-          "hurdlesの型は" + typeof vm.hurdles
+          "hurdlesの型は" + Array.isArray(vm.hurdles)
         );
+        console.log(dataList);
         console.log(vm.hurdles);
         vm.isEmpty = querysnapshot.empty;
       });
@@ -1013,12 +1096,13 @@ AccordionItem {
   width: 80%;
   padding: 0.5em;
   font-size: 16px;
-  border: solid 2px #dedddd;
+  border: none;
   border-radius: 4px;
   margin: 0.5em 0em 0em 2em;
   background: #f4f7f8;
 }
 .Bracket {
+  margin-left: 2em;
   border-left: 2px solid #dedddd;
   // border-bottom: 2px solid #dedddd;
 }
