@@ -39,7 +39,7 @@
       </div>
       <button
         class="button__design material-icons"
-        style="margin-left: 85%;"
+        style="margin-left: 85%"
         @click="addReasonForm"
       >
         add_circle
@@ -67,7 +67,7 @@
       </div>
       <button
         class="button__design material-icons"
-        style="margin-left: 85%;"
+        style="margin-left: 85%"
         @click="addFeedbackForm"
       >
         add_circle
@@ -89,19 +89,15 @@
               max="100"
               v-model.number="fdbk.pre_satis"
               class="number-input"
-            /><span style="font-weight: bold;"> % / 100 % </span>
+            /><span style="font-weight: bold"> % / 100 % </span>
           </label>
-          <template #tooltip>
-            From 0 to 100
-          </template>
+          <template #tooltip> From 0 to 100 </template>
         </vs-tooltip>
       </div>
       <div name="dfclt">
         <vs-tooltip>
           <label>
-            <h3>
-              🌋 Predict the difficulty of the task.
-            </h3>
+            <h3>🌋 Predict the difficulty of the task.</h3>
             <input
               type="number"
               name="pre_dfclt"
@@ -109,11 +105,9 @@
               max="10"
               v-model.number="fdbk.pre_dfclt"
               class="number-input"
-            /><span style="font-weight: bold;"> Level / 10 Level</span>
+            /><span style="font-weight: bold"> Level / 10 Level</span>
           </label>
-          <template #tooltip>
-            From Level 0 to Level 10
-          </template>
+          <template #tooltip> From Level 0 to Level 10 </template>
         </vs-tooltip>
       </div>
     </div>
@@ -193,19 +187,19 @@ export default Vue.extend({
     };
   },
   methods: {
-    addReasonForm: function() {
+    addReasonForm: function () {
       this.reasons.push("");
     },
-    deleteReasonForm: function(index: number) {
+    deleteReasonForm: function (index: number) {
       this.reasons.splice(index, 1);
     },
-    addFeedbackForm: function() {
+    addFeedbackForm: function () {
       this.feedbacks.push("");
     },
-    deleteFeedbackForm: function(index: number) {
+    deleteFeedbackForm: function (index: number) {
       this.feedbacks.splice(index, 1);
     },
-    setTask: function() {
+    setTask: function () {
       const vm = this;
       const userId = vm.$store.state.user.uid;
       const goalId = vm.$store.state.selectingGoal.docId;
@@ -237,7 +231,7 @@ export default Vue.extend({
         }
         docRef
           .add(data)
-          .then(function(docRef) {
+          .then(function (docRef) {
             console.log(docRef, "Document Successfully Written!!!");
             vm.$router.push({
               name: "TaskDetail",
@@ -247,7 +241,7 @@ export default Vue.extend({
               },
             });
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           });
       }

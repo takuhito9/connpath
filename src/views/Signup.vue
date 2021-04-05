@@ -13,8 +13,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import firebase from "firebase";
-import { auth, db } from "@/main";
+import { auth } from "@/main";
 export type DataType = {
   name: string;
   email: string;
@@ -30,7 +29,7 @@ export default Vue.extend({
   },
 
   methods: {
-    signup: function() {
+    signup: function () {
       auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(() => {
@@ -44,3 +43,6 @@ export default Vue.extend({
   },
 });
 </script>
+
+
+

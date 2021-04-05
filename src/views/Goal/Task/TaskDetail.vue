@@ -146,7 +146,7 @@ export default Vue.extend({
     Accordion,
     AccordionItem,
     TaskDetailMotivation,
-    TaskDetailConditionOfSuccess,
+    TaskDetailConditionOfSuccess
   },
 
   data(): dataType {
@@ -157,30 +157,34 @@ export default Vue.extend({
         status: 0,
         cre_at: {
           seconds: 0,
-          nanoseconds: 0,
+          nanoseconds: 0
         },
         cos: [
           {
             cmplt: false,
-            cond: "",
-          },
+            cond: ""
+          }
         ],
         fdbk: {
           pre_dfclt: 0,
           pre_satis: 0,
           post_dfclt: 0,
-          post_satis: 0,
+          post_satis: 0
         },
         reasons: [],
         feedbacks: [],
-        docId: "",
+        docId: ""
       },
 
       isActive: "1",
-      currentComponent: "TaskHurdleList",
+      currentComponent: "TaskHurdleList"
     };
   },
   methods: {
+    testMethods() {
+      const test = "message";
+      console.log(test);
+    },
     updateTask: function() {
       const vm = this;
       const goalId = vm.$route.params.goalId;
@@ -202,7 +206,7 @@ export default Vue.extend({
         .catch(function(error) {
           console.error("Don't Delete", error);
         });
-    },
+    }
   },
   created() {
     const vm = this;
@@ -221,7 +225,7 @@ export default Vue.extend({
         console.log(Error);
       }
     });
-  },
+  }
 });
 </script>
 
@@ -301,6 +305,7 @@ ul {
 #tabs label:hover {
   background: #4a4a4a10;
   color: rgb(41, 41, 41);
+  font-weight: 600;
 }
 #group {
   margin: 0em 0em 0.5em 0em;

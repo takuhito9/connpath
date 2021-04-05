@@ -11,6 +11,7 @@
 
     <template>
       <h2>Google Auth</h2>
+      <p>test</p>
       <button @click="googleSignin">Google Sign in</button>
     </template>
 
@@ -41,7 +42,7 @@ export default Vue.extend({
   },
 
   methods: {
-    mailSignin: function() {
+    mailSignin: function () {
       auth
         .signInWithEmailAndPassword(this.email, this.password)
         .then((user) => {
@@ -52,10 +53,10 @@ export default Vue.extend({
           alert(error.message);
         });
     },
-    signOut: function() {
+    signOut: function () {
       auth
         .signOut()
-        .then((ms) => {
+        .then(() => {
           alert("サインアウトしました");
           // Sign-out successful.
         })
@@ -64,7 +65,7 @@ export default Vue.extend({
           // An error happened.
         });
     },
-    googleSignin: function() {
+    googleSignin: function () {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth
         .signInWithPopup(provider)
@@ -79,18 +80,18 @@ export default Vue.extend({
                 uid: auth.currentUser!.uid,
                 cre_at: firestore.FieldValue.serverTimestamp(),
               })
-              .then(function() {
+              .then(function () {
                 console.log("Saved to user information.");
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 console.error("Error writing document: ", error);
               });
           }
-          this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
+      this.$router.push("/");
     },
   },
   mounted() {},

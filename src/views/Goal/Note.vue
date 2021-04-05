@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>🖋 Note<span> ➕ </span></h3>
-
+    <div></div>
     <div class="grid"></div>
   </div>
 </template>

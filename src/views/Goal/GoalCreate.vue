@@ -23,7 +23,7 @@ export default Vue.extend({
   data(): DataType {
     return {
       goal: "",
-      deets: "",
+      deets: ""
     };
   },
   methods: {
@@ -39,24 +39,24 @@ export default Vue.extend({
         const data = {
           goal: vm.goal,
           deets: vm.deets,
-          cre_at: firestore.FieldValue.serverTimestamp(),
+          cre_at: firestore.FieldValue.serverTimestamp()
         };
         collectionRef
           .add(data)
           .then(function(docRef) {
             console.log(docRef, "Document Successfully Written!!!");
             vm.$router.push({
-              name: "Goal",
+              name: "GoalDetail",
               params: {
-                id: docRef.id,
-              },
+                id: docRef.id
+              }
             });
           })
           .catch(function(error) {
             console.log(error);
           });
       }
-    },
-  },
+    }
+  }
 });
 </script>

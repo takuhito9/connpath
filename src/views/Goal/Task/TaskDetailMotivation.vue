@@ -2,14 +2,14 @@
   <div class="task__motivation__position">
     <div>
       <h3>
-        <i class="material-icons" style="vertical-align: -5px; ">
+        <i class="material-icons" style="vertical-align: -5px">
           help_outline
         </i>
         Reason
         <button
           @click="reasonAddDialog = !reasonAddDialog"
           class="material-icons button__design"
-          style="vertical-align: -5px;"
+          style="vertical-align: -5px"
         >
           add_circle
         </button>
@@ -30,7 +30,7 @@
                 delete
               </button>
               <button
-                class="button__design material-icons "
+                class="button__design material-icons"
                 @click="showUpdateReason(reason, index)"
               >
                 edit
@@ -48,14 +48,14 @@
 
     <div>
       <h3>
-        <span class="material-icons" style="vertical-align: -5px;">
+        <span class="material-icons" style="vertical-align: -5px">
           card_giftcard
         </span>
         Feedback
         <button
           @click="feedbackAddDialog = !feedbackAddDialog"
           class="material-icons button__design"
-          style="vertical-align: -5px;"
+          style="vertical-align: -5px"
         >
           add_circle
         </button>
@@ -247,7 +247,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    createReason: function(reason: string) {
+    createReason: function (reason: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -266,7 +266,7 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteReason: function(reason: string) {
+    deleteReason: function (reason: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -276,12 +276,12 @@ export default Vue.extend({
         reasons: firestore.FieldValue.arrayRemove(reason),
       });
     },
-    showUpdateReason: function(reason: string, index: number) {
+    showUpdateReason: function (reason: string, index: number) {
       this.reasonUpdateDialog = true;
       this.reasonUpdateBaseInput = reason;
       this.reasonNth = index;
     },
-    updateReason: function(reason: string, reasonNth: number) {
+    updateReason: function (reason: string, reasonNth: number) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -298,7 +298,7 @@ export default Vue.extend({
         .catch((err) => console.log(err));
     },
 
-    createFeedback: function(feedback: string) {
+    createFeedback: function (feedback: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -317,7 +317,7 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    deleteFeedback: function(feedback: string) {
+    deleteFeedback: function (feedback: string) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -327,12 +327,12 @@ export default Vue.extend({
         feedbacks: firestore.FieldValue.arrayRemove(feedback),
       });
     },
-    showUpdateFeedback: function(feedback: string, index: number) {
+    showUpdateFeedback: function (feedback: string, index: number) {
       this.feedbackUpdateDialog = true;
       this.feedbackUpdateBaseInput = feedback;
       this.feedbackNth = index;
     },
-    updateFeedback: function(feedback: string, feedbackNth: number) {
+    updateFeedback: function (feedback: string, feedbackNth: number) {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
