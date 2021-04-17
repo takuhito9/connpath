@@ -30,7 +30,7 @@ export default Vue.extend({
   },
   created() {
     const vm = this;
-    auth.onAuthStateChanged(function(user) {
+    auth.onAuthStateChanged(function (user) {
       if (user) {
         auth.onAuthStateChanged((user) => {
           vm.$store.commit("setUser", user);
@@ -41,9 +41,12 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss">
+@import "./views/common.scss";
+
+/* Responsive */
 @media screen and (min-width: 480px) {
-  /*　画面サイズが480pxからはここを読み込む　*/
+  /*　~ 480px　*/
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -64,7 +67,7 @@ export default Vue.extend({
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-  /*　画面サイズが768pxから1024pxまではここを読み込む　*/
+  /*　768px ~ 1024px　*/
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -85,7 +88,7 @@ export default Vue.extend({
 }
 
 @media screen and (min-width: 1024px) {
-  /*　画面サイズが1024pxからはここを読み込む　*/
+  /*　1024px ~ */
   .grid-container {
     display: grid;
     grid-template-columns: 0.7fr 1.9fr 1fr 1fr;
@@ -106,25 +109,12 @@ export default Vue.extend({
   }
 }
 
-body {
-  background: #f4f7f8;
-  font-size: 1em;
-  margin: 0;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: rgb(44, 62, 80);
-}
-
 #nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: $positive;
 }
 </style>

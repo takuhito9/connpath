@@ -8,7 +8,7 @@
         Reason
         <button
           @click="reasonAddDialog = !reasonAddDialog"
-          class="material-icons button__design"
+          class="material-icons button_positive"
           style="vertical-align: -5px"
         >
           add_circle
@@ -24,13 +24,13 @@
             <span style="position: relative">{{ reason }}</span>
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons button__design__delete"
+                class="button_positive material-icons button_negative"
                 @click="deleteReason(reason)"
               >
                 delete
               </button>
               <button
-                class="button__design material-icons"
+                class="button_positive material-icons"
                 @click="showUpdateReason(reason, index)"
               >
                 edit
@@ -54,7 +54,7 @@
         Feedback
         <button
           @click="feedbackAddDialog = !feedbackAddDialog"
-          class="material-icons button__design"
+          class="material-icons button_positive"
           style="vertical-align: -5px"
         >
           add_circle
@@ -70,13 +70,13 @@
             <span style="position: relative">{{ feedback }}</span>
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons button__design__delete"
+                class="button_positive material-icons button_negative"
                 @click="deleteFeedback(feedback)"
               >
                 delete
               </button>
               <button
-                class="button__design material-icons"
+                class="button_positive material-icons"
                 @click="showUpdateFeedback(feedback, index)"
               >
                 edit
@@ -361,20 +361,5 @@ export default Vue.extend({
 }
 #task__feedback {
   margin: 0.2em 4em 0em 3em;
-}
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
-}
-.button__design__delete:hover,
-.button__design__delete:focus {
-  color: #d44343fb;
-  transition: 0.2s;
 }
 </style>

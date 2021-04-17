@@ -1,43 +1,36 @@
 <template>
   <div>
-    <h3 id="goal__title">
-      <span class="material-icons" style="vertical-align: -5px; ">flag</span>
+    <h3 class="goal_title">
+      <span class="material-icons" style="vertical-align: -5px">flag</span>
       {{ $store.state.selectingGoal.goal }}
     </h3>
 
     <div id="predict" name="predict">
       <h4>
-        <vs-tooltip class="predict__status-horizontal">
-          <span class="material-icons" style="vertical-align: -5px;">
+        <vs-tooltip class="predict_status">
+          <span class="material-icons" style="vertical-align: -5px">
             sentiment_very_satisfied
           </span>
           <span>{{ task.fdbk.pre_satis }} %</span>
-          <template #tooltip>
-            Satisfaction
-          </template>
+          <template #tooltip> Satisfaction </template>
         </vs-tooltip>
 
-        <vs-tooltip class="predict__status-horizontal">
+        <vs-tooltip class="predict_status">
           <span
             class="material-icons"
-            style="vertical-align: -5px; margin-left: 20px;"
+            style="vertical-align: -5px; margin-left: 20px"
           >
             landscape
           </span>
           <span> Level {{ task.fdbk.pre_dfclt }}</span>
-          <template #tooltip>
-            Difficulty
-          </template>
+          <template #tooltip> Difficulty </template>
         </vs-tooltip>
       </h4>
     </div>
     <br />
 
-    <h2 id="task__title">
-      <i
-        class="material-icons task__title__icon"
-        style="vertical-align: -5px; margin-left: 10px;"
-      >
+    <h2>
+      <i class="material-icons" style="vertical-align: -5px; margin-left: 10px">
         directions_run</i
       >
       {{ task.task }}
@@ -48,7 +41,7 @@
       </template>
     </h2>
 
-    <p id="task__detail">{{ task.deets }}</p>
+    <p id="task_detail">{{ task.deets }}</p>
 
     <TaskDetailConditionOfSuccess
       :cos="task.cos"
@@ -58,9 +51,9 @@
     <Accordion>
       <AccordionItem>
         <template slot="accordion-trigger">
-          <div id="task__motivation-announce">
-            <button class="button__design task__motivation-announce__button">
-              <i class="material-icons" style="vertical-align: -5px; ">
+          <div id="motivation_open">
+            <button class="button_positive motivation_open__button">
+              <i class="material-icons" style="vertical-align: -5px">
                 bug_report
               </i>
               When your motivation drops...
@@ -146,7 +139,7 @@ export default Vue.extend({
     Accordion,
     AccordionItem,
     TaskDetailMotivation,
-    TaskDetailConditionOfSuccess
+    TaskDetailConditionOfSuccess,
   },
 
   data(): dataType {
@@ -157,27 +150,27 @@ export default Vue.extend({
         status: 0,
         cre_at: {
           seconds: 0,
-          nanoseconds: 0
+          nanoseconds: 0,
         },
         cos: [
           {
             cmplt: false,
-            cond: ""
-          }
+            cond: "",
+          },
         ],
         fdbk: {
           pre_dfclt: 0,
           pre_satis: 0,
           post_dfclt: 0,
-          post_satis: 0
+          post_satis: 0,
         },
         reasons: [],
         feedbacks: [],
-        docId: ""
+        docId: "",
       },
 
       isActive: "1",
-      currentComponent: "TaskHurdleList"
+      currentComponent: "TaskHurdleList",
     };
   },
   methods: {
@@ -185,14 +178,14 @@ export default Vue.extend({
       const test = "message";
       console.log(test);
     },
-    updateTask: function() {
+    updateTask: function () {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
       const userId = vm.$store.state.user.uid;
       const dogRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
     },
-    deleteTask: function() {
+    deleteTask: function () {
       const vm = this;
       const goalId = vm.$route.params.goalId;
       const taskId = vm.$route.params.taskId;
@@ -200,13 +193,13 @@ export default Vue.extend({
       const dogRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
       dogRef
         .delete()
-        .then(function() {
+        .then(function () {
           console.log("Delete");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.error("Don't Delete", error);
         });
-    }
+    },
   },
   created() {
     const vm = this;
@@ -214,7 +207,7 @@ export default Vue.extend({
     const taskId = vm.$route.params.taskId;
     const userId = vm.$store.state.user.uid;
     const docRef = db.doc(`users/${userId}/goals/${goalId}/tasks/${taskId}`);
-    docRef.onSnapshot(function(doc) {
+    docRef.onSnapshot(function (doc) {
       const docData = doc.data();
       if (docData) {
         docData.docId = taskId;
@@ -225,34 +218,24 @@ export default Vue.extend({
         console.log(Error);
       }
     });
-  }
+  },
 });
 </script>
 
 <style lang="scss" scoped>
-#goal__title {
-  color: #42b983;
-  padding-left: 2em;
-  text-indent: -1em;
-}
 #predict {
   text-align: right;
   font-weight: normal;
 }
-.predict__status-horizontal {
+.predict_status {
   float: left;
 }
-#task__title {
-  padding-left: 2em;
-  text-indent: -1em;
-}
-#task__detail {
+#task_detail {
   text-align: left;
   font-weight: 500;
   margin: 0em 1em 0em 3em;
 }
-
-#task__motivation-announce {
+#motivation_open {
   position: relative;
   margin: 0px auto;
   font-weight: 500;
@@ -265,26 +248,14 @@ export default Vue.extend({
     font-size: 1em;
   }
 }
-
 .multi-content-board {
   background: #4a4a4a10;
   padding: 20px 40px 40px 40px;
   border-radius: 0% 20px 20px 20px;
 }
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
-}
 ul {
   list-style: none;
 }
-
 #tabs {
   overflow: hidden;
 }
@@ -307,6 +278,7 @@ ul {
   color: rgb(41, 41, 41);
   font-weight: 600;
 }
+
 #group {
   margin: 0em 0em 0.5em 0em;
   background: #f4f7f8;
@@ -314,7 +286,6 @@ ul {
   padding: 1em 1em;
   word-break: normal;
 }
-
 .in_progress {
   background: rgba(84, 207, 255, 0.511);
   padding: 0.3rem;

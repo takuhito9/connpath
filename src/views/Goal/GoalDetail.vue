@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="goal">
-      <h2 class="goal__title">
+      <h2 class="goal_title">
         <i
           ><span class="material-icons" style="vertical-align: -4px"
             >flag</span
@@ -84,21 +84,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.goal__title {
-  color: #50c38f;
-}
 .goal__detail {
   font-weight: 500;
   margin: 0em 0em 0em 3em;
-}
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
 }
 </style>

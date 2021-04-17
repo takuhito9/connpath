@@ -1,19 +1,23 @@
 <template>
   <div>
-    <h1>📈　New Goal</h1>
-    <h1>👉 {{ goal }}</h1>
-    <input required border v-model="goal" placeholder="Goal" /><br />
-    <input border v-model="deets" placeholder="Deets" /><br />
+    <h3>Please enter your wishes and dreams.</h3>
+    <input class="input_text" placeholder="Wish" />
 
-    <button @click="setGoal">Register</button>
+    <h3>Please enter your Outcome.</h3>
+    <h1>{{ goal }}</h1>
+    <input class="input_text" v-model="goal" placeholder="Outcome" />
+
+    <h3>Please enter your Details.</h3>
+    <input class="input_text" v-model="deets" placeholder="Details" />
+
+    <button class="button_register" @click="setGoal">Register</button>
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-const Vuesax = require("vuesax");
-import { auth, db, firestore } from "@/main";
+import { db, firestore } from "@/main";
 export type DataType = {
   goal: string;
   deets: string;
@@ -23,7 +27,7 @@ export default Vue.extend({
   data(): DataType {
     return {
       goal: "",
-      deets: ""
+      deets: "",
     };
   },
   methods: {
@@ -39,24 +43,24 @@ export default Vue.extend({
         const data = {
           goal: vm.goal,
           deets: vm.deets,
-          cre_at: firestore.FieldValue.serverTimestamp()
+          cre_at: firestore.FieldValue.serverTimestamp(),
         };
         collectionRef
           .add(data)
-          .then(function(docRef) {
+          .then(function (docRef) {
             console.log(docRef, "Document Successfully Written!!!");
             vm.$router.push({
               name: "GoalDetail",
               params: {
-                id: docRef.id
-              }
+                id: docRef.id,
+              },
             });
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
           });
       }
-    }
-  }
+    },
+  },
 });
 </script>

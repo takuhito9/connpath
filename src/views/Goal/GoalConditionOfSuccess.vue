@@ -5,7 +5,7 @@
       Condition of Success
       <button
         @click="cosAddDialog = !cosAddDialog"
-        class="button__design material-icons"
+        class="button_positive material-icons"
         style="vertical-align: -5px"
       >
         add_circle
@@ -19,14 +19,14 @@
         <span style="position: absolute; right: 10%">
           <button
             @click="deleteCondition(condition)"
-            class="button__design material-icons"
+            class="button_positive material-icons"
           >
             delete
           </button>
 
           <button
             @click="showUpdateCondition(condition.cond, index)"
-            class="button__design material-icons"
+            class="button_positive material-icons"
           >
             edit
           </button>
@@ -181,15 +181,5 @@ export default Vue.extend({
 <style lg="scss" scoped>
 .condition__content_left-margin {
   margin: 0em 0em 0em 3em;
-}
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
 }
 </style>

@@ -3,20 +3,20 @@
     <h3>
       <i
         class="material-icons task__title__icon"
-        style="vertical-align: -5px; margin-left: 10px;"
+        style="vertical-align: -5px; margin-left: 10px"
       >
         directions_run</i
       >
       Task
       <router-link
-        style="text-decoration: none; color: rgb(44, 62, 80);"
+        style="text-decoration: none; color: rgb(44, 62, 80)"
         :to="{
           name: 'TaskCreate',
-          params: { goalId: $store.state.selectingGoal.docId }
+          params: { goalId: $store.state.selectingGoal.docId },
         }"
       >
         <button
-          class="button__design material-icons"
+          class="button_positive material-icons"
           style="vertical-align: -5px"
         >
           add_circle
@@ -63,7 +63,7 @@ export default Vue.extend({
       tasks: {},
       isEmpty: false,
       taskAddInput: "",
-      dialogWidth: "600px"
+      dialogWidth: "600px",
     };
   },
   methods: {
@@ -73,12 +73,12 @@ export default Vue.extend({
       this.$router
         .push({
           name: "TaskDetail",
-          params: { goalId: goalId, taskId: taskId }
+          params: { goalId: goalId, taskId: taskId },
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
-    }
+    },
   },
   created() {
     const vm = this;
@@ -92,17 +92,17 @@ export default Vue.extend({
     CollectionRef.orderBy("status")
       .limit(12)
       .get()
-      .then(function(querysnapshot) {
-        const dataList = querysnapshot.docs.map(doc => ({
+      .then(function (querysnapshot) {
+        const dataList = querysnapshot.docs.map((doc) => ({
           docId: doc.id,
-          ...doc.data() // spread
+          ...doc.data(), // spread
         }));
         console.log("firebaseにアクセスしました");
         vm.tasks = dataList;
         vm.isEmpty = querysnapshot.empty;
       });
   },
-  computed: {}
+  computed: {},
 });
 </script>
 
@@ -129,16 +129,6 @@ export default Vue.extend({
   transition: 0.2s;
 }
 
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
-}
 .in_progress {
   background: rgba(84, 207, 255, 0.511);
   padding: 0.3rem;

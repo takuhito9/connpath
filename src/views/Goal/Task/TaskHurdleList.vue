@@ -48,7 +48,7 @@
               v-model="CreateSolutions[index].ref"
             />
             <button
-              class="material-icons button__design"
+              class="material-icons button_positive"
               @click="deleteSolutionForm(index)"
             >
               delete
@@ -117,7 +117,7 @@
                               @click.stop="
                                 hurdleUpdateTooltip = !hurdleUpdateTooltip
                               "
-                              class="material-icons button__design hurdle__update"
+                              class="material-icons button_positive hurdle__update"
                             >
                               more_horiz
                             </button>
@@ -125,14 +125,14 @@
                           </vs-tooltip>
 
                           <button
-                            class="material-icons button__design"
+                            class="material-icons button_positive"
                             style="vertical-align: -6px"
                             @click.stop="showDeleteHurdle(hurdle.docId)"
                           >
                             delete
                           </button>
                           <button
-                            class="material-icons button__design"
+                            class="material-icons button_positive"
                             style="vertical-align: -6px"
                             @click.stop="
                               showUpdateHurdleTitle(hurdle.hurdle, hurdle.docId)
@@ -159,7 +159,7 @@
                               <template #tooltip>Useful</template>
                             </vs-tooltip>
                             <button
-                              class="material-icons button__design__delete"
+                              class="material-icons button_negative"
                               style="vertical-align: -6px"
                               @click="
                                 showDeleteSolution(
@@ -173,7 +173,7 @@
                               delete
                             </button>
                             <button
-                              class="material-icons button__design"
+                              class="material-icons button_positive"
                               style="vertical-align: -6px"
                               @click="
                                 showUpdateSolution(
@@ -1000,26 +1000,6 @@ AccordionItem {
 .create__button:hover,
 .create__button:focus {
   color: #50c38f;
-  transition: 0.2s;
-}
-.button__design {
-  border: none;
-  background: none;
-  color: #4c4c4c68;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
-}
-.button__design__delete {
-  border: none;
-  background: none;
-  color: #4c4c4c68;
-}
-.button__design__delete:hover,
-.button__design__delete:focus {
-  color: #d44343fb;
   transition: 0.2s;
 }
 .button__register {

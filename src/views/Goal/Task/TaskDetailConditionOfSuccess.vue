@@ -3,15 +3,15 @@
     <div id="task__condition-of-success">
       <h3>
         <i
-          class="material-icons "
-          style="vertical-align: -5px; margin-left: 10px;"
+          class="material-icons"
+          style="vertical-align: -5px; margin-left: 10px"
           >rule</i
         >
         Condition of Success
         <button
-          class="button__design material-icons"
+          class="button_positive material-icons"
           @click="cosAddDialog = !cosAddDialog"
-          style="vertical-align: -5px;"
+          style="vertical-align: -5px"
         >
           add_circle
         </button>
@@ -26,8 +26,8 @@
             <template v-if="condition.cmplt"
               ><button
                 @click="showNotYetCondition(index)"
-                class="button__design material-icons"
-                style="vertical-align: -6px;"
+                class="button_positive material-icons"
+                style="vertical-align: -6px"
               >
                 check_box
               </button>
@@ -35,8 +35,8 @@
             <template v-else
               ><button
                 @click="showDoneCondition(index)"
-                class="button__design material-icons"
-                style="vertical-align: -6px;"
+                class="button_positive material-icons"
+                style="vertical-align: -6px"
               >
                 indeterminate_check_box
               </button>
@@ -51,7 +51,7 @@
 
             <span style="position: absolute; right: 11%">
               <button
-                class="button__design material-icons button__design__delete"
+                class="button_positive material-icons button_negative"
                 @click="showDeleteCondition(condition)"
                 @mouseover="deleteActive = true"
                 @mouseout="deleteActive = false"
@@ -59,7 +59,7 @@
                 delete
               </button>
               <button
-                class="button__design material-icons"
+                class="button_positive material-icons"
                 @click="showUpdateCondition(condition.cond, index)"
               >
                 edit
@@ -90,9 +90,7 @@
           >
             Ok
           </button>
-          <button @click="cosUpdateDialog = false">
-            Cancel
-          </button>
+          <button @click="cosUpdateDialog = false">Cancel</button>
         </div>
       </template>
     </vs-dialog>
@@ -349,22 +347,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.button__design {
-  border: none;
-  background: none;
-  color: #4f4f4f;
-}
-.button__design:hover,
-.button__design:focus {
-  color: #50c38f;
-  transition: 0.2s;
-}
-
-.button__design__delete:hover,
-.button__design__delete:focus {
-  color: #d44343fb;
-  transition: 0.2s;
-}
 #task__condition-of-success {
   text-align: left;
   font-weight: normal;
