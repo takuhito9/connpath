@@ -11,8 +11,9 @@
 
     <template>
       <h2>Google Auth</h2>
-      <p>test</p>
-      <button @click="googleSignin">Google Sign in</button>
+      <button class="button_register" @click="googleSignin">
+        Google Sign in
+      </button>
     </template>
 
     <template>

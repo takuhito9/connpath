@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="goal">
+      <span>{{ goal.wish }}</span>
       <h2 class="goal_title">
         <i
           ><span class="material-icons" style="vertical-align: -4px"
@@ -10,9 +11,12 @@
         {{ goal.goal }}
       </h2>
       <h4 class="goal__detail">{{ goal.deets }}</h4>
-    </div>
 
-    <br />
+      <h3>Feedback</h3>
+      <div v-for="feedback in goal.fdbk" :key="feedback.id">
+        <h4 class="goal__detail">{{ feedback }}</h4>
+      </div>
+    </div>
 
     <GoalConditionOfSuccess :cos="goal.cos"></GoalConditionOfSuccess>
     <TaskList />
@@ -29,7 +33,9 @@ import TaskList from "@/views/Goal/Task/TaskList.vue";
 import GoalConditionOfSuccess from "@/views/Goal/GoalConditionOfSuccess.vue";
 
 interface goalObjectType {
+  wish: string;
   goal: string;
+  fdbk: string[];
   cos: Array<{
     cond: string;
     cmplt: boolean;
@@ -51,7 +57,9 @@ export default Vue.extend({
   data(): dataType {
     return {
       goal: {
+        wish: "",
         goal: "",
+        fdbk: [""],
         cos: [{ cond: "", cmplt: false }],
         deets: "",
         cre_at: {

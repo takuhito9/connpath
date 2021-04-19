@@ -1,7 +1,7 @@
 $positive: #50c38f; // main theme
 $negative: #d44343fb;
 $text_right: #4c4c4c;
-$text_dark: #F1F1F1;
+$text_dark: #f1f1f1;
 $input_border: #e1e3e8;
 
 #app {
@@ -112,4 +112,9 @@ body {
     background: $positive;
     transition: 0.2s;
   }
+}
+
+.icon_height_fix {
+    display: inline-flex;
+  vertical-align: middle;
 }
