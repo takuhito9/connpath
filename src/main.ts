@@ -25,6 +25,8 @@ db.enablePersistence({ synchronizeTabs: true })
 
 Vue.config.productionTip = false
 
+
+
 new Vue({
   router,
   store,

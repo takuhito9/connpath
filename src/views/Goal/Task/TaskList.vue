@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>
+    <h3 class="task_title">
       <i
         class="material-icons task__title__icon"
         style="vertical-align: -5px; margin-left: 10px"
@@ -27,7 +27,9 @@
 
     <div class="task__grid">
       <template v-if="isEmpty">
-        <h2>you need add tasks</h2>
+        <button class="click_me position_correction">
+          <span class="add_it">Add it.</span>
+        </button>
       </template>
 
       <template v-else>
@@ -106,12 +108,16 @@ export default Vue.extend({
 });
 </script>
 
-<style lg="scss" scoped>
+<style lang="scss" scoped>
+.task_title {
+  color: #4ac0cf;
+  margin-left: 0.5em;
+}
 .task__grid {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  margin: 0em 0em 0em 3em;
+  /* margin: 0em 0em 0em 3em; */
 }
 .task__item {
   border-radius: 10px;
@@ -155,5 +161,40 @@ export default Vue.extend({
   vertical-align: 5px;
   white-space: nowrap;
   vertical-align: -0px;
+}
+
+.click_me {
+  border: 10px dashed #d5d6d8;
+  background: none;
+  width: 90%;
+  height: 10em;
+  border-radius: 10px 10px;
+
+  &:focus {
+    border: 10px dashed #43b5c4;
+    transition: 0.3s;
+  }
+  &:hover {
+    border: 10px dashed #43b5c4;
+    transition: 0.3s;
+  }
+}
+.click_me:focus .add_it {
+  color: #43b5c4;
+  transition: 0.3s;
+}
+.click_me:hover .add_it {
+  color: #43b5c4;
+  transition: 0.3s;
+}
+.add_it {
+  font-size: 3em;
+  font-weight: 700;
+  color: #d5d6d8;
+}
+
+.position_correction {
+  font-weight: normal;
+  margin: 0em 0em 0.5em 3em;
 }
 </style>

@@ -11,26 +11,28 @@
         add_circle
       </button>
     </h3>
-    <div v-if="cos" class="condition__content_left-margin">
-      <div v-for="(condition, index) in cos" :key="condition.id">
-        <template v-if="condition.cmplt">✔ : </template>
-        <template v-else>□</template>
-        <span style="position: relative"> {{ condition.cond }}</span>
-        <span style="position: absolute; right: 10%">
-          <button
-            @click="deleteCondition(condition)"
-            class="button_positive material-icons"
-          >
-            delete
-          </button>
+    <div v-if="coss">
+      <div v-for="(condition, index) in coss" :key="condition.id">
+        <div class="position_correction">
+          <template v-if="condition.cmplt">✔ : </template>
+          <template v-else>□</template>
+          <span style="position: relative"> {{ condition.cond }}</span>
+          <span style="position: absolute; right: 10%">
+            <button
+              @click="deleteCondition(condition)"
+              class="button_positive material-icons"
+            >
+              delete
+            </button>
 
-          <button
-            @click="showUpdateCondition(condition.cond, index)"
-            class="button_positive material-icons"
-          >
-            edit
-          </button>
-        </span>
+            <button
+              @click="showUpdateCondition(condition.cond, index)"
+              class="button_positive material-icons"
+            >
+              edit
+            </button>
+          </span>
+        </div>
       </div>
     </div>
     <template v-else>
@@ -112,7 +114,7 @@ interface dataType {
 
 export default Vue.extend({
   props: {
-    cos: Array as Vue.PropType<Array<conditionOfSuccessType>>,
+    coss: Array as Vue.PropType<Array<conditionOfSuccessType>>,
   },
   data(): dataType {
     return {
@@ -133,7 +135,7 @@ export default Vue.extend({
       console.log(docRef);
       docRef
         .update({
-          cos: firestore.FieldValue.arrayUnion({
+          coss: firestore.FieldValue.arrayUnion({
             cond: cond,
             cmplt: false,
           }),
@@ -152,7 +154,7 @@ export default Vue.extend({
       const goalId = this.$store.state.selectingGoal.docId;
       const docRef = db.doc(`users/${userUId}/goals/${goalId}`);
       docRef.update({
-        cos: firestore.FieldValue.arrayRemove(cond),
+        coss: firestore.FieldValue.arrayRemove(cond),
       });
     },
     showUpdateCondition: function (cond: string, index: number) {
@@ -165,10 +167,10 @@ export default Vue.extend({
       const goalId = this.$store.state.selectingGoal.docId;
       const userUId = vm.$store.state.user.uid;
       const docRef = db.doc(`users/${userUId}/goals/${goalId}`);
-      let originalCos = vm.cos;
+      let originalCos = vm.coss;
       originalCos[nth] = { cond: cond, cmplt: false };
       docRef
-        .update({ cos: originalCos })
+        .update({ coss: originalCos })
         .then((el) => {
           console.log(el);
           vm.cosUpdateNewInput = "";
@@ -179,7 +181,8 @@ export default Vue.extend({
 });
 </script>
 <style lg="scss" scoped>
-.condition__content_left-margin {
-  margin: 0em 0em 0em 3em;
+.position_correction {
+  /* font-weight: 500; */
+  margin: 0em 0em 0.5em 3em;
 }
 </style>

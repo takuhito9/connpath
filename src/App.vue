@@ -43,7 +43,7 @@ export default Vue.extend({
 
 <style lang="scss">
 @import "./views/common.scss";
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 /* Responsive */
 @media screen and (min-width: 480px) {
   /*　~ 480px　*/

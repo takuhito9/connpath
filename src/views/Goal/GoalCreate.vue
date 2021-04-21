@@ -1,74 +1,122 @@
 <template>
   <div>
-    <h4>Please enter your wishes and dreams.</h4>
-    <input class="input_text" v-model="wish" placeholder="Wish" />
-
-    <h4>What is the desired outcome regarding your wish ?</h4>
-    <h1 style="color: #50c38f">{{ goal }}</h1>
-    <input class="input_text" v-model="goal" placeholder="Outcome" />
-
-    <h4>Please enter your Details.</h4>
-    <textarea
-      rows="3"
-      class="input_text"
-      v-model="deets"
-      placeholder="Details"
-    ></textarea>
-
-    <h4>
-      <i class="material-icons" style="vertical-align: -5px; margin-right: 5px">
-        card_giftcard
-      </i>
-      Feedback
-    </h4>
-    <div :class="[feedbacks.length >= 2 ? 'frame' : '']">
-      <div v-for="(feedback, index) in feedbacks" :key="feedback.id">
-        <input
-          class="input_text"
-          v-model="feedbacks[index]"
-          placeholder="Feedback"
-        /><button
-          class="button_positive material-icons"
-          @click="deleteFeedbackForm(index)"
-        >
-          delete
-        </button>
-      </div>
-      <button
-        class="button_positive material-icons"
-        style="margin-left: 85%"
-        @click="addFeedbackForm"
-      >
-        add_circle
-      </button>
+    <div class="category">
+      <h4>Please enter your wishes and dreams.</h4>
+      <input class="input_text" v-model="wish" placeholder="Wish" />
     </div>
 
-    <h4>
-      <i class="material-icons" style="vertical-align: -5px; margin-right: 5px"
-        >rule</i
-      >
-      Condition of Success
-    </h4>
-    <div :class="[coss.length >= 2 ? 'frame' : '']">
-      <div v-for="(cos, index) in coss" :key="cos.id">
-        <input
-          class="input_text"
-          v-model="coss[index].cond"
-          placeholder="Condition of Success"
-        /><button
-          @click="deleteCossForm(index)"
-          class="button_positive material-icons"
+    <div class="category">
+      <h4>What is the desired outcome regarding your wish ?</h4>
+      <h1 style="color: #50c38f">{{ goal }}</h1>
+      <input class="input_text" v-model="goal" placeholder="Outcome" />
+    </div>
+
+    <div class="category">
+      <h4>Please enter your Details.</h4>
+      <textarea
+        rows="3"
+        class="input_text"
+        v-model="deets"
+        placeholder="Details"
+      ></textarea>
+    </div>
+
+    <div class="category">
+      <h4>
+        <i
+          class="material-icons"
+          style="vertical-align: -5px; margin-right: 5px"
         >
-          delete
+          card_giftcard
+        </i>
+        Feedback
+        <button
+          class="button_positive material-icons"
+          style="margin-right: 10%; vertical-align: -5px"
+          @click="addFeedbackForm"
+        >
+          add_circle
         </button>
+      </h4>
+      <div :class="[fdbks.length >= 2 ? 'frame' : '']">
+        <div v-for="(feedback, index) in fdbks" :key="feedback.id">
+          <input
+            class="input_text"
+            v-model="fdbks[index]"
+            placeholder="Feedback"
+          /><button
+            class="button_positive material-icons"
+            @click="deleteFeedbackForm(index)"
+          >
+            delete
+          </button>
+        </div>
       </div>
-      <button
-        @click="addCossForm"
-        class="button_positive material-icons"
-        style="margin-left: 85%"
-      >
-        add_circle
-      </button>
+    </div>
+
+    <div class="category">
+      <h4>
+        <i
+          class="material-icons"
+          style="vertical-align: -5px; margin-right: 5px"
+          >rule</i
+        >
+        Condition of Success
+        <button
+          @click="addCossForm"
+          class="button_positive material-icons"
+          style="margin-right: 10%; vertical-align: -5px"
+        >
+          add_circle
+        </button>
+      </h4>
+      <div :class="[coss.length >= 2 ? 'frame' : '']">
+        <div v-for="(cos, index) in coss" :key="cos.id">
+          <input
+            class="input_text"
+            v-model="coss[index].cond"
+            placeholder="Condition of Success"
+          /><button
+            @click="deleteCossForm(index)"
+            class="button_positive material-icons"
+          >
+            delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <h4>
+        <i
+          class="material-icons"
+          style="vertical-align: -5px; margin-right: 5px"
+        >
+          hiking
+        </i>
+        Obstacle
+        <button
+          class="button_positive material-icons"
+          @click="addObstacleForm"
+          style="margin-right: 10%; vertical-align: -5px"
+        >
+          add_circle
+        </button>
+      </h4>
+      <div :class="[obsts.length >= 2 ? 'frame' : '']">
+        <div v-for="(obst, index) in obsts" :key="obst.id">
+          <input
+            class="input_text"
+            v-model="obsts[index]"
+            placeholder="Obstacle"
+          /><button
+            class="button_positive material-icons"
+            @click="deleteObstacleForm(index)"
+          >
+            delete
+          </button>
+        </div>
+      </div>
     </div>
 
     <button class="button_register" @click="setGoal">Register</button>
@@ -89,7 +137,8 @@ interface DataType {
   wish: string;
   goal: string;
   deets: string;
-  feedbacks: string[];
+  fdbks: string[];
+  obsts: string[];
   coss: conditionOfSuccessType[];
 }
 
@@ -99,21 +148,22 @@ export default Vue.extend({
       wish: "",
       goal: "",
       deets: "",
-      feedbacks: [""],
+      fdbks: [""],
+      obsts: [""],
       coss: [{ cmplt: false, cond: "" }],
     };
   },
   methods: {
     addFeedbackForm() {
-      if (this.feedbacks.length <= 5) {
-        this.feedbacks.push("");
+      if (this.fdbks.length <= 5) {
+        this.fdbks.push("");
       } else {
         alert("多すぎ");
       }
     },
     deleteFeedbackForm(index: number) {
-      if (this.feedbacks.length != 1) {
-        this.feedbacks.splice(index, 1);
+      if (this.fdbks.length != 1) {
+        this.fdbks.splice(index, 1);
       } else {
         alert("それ以上は消せません");
       }
@@ -132,6 +182,21 @@ export default Vue.extend({
         alert("それ以上は消せません");
       }
     },
+    addObstacleForm() {
+      if (this.obsts.length <= 5) {
+        this.obsts.push("");
+      } else {
+        alert("多すぎ");
+      }
+    },
+    deleteObstacleForm(index: number) {
+      if (this.obsts.length != 1) {
+        this.obsts.splice(index, 1);
+      } else {
+        alert("それ以上は消せません");
+      }
+    },
+
     setGoal() {
       const vm = this;
       const collectionRef = db.collection(
@@ -145,8 +210,9 @@ export default Vue.extend({
           wish: vm.wish,
           goal: vm.goal,
           deets: vm.deets,
-          cos: vm.coss,
-          fdbk: vm.feedbacks,
+          coss: vm.coss,
+          fdbks: vm.fdbks,
+          obsts: vm.obsts,
           cre_at: firestore.FieldValue.serverTimestamp(),
         };
         collectionRef
@@ -171,5 +237,8 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .frame {
   border-left: 2px #e1e3e8 solid;
+}
+.category {
+  padding-bottom: 1em;
 }
 </style>
