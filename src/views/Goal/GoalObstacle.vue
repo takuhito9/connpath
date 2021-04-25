@@ -79,7 +79,7 @@ export default Vue.extend({
     const goalId = vm.$route.params.id;
     const userId = vm.$store.state.user.uid;
     const ref = db.collection(`users/${userId}/goals/${goalId}/obstacles`);
-    ref.onSnapshot((querysnapshot) => {
+    ref.orderBy("cre_at").onSnapshot((querysnapshot) => {
       const dataList = querysnapshot.docs.map((doc) => ({
         docId: doc.id,
         ...doc.data(), // spread

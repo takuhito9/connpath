@@ -3,15 +3,17 @@
     <div>
       <ul v-for="obst in obsts" :key="obst.id" class="block obst_ul">
         <li class="obst_li">{{ obst.obst }}</li>
-        <ul
-          v-for="sol in obst.sols"
-          :key="sol.id"
-          class="solution_position sol_ul"
-        >
-          <li class="sol_li">
-            {{ sol.sol }}
-          </li>
-        </ul>
+        <div style="border-left: 3px #e1e3e8 solid">
+          <ul
+            v-for="sol in obst.sols"
+            :key="sol.id"
+            class="solution_position sol_ul"
+          >
+            <li class="sol_li">
+              {{ sol.sol }}
+            </li>
+          </ul>
+        </div>
       </ul>
     </div>
   </div>
@@ -50,6 +52,7 @@ export default Vue.extend({
     padding-left: 1em;
 
     &:before {
+      vertical-align: -2px;
       font-family: "Material Icons";
       margin-right: 10px;
       content: "hiking";
@@ -61,11 +64,10 @@ export default Vue.extend({
 
   .sol_li {
     margin-bottom: 10px;
-
     text-indent: -2em;
-    padding-left: 1em;
 
     &:before {
+      vertical-align: -3px;
       font-family: "Material Icons";
       margin-right: 10px;
       content: "lightbulb";
