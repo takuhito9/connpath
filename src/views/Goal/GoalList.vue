@@ -2,10 +2,10 @@
   <div>
     <h1>User Name : {{ $store.state.user.displayName }}</h1>
     <br />
-    <router-link :to="GoalCreate"><button>GoalCreate</button></router-link>
+    <router-link to="GoalCreate"><button>GoalCreate</button></router-link>
     <router-view />
 
-    <h1>
+<h1>
       <span class="material-icons">flag</span>
       Goal
     </h1>
@@ -18,7 +18,9 @@
           The goal has not been registered. If you would like to register a new
           goal, please click the Register button above.
         </vs-alert>
-      </templscss      <template v-else>
+      </template>
+
+      <template v-else>
         <div v-for="goal in goals" :key="goal.id">
           <button
             style="cursor:pointer"
@@ -29,7 +31,7 @@
               <h3 class="goalTitle">{{ goal.goal }}</h3>
             </template>
             <template>
-              <p>
+             <p>
                 {{ goal.deets }} :
                 {{ goal.cre_at.toDate().toLocaleDateString("ja-JP") }}
               </p>
@@ -53,10 +55,12 @@
           </div>
         </div>
       </template>
-    </div>
+    </div> 
 
-    <pre>{{ goals }}</pre>
-  </div>
+
+
+    <!-- <pre>{{ goals }}</pre> -->
+ </div>
 </template>
 
 <script lang="ts">

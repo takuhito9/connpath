@@ -1,79 +1,106 @@
 <template>
   <div>
     <div>
-      <h3>
+      <h3 class="obst_position">
         <i
           class="material-icons"
           style="vertical-align: -5px; margin-right: 5px"
           >hiking</i
         >Obstacles
       </h3>
-      <button class="click_me position_correction" @click="modal = true">
-        <span class="add_it">Add it.</span>
-      </button>
-    </div>
+      <h3 class="solution_position">
+        <i
+          class="material-icons"
+          style="vertical-align: -5px; margin-right: 5px"
+          >lightbulb</i
+        >
+        Solutions
+      </h3>
 
-    <MyModal @close="closeModal" v-if="modal">
-      <!-- default スロットコンテンツ -->
-      <p>Vue.js Modal Window!</p>
-      <div><input v-model="message" /></div>
-      <!-- /default -->
-      <!-- footer スロットコンテンツ -->
-      <template slot="footer">
-        <button @click="doSend">送信</button>
-      </template>
-      <!-- /footer -->
-    </MyModal>
+      <div class="position_correction">
+        <!-- If obstacle is unregistered -->
+        <template v-if="!obsts.length">
+          <GoalObstacleCreate />
+        </template>
+        <template v-else>
+          <GoalObstacleList :obsts="obsts" />
+          <GoalObstacleCreate />
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import Modal from "@/components/Modal.vue";
+import { db } from "@/main";
+import GoalObstacleCreate from "@/views/Goal/GoalObstacleCreate.vue";
+import GoalObstacleList from "@/views/Goal/GoalObstacleList.vue";
+
+interface obstsType {
+  docId: string;
+  obst: string;
+  sols: {
+    ref: string;
+    sol: string;
+  };
+}
+
+interface dataType {
+  editMode: boolean;
+  obsts: Array<obstsType>;
+}
+
 export default Vue.extend({
   components: {
-    Modal,
+    GoalObstacleCreate,
+    GoalObstacleList,
   },
-  data() {
+  data(): dataType {
     return {
-      modal: false,
+      editMode: false,
+      obsts: [
+        {
+          docId: "",
+          obst: "",
+          sols: {
+            ref: "",
+            sol: "",
+          },
+        },
+      ],
     };
+  },
+  created() {
+    const vm = this;
+    const goalId = vm.$route.params.id;
+    const userId = vm.$store.state.user.uid;
+    const ref = db.collection(`users/${userId}/goals/${goalId}/obstacles`);
+    console.log(ref);
+    ref.get().then(function (querysnapshot) {
+      const dataList = querysnapshot.docs.map((doc) => ({
+        docId: doc.id,
+        ...doc.data(), // spread
+      }));
+      console.log("obstacle: firebaseにアクセスしました");
+      vm.obsts = dataList as Array<obstsType>;
+    });
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.click_me {
-  border: 10px dashed #d5d6d8;
-  background: none;
-  width: 90%;
-  height: 10em;
-  border-radius: 10px 10px;
-
-  &:focus {
-    border: 10px dashed #50c38f;
-    transition: 0.3s;
-  }
-  &:hover {
-    border: 10px dashed #50c38f;
-    transition: 0.3s;
-  }
-}
-.click_me:focus .add_it {
-  color: #50c38f;
-  transition: 0.3s;
-}
-.click_me:hover .add_it {
-  color: #50c38f;
-  transition: 0.3s;
-}
-.add_it {
-  font-size: 3em;
-  font-weight: 700;
-  color: #d5d6d8;
-}
-
 .position_correction {
   font-weight: normal;
   margin: 0em 0em 0.5em 3em;
+}
+.obst_position {
+  margin: 1em 0em 0em 0em;
+}
+.solution_position {
+  margin: 0.5em 0em 1em 2em;
 }
 </style>
