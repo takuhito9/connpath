@@ -1,12 +1,12 @@
 $positive: #50c38f; // main theme
 $negative: #d44343fb;
-$sub_theme: #43B5C4; // sub theme
+$sub_theme: #43b5c4; // sub theme
 $text_right: #4c4c4c;
 $text_dark: #f1f1f1;
 $input_border: #e1e3e8;
 
 #app {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -116,8 +116,8 @@ body {
   }
 }
 
-.button_cancel{
-margin: 10px 20px;
+.button_cancel {
+  margin: 10px 20px;
   padding: 0.5em 3em;
   border-radius: 20px;
   border: 2px solid #4c4c4c5f;
@@ -137,6 +137,6 @@ margin: 10px 20px;
 }
 
 .icon_height_fix {
-    display: inline-flex;
+  display: inline-flex;
   vertical-align: middle;
 }

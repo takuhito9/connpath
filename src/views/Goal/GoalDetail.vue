@@ -1,8 +1,11 @@
 <template>
   <div>
     <div class="category">
-      <p>
-        <strong>Wish</strong> <span>{{ goal.wish }}</span>
+      <p style="margin: 0 0 3em 0">
+        <span class="wish">
+          <i class="material-icons" style="vertical-align: -5px">arrow_right</i>
+          {{ goal.wish }}</span
+        >
       </p>
       <h2 class="goal_title">
         <i
@@ -110,5 +113,10 @@ export default Vue.extend({
 }
 .category {
   padding-bottom: 1em;
+}
+.wish {
+  background: #eaeded;
+  border-radius: 10px;
+  padding: 5px 10px;
 }
 </style>

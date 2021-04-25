@@ -1,11 +1,18 @@
 <template>
   <div>
-    <div v-for="obst in obsts" :key="obst.id">
-      <p>Obstacle : {{ obst.obst }}</p>
-      <div v-for="sol in obst.sols" :key="sol.id">
-        <p>Solution : {{ sol.sol }}</p>
-      </div>
-      <hr />
+    <div>
+      <ul v-for="obst in obsts" :key="obst.id" class="block obst_ul">
+        <li class="obst_li">{{ obst.obst }}</li>
+        <ul
+          v-for="sol in obst.sols"
+          :key="sol.id"
+          class="solution_position sol_ul"
+        >
+          <li class="sol_li">
+            {{ sol.sol }}
+          </li>
+        </ul>
+      </ul>
     </div>
   </div>
 </template>
@@ -18,10 +25,51 @@ interface obstsType {
     sol: string;
   };
 }
-
 export default Vue.extend({
   props: {
     obsts: Array as Vue.PropType<Array<obstsType>>,
   },
 });
 </script>
+<style lang="scss" scoped>
+.block {
+  padding-bottom: 10px;
+  padding-left: 1em;
+  margin-left: 1em;
+}
+.solution_position {
+  margin-left: 2em;
+  padding-left: 2em;
+}
+.obst_ul {
+  list-style: none;
+
+  .obst_li {
+    margin-bottom: 10px;
+    text-indent: -1.7em;
+    padding-left: 1em;
+
+    &:before {
+      font-family: "Material Icons";
+      margin-right: 10px;
+      content: "hiking";
+    }
+  }
+}
+.sol_ul {
+  list-style: none;
+
+  .sol_li {
+    margin-bottom: 10px;
+
+    text-indent: -2em;
+    padding-left: 1em;
+
+    &:before {
+      font-family: "Material Icons";
+      margin-right: 10px;
+      content: "lightbulb";
+    }
+  }
+}
+</style>

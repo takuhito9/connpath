@@ -55,32 +55,44 @@
         </div>
         <!-- Add Solution Form -->
         <button
-          class="material-icons button_positive"
           @click="addSolutionForm(obstIndex)"
-          style="margin-right: 10%; vertical-align: -5px"
+          class="button_positive"
+          style="padding-left: 5em; margin-bottom: 10px"
         >
-          add_circle
+          <i
+            class="material-icons"
+            style="margin-right: 5%; vertical-align: -5px"
+          >
+            add_circle
+          </i>
+          Solution
         </button>
       </div>
 
       <!-- Add Obstacle Form -->
       <button
-        class="button_positive material-icons"
         @click="addObstacleForm"
-        style="margin-right: 10%; vertical-align: -5px"
+        class="button_positive"
+        style="padding-left: 1em; margin-bottom: 10px"
       >
-        add_circle
+        <i
+          class="material-icons"
+          style="margin-right: 10%; vertical-align: -5px"
+        >
+          add_circle
+        </i>
+        Obstacle
       </button>
       <button @click="setCancel()" class="button_cancel">Cancel</button>
       <button @click="setObstacles()" class="button_register">Register</button>
     </template>
 
-    <pre>{{ inputObstacles }}</pre>
+    <!-- <pre>{{ inputObstacles }}</pre> -->
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { db } from "@/main";
+import { db, firestore } from "@/main";
 
 export default Vue.extend({
   data() {
@@ -155,6 +167,7 @@ export default Vue.extend({
           batch.set(docRef.doc(), {
             obst: obstacles.obst,
             sols: obstacles.sols,
+            cre_at: firestore.FieldValue.serverTimestamp(),
           });
         });
         await batch.commit();
