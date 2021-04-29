@@ -13,9 +13,10 @@
       <div v-for="(obstacle, obstIndex) in inputObstacles" :key="obstacle.id">
         <input
           class="input_text"
-          v-model="inputObstacles[obstIndex].obst"
+          v-model.trim="inputObstacles[obstIndex].obst"
           placeholder="Obstacle"
           ref="firstFocus"
+          type="text"
         />
         <button
           class="button_positive material-icons"
@@ -36,13 +37,15 @@
             >
               <input
                 class="input_text radius_fix input_position_correction"
-                v-model="solution.sol"
+                v-model.trim="solution.sol"
                 placeholder="Solution"
+                type="text"
               />
               <input
                 class="input_text_url input_position_correction"
-                v-model="solution.ref"
+                v-model.trim="solution.ref"
                 placeholder="URL"
+                type="url"
               />
               <button
                 class="button_positive material-icons"
@@ -86,16 +89,24 @@
       <button @click="setCancel()" class="button_cancel">Cancel</button>
       <button @click="setObstacles()" class="button_register">Register</button>
     </template>
-
-    <!-- <pre>{{ inputObstacles }}</pre> -->
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import { db, firestore } from "@/main";
 
+interface obstaclesType {
+  obst: string;
+  sols: Array<{ sol: string; ref: string }>;
+}
+
+interface inputDataType {
+  editMode: boolean;
+  inputObstacles: Array<obstaclesType>;
+}
+
 export default Vue.extend({
-  data() {
+  data(): inputDataType {
     return {
       editMode: false,
       inputObstacles: [
@@ -115,6 +126,7 @@ export default Vue.extend({
   methods: {
     toInputMode() {
       this.editMode = true;
+      // @ts-ignore   == My defeat ==
       this.$nextTick(() => this.$refs.firstFocus[0].focus());
     },
 
@@ -154,25 +166,8 @@ export default Vue.extend({
         alert("それ以上はけせません");
       }
     },
-    setObstacles() {
+    initializeObstacles() {
       const vm = this;
-      const setMultipleDocument = async () => {
-        const userId = vm.$store.state.user.uid;
-        const goalId = vm.$store.state.selectingGoal.docId;
-        const docRef = db.collection(
-          `users/${userId}/goals/${goalId}/obstacles`
-        );
-        const batch = db.batch();
-        vm.inputObstacles.map((obstacles) => {
-          batch.set(docRef.doc(), {
-            obst: obstacles.obst,
-            sols: obstacles.sols,
-            cre_at: firestore.FieldValue.serverTimestamp(),
-          });
-        });
-        await batch.commit();
-      };
-      setMultipleDocument();
       vm.inputObstacles = [
         {
           obst: "",
@@ -184,6 +179,28 @@ export default Vue.extend({
           ],
         },
       ];
+    },
+    setObstacles() {
+      const vm = this;
+      const setMultipleDocument = async () => {
+        const userId = vm.$store.state.user.uid;
+        const goalId = vm.$store.state.selectingGoal.docId;
+        const docRef = db.collection(
+          `users/${userId}/goals/${goalId}/obstacles`
+        );
+        const batch = db.batch();
+
+        vm.inputObstacles.map((obstacles) => {
+          batch.set(docRef.doc(), {
+            obst: obstacles.obst,
+            sols: obstacles.sols,
+            cre_at: firestore.FieldValue.serverTimestamp(),
+          });
+        });
+        await batch.commit();
+      };
+      setMultipleDocument();
+      vm.initializeObstacles();
       vm.editMode = false;
     },
     setCancel() {
@@ -209,8 +226,11 @@ export default Vue.extend({
   border: 10px dashed #d5d6d8;
   background: none;
   width: 90%;
-  height: 10em;
+  height: 8em;
   border-radius: 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:focus {
     border: 10px dashed #50c38f;
