@@ -232,6 +232,12 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
 
+  .add_it {
+    font-size: 3em;
+    font-weight: 700;
+    color: #d5d6d8;
+  }
+
   &:focus {
     border: 10px dashed #50c38f;
     transition: 0.3s;
@@ -249,11 +255,7 @@ export default Vue.extend({
   color: #50c38f;
   transition: 0.3s;
 }
-.add_it {
-  font-size: 3em;
-  font-weight: 700;
-  color: #d5d6d8;
-}
+
 .solution_position {
   margin-left: 2em;
   padding-left: 2em;
