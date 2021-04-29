@@ -1,6 +1,12 @@
 <template>
   <div>
-    <h4>{{ sol }}</h4>
+    <ul class="sol_ul">
+      <li class="sol_li">
+        {{ sol.sol }}
+        <br />
+        <a target="blank" :href="sol.ref">{{ sol.ref }}</a>
+      </li>
+    </ul>
   </div>
 </template>
 <script lang="ts">
@@ -18,3 +24,20 @@ export default Vue.extend({
   methods: {},
 });
 </script>
+<style lang="scss" scoped>
+.sol_ul {
+  list-style: none;
+
+  .sol_li {
+    margin-bottom: 10px;
+    text-indent: -2em;
+
+    &:before {
+      vertical-align: -3px;
+      font-family: "Material Icons";
+      margin-right: 10px;
+      content: "lightbulb";
+    }
+  }
+}
+</style>
