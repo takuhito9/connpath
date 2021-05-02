@@ -23,7 +23,7 @@
           <GoalObstacleCreate />
         </template>
         <template v-else>
-          <GoalObstacleList :obsts="obsts" />
+          <GoalObstacleForLoop :obsts="obsts" />
           <GoalObstacleCreate />
         </template>
       </div>
@@ -37,8 +37,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { db } from "@/main";
-import GoalObstacleCreate from "@/views/Goal/GoalObstacleCreate.vue";
-import GoalObstacleList from "@/views/Goal/GoalObstacleList.vue";
+import GoalObstacleCreate from "@/views/Goal/GoalObstacle/GoalObstacleCreate.vue";
+import GoalObstacleForLoop from "@/views/Goal/GoalObstacle/GoalObstacleForLoop.vue";
 
 interface obstsType {
   docId: string;
@@ -57,7 +57,7 @@ interface dataType {
 export default Vue.extend({
   components: {
     GoalObstacleCreate,
-    GoalObstacleList,
+    GoalObstacleForLoop,
   },
   data(): dataType {
     return {

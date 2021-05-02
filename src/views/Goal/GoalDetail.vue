@@ -44,7 +44,7 @@ import Vue from "vue";
 import { db } from "@/main";
 import TaskList from "@/views/Goal/Task/TaskList.vue";
 import GoalFeedback from "@/views/Goal/GoalFeedback.vue";
-import GoalObstacle from "@/views/Goal/GoalObstacle.vue";
+import GoalObstacle from "@/views/Goal/GoalObstacle/GoalObstacle.vue";
 import GoalConditionOfSuccess from "@/views/Goal/GoalConditionOfSuccess.vue";
 
 interface goalObjectType {

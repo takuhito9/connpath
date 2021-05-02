@@ -1,15 +1,15 @@
 <template>
   <div>
     <div>
-      <div v-for="(obst, index) in obsts" :key="obst.id">
-        <GoalObstacleSolutionCreate :obst="obst" :index="index" />
+      <div v-for="obst in obsts" :key="obst.id">
+        <GoalObstacleListAndSolutionForLoop :obst="obst" />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
-import GoalObstacleSolutionCreate from "@/views/Goal/GoalObstacleSolutionCreate.vue";
+import GoalObstacleListAndSolutionForLoop from "@/views/Goal/GoalObstacle/GoalObstacleListAndSolutionForLoop.vue";
 interface obstsType {
   obst: string;
   sols: {
@@ -19,18 +19,10 @@ interface obstsType {
 }
 export default Vue.extend({
   components: {
-    GoalObstacleSolutionCreate,
+    GoalObstacleListAndSolutionForLoop,
   },
   props: {
     obsts: Array as Vue.PropType<Array<obstsType>>,
-  },
-  data() {
-    return {
-      add_solution_flag: false,
-    };
-  },
-  methods: {
-    addSolution(index: number) {},
   },
 });
 </script>

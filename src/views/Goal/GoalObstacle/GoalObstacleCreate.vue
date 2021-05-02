@@ -272,24 +272,4 @@ export default Vue.extend({
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
-.input_text_url {
-  width: 80%;
-  height: 6px;
-  position: relative;
-  top: -7px;
-  padding: 0.5em;
-  background: #e1e3e8;
-  font-size: 1em;
-  color: #4c4c4c;
-  border: solid 2px #e1e3e8;
-  border-radius: 4px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin-top: 0;
-  &:focus {
-    border: solid 2px #50c38f;
-    transition: 0.2s;
-  }
-}
 </style>
