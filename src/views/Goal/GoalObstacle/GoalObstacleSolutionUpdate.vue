@@ -3,9 +3,9 @@
     <div id="content">
       <p>{{ sol.sol }}</p>
       <p>{{ sol.ref }}</p>
-      <button @click="deleteSolution" class="button_cancel">Delete</button>
+      <button @click="updateSolution" class="button_cancel">Update</button>
       <button
-        @click="$emit('closeDeleteOverlay')"
+        @click="$emit('closeUpdateOverlay')"
         class="button_register"
         ref="focus"
       >
@@ -14,7 +14,6 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import Vue from "vue";
 import { db, firestore } from "@/main";
@@ -25,7 +24,6 @@ interface solType {
 }
 
 export default Vue.extend({
-  components: {},
   props: {
     sol: { type: Object as () => solType },
     solNth: { type: Number },
@@ -37,21 +35,12 @@ export default Vue.extend({
       // @ts-ignore
       this.$refs.focus.focus();
     },
-    deleteSolution() {
+    updateSolution() {
       const vm = this;
       const goalId = vm.$store.state.selectingGoal.docId;
       const userId = vm.$store.state.user.uid;
       const obstId = vm.obstId;
-      const docRef = db.doc(
-        `users/${userId}/goals/${goalId}/obstacles/${obstId}`
-      );
-      docRef
-        .update({ sols: firestore.FieldValue.arrayRemove(vm.sol) })
-        .then((result) => {
-          vm.$emit("closeDeleteOverlay");
-        });
     },
   },
 });
 </script>
-

@@ -126,7 +126,7 @@ export default Vue.extend({
   methods: {
     toInputMode() {
       this.editMode = true;
-      // @ts-ignore   == My defeat ==
+      // @ts-ignore
       this.$nextTick(() => this.$refs.firstFocus[0].focus());
     },
 

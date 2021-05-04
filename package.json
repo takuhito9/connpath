@@ -11,6 +11,8 @@
     "core-js": "^3.10.2",
     "firebase": "^8.2.4",
     "firebaseui": "^4.7.3",
+    "focus-trap": "^6.4.0",
+    "focus-trap-vue": "^1.1.1",
     "highlight.js": "^10.6.0",
     "material-design-icons": "^3.0.1",
     "node-sass": "^5.0.0",

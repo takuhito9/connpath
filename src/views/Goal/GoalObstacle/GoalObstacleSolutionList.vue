@@ -1,12 +1,10 @@
 <template>
   <div style="position: relative">
     <button class="solution">
-      <GoalObstacleSolutionDelete @close="closeOverlay" v-if="del" />
-
       <ul class="icon">
         <li class="action_icon">
           <button
-            @click="delDisplay"
+            @click="openDeleteOverlay"
             class="material-icons button_negative hover_icons"
           >
             delete
@@ -14,11 +12,15 @@
         </li>
 
         <li>
-          <button class="material-icons button_positive hover_icons">
+          <button
+            @click="openUpdateOverlay"
+            class="material-icons button_positive hover_icons"
+          >
             edit
           </button>
         </li>
       </ul>
+
       <ul class="sol_ul">
         <li class="sol_li">
           <span class="line">{{ sol.sol }}</span>
@@ -27,32 +29,83 @@
         </li>
       </ul>
     </button>
+
+    <focus-trap v-model="deleteFocusTrapIsActive">
+      <div>
+        <GoalObstacleSolutionDelete
+          ref="deleteComponent"
+          @closeDeleteOverlay="closeDeleteOverlay"
+          v-if="deleteModal"
+          :sol="sol"
+          :solNth="solNth"
+          :obstId="obstId"
+        />
+      </div>
+    </focus-trap>
+
+    <template>
+      <focus-trap v-model="updateFocusTrapIsActive">
+        <div>
+          <GoalObstacleSolutionUpdate
+            @closeUpdateOverlay="closeUpdateOverlay"
+            v-if="updateModal"
+            :sol="sol"
+            :solNth="solNth"
+            :obstId="obstId"
+          />
+        </div>
+      </focus-trap>
+    </template>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
+import { FocusTrap } from "focus-trap-vue";
+
 import GoalObstacleSolutionDelete from "@/views/Goal/GoalObstacle/GoalObstacleSolutionDelete.vue";
+import GoalObstacleSolutionUpdate from "@/views/Goal/GoalObstacle/GoalObstacleSolutionUpdate.vue";
 interface solType {
-  sol: "";
-  ref: "";
+  sol: string;
+  ref: string;
 }
 
 export default Vue.extend({
   components: {
+    FocusTrap,
+    GoalObstacleSolutionUpdate,
     GoalObstacleSolutionDelete,
+  },
+  props: {
+    sol: { type: Object as () => solType },
+    solNth: { type: Number },
+    obstId: { type: String },
   },
   data() {
     return {
-      del: false,
+      deleteModal: false,
+      deleteFocusTrapIsActive: false,
+      updateModal: false,
+      updateFocusTrapIsActive: false,
     };
   },
-  props: { sol: Object as () => solType },
   methods: {
-    delDisplay() {
-      this.del = true;
+    openDeleteOverlay() {
+      this.deleteFocusTrapIsActive = true;
+      this.deleteModal = true;
+      // @ts-ignore
+      this.$nextTick(() => this.$refs.deleteComponent.firstFocus());
     },
-    closeOverlay() {
-      this.del = false;
+    closeDeleteOverlay() {
+      this.deleteFocusTrapIsActive = false;
+      this.deleteModal = false;
+    },
+    openUpdateOverlay() {
+      this.updateFocusTrapIsActive = true;
+      this.updateModal = true;
+    },
+    closeUpdateOverlay() {
+      this.updateFocusTrapIsActive = false;
+      this.updateModal = false;
     },
   },
 });

@@ -10,11 +10,15 @@
         <template>
           <div style="margin-left: 2em; border-left: 3px #e1e3e8 solid">
             <div
-              v-for="sol in obst.sols"
+              v-for="(sol, index) in obst.sols"
               :key="sol.id"
               style="margin-left: 15px"
             >
-              <GoalObstacleSolutionList :sol="sol" />
+              <GoalObstacleSolutionList
+                :sol="sol"
+                :solNth="index"
+                :obstId="obst.docId"
+              />
             </div>
           </div>
         </template>
@@ -47,7 +51,7 @@ export default Vue.extend({
     GoalObstacleSolutionAdd,
   },
   props: {
-    obst: Object as () => obstType,
+    obst: { type: Object as () => obstType },
   },
 });
 </script>

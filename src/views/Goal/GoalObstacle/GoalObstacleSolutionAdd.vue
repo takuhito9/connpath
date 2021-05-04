@@ -56,7 +56,7 @@ interface obstType {
 
 export default Vue.extend({
   props: {
-    obst: Object as Vue.PropType<obstType>,
+    obst: { type: Object as Vue.PropType<obstType> },
   },
   data() {
     return {
@@ -69,7 +69,7 @@ export default Vue.extend({
   methods: {
     displaySolution() {
       this.flag = true;
-      // @ts-ignore   == My defeat ==
+      // @ts-ignore
       this.$nextTick(() => this.$refs.inputFocus.focus());
     },
     addSolution() {
