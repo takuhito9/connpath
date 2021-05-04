@@ -2,7 +2,7 @@
   <div style="position: relative">
     <button class="solution">
       <ul class="icon">
-        <li class="action_icon">
+        <li>
           <button
             @click="openDeleteOverlay"
             class="material-icons button_negative hover_icons"
@@ -47,8 +47,10 @@
       <focus-trap v-model="updateFocusTrapIsActive">
         <div>
           <GoalObstacleSolutionUpdate
+            ref="updateComponent"
             @closeUpdateOverlay="closeUpdateOverlay"
             v-if="updateModal"
+            :sols="sols"
             :sol="sol"
             :solNth="solNth"
             :obstId="obstId"
@@ -76,6 +78,7 @@ export default Vue.extend({
     GoalObstacleSolutionDelete,
   },
   props: {
+    sols: { type: Array as () => Array<solType> },
     sol: { type: Object as () => solType },
     solNth: { type: Number },
     obstId: { type: String },
@@ -96,12 +99,14 @@ export default Vue.extend({
       this.$nextTick(() => this.$refs.deleteComponent.firstFocus());
     },
     closeDeleteOverlay() {
-      this.deleteFocusTrapIsActive = false;
       this.deleteModal = false;
+      this.deleteFocusTrapIsActive = false;
     },
     openUpdateOverlay() {
       this.updateFocusTrapIsActive = true;
       this.updateModal = true;
+      // @ts-ignore
+      this.$nextTick(() => this.$refs.updateComponent.firstFocus());
     },
     closeUpdateOverlay() {
       this.updateFocusTrapIsActive = false;

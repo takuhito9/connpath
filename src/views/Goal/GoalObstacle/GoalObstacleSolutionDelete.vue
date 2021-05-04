@@ -1,16 +1,22 @@
 <template>
   <div id="overlay">
     <div id="content">
+      <h2>
+        <i class="material-icons" style="vertical-align: -4px">delete</i>
+        Delete it
+      </h2>
+
       <p>{{ sol.sol }}</p>
       <p>{{ sol.ref }}</p>
-      <button @click="deleteSolution" class="button_cancel">Delete</button>
+      <br />
       <button
         @click="$emit('closeDeleteOverlay')"
-        class="button_register"
+        class="button_cancel"
         ref="focus"
       >
         Cancel
       </button>
+      <button @click="deleteSolution" class="button_delete">Delete</button>
     </div>
   </div>
 </template>
