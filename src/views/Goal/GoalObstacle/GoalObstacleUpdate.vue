@@ -23,7 +23,7 @@
         >
           Cancel
         </button>
-        <button @click="updateObstacle" class="button_delete">Update</button>
+        <button @click="updateObstacle" class="button_register">Update</button>
       </div>
     </div>
   </div>

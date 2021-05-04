@@ -2,7 +2,7 @@
   <div id="overlay">
     <div id="content">
       <h2>
-        <i class="material-icons" style="vertical-align: -4px">lightbulb </i>
+        <i class="material-icons" style="vertical-align: -4px">edit</i>
         Update it
       </h2>
       <input

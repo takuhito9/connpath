@@ -75,7 +75,6 @@ body {
   }
 }
 
-
 .input_radio {
   height: 25px;
   width: 25px;
@@ -124,15 +123,15 @@ body {
   border-radius: 20px;
   border: 2px solid #4c4c4c5f;
   font-weight: bold;
-  color: $text_right;
-  background: $text_dark;
+  color: #4c4c4c5f;
+  background: #50c38f91;
   &:focus {
-    color: $text_dark;
+    color: #f2f2f2;
     background: $positive;
     transition: 0.2s;
   }
   &:hover {
-    color: $text_dark;
+    color: #f2f2f2;
     background: $positive;
     transition: 0.2s;
   }
@@ -144,8 +143,8 @@ body {
   border-radius: 20px;
   border: 2px solid #4c4c4c5f;
   font-weight: bold;
-  color: $text_right;
-  background: $text_dark;
+  color: #4c4c4c5f;
+  background: #d4434382;
   &:focus {
     color: $text_dark;
     background: $negative;
@@ -164,20 +163,19 @@ body {
   border-radius: 20px;
   border: 2px solid #4c4c4c5f;
   font-weight: bold;
-  color: $text_right;
+  color: #4c4c4c5f;
   background: $text_dark;
   &:focus {
-    color: $text_dark;
-    background: #666666;
+    color: $text_right;
+    border: 2px solid $text_right;
     transition: 0.2s;
   }
   &:hover {
-    color: $text_dark;
-    background: #666666;
+    color: $text_right;
+    border: 2px solid $text_right;
     transition: 0.2s;
   }
 }
-
 
 .icon_height_fix {
   display: inline-flex;
@@ -214,4 +212,3 @@ body {
 #content > img {
   width: 95%;
 }
-
