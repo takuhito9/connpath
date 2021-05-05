@@ -20,16 +20,12 @@
       <div class="position_correction">
         <!-- If obstacle is unregistered -->
         <template v-if="!obsts.length">
-          <GoalObstacleCreate />
+          <GoalObstacleCreate :isObstExist="isObstExist" />
         </template>
         <template v-else>
           <GoalObstacleForLoop :obsts="obsts" />
-          <GoalObstacleCreate />
+          <GoalObstacleCreate :isObstExist="isObstExist" />
         </template>
-      </div>
-    </div>
-  </div>
-</template>
       </div>
     </div>
   </div>
@@ -50,6 +46,7 @@ interface obstsType {
 }
 
 interface dataType {
+  isObstExist: boolean;
   editMode: boolean;
   obsts: Array<obstsType>;
 }
@@ -61,6 +58,7 @@ export default Vue.extend({
   },
   data(): dataType {
     return {
+      isObstExist: false,
       editMode: false,
       obsts: [
         {
@@ -80,6 +78,11 @@ export default Vue.extend({
     const userId = vm.$store.state.user.uid;
     const ref = db.collection(`users/${userId}/goals/${goalId}/obstacles`);
     ref.orderBy("cre_at").onSnapshot((querysnapshot) => {
+      if (querysnapshot.docs.length == 0) {
+        vm.isObstExist = false;
+      } else {
+        vm.isObstExist = true;
+      }
       const dataList = querysnapshot.docs.map((doc) => ({
         docId: doc.id,
         ...doc.data(), // spread

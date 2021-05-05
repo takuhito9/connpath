@@ -3,16 +3,51 @@
     <!-- First time after registering as Goal -->
     <!-- The Obstacle add button is not pressed. -->
     <template v-if="!editMode">
-      <button class="click_me" @click="toInputMode">
-        <span class="add_it">Add it.</span>
-      </button>
+      <template>
+        <template v-if="isObstExist">
+          <button
+            class="button_positive"
+            @click="toInputMode"
+            style="margin-left: -3em"
+          >
+            <i
+              class="material-icons"
+              style="margin-right: 5%; vertical-align: -5px"
+              add_solution_input
+            >
+              add_circle
+            </i>
+            <div style="margin: 0; padding: 0">
+              <i
+                class="material-icons"
+                style="font-size: 12px; vertical-align: -2px"
+                >hiking</i
+              >
+              Obstacle
+            </div>
+          </button>
+        </template>
+        <template v-else>
+          <button class="click_me" @click="toInputMode">
+            <span>Register the Obstacle.</span>
+          </button>
+        </template>
+      </template>
     </template>
 
     <!-- When the Add Obstacle button is pressed. -->
     <template v-else>
+      <hr />
+      <br />
       <div v-for="(obstacle, obstIndex) in inputObstacles" :key="obstacle.id">
+        <i
+          class="material-icons"
+          style="vertical-align: -5px; padding-left: 2.8em; font-size: 16px"
+          >hiking</i
+        >
         <input
           class="input_text"
+          style="width: 70%"
           v-model.trim="inputObstacles[obstIndex].obst"
           placeholder="Obstacle"
           ref="firstFocus"
@@ -35,14 +70,26 @@
                 inputObstacles[obstIndex].sols.length >= 2 ? 'frame' : '',
               ]"
             >
+              <i
+                class="material-icons"
+                style="
+                  vertical-align: -5px;
+                  padding-left: 1.9em;
+                  font-size: 17px;
+                "
+                >lightbulb</i
+              >
+
               <input
                 class="input_text radius_fix input_position_correction"
+                style="width: 70.5%"
                 v-model.trim="solution.sol"
                 placeholder="Solution"
                 type="text"
               />
               <input
                 class="input_text_url input_position_correction"
+                style="width: 70.5%; margin-left: 4.1em"
                 v-model.trim="solution.ref"
                 placeholder="URL"
                 type="url"
@@ -56,11 +103,12 @@
             </div>
           </div>
         </div>
+
         <!-- Add Solution Form -->
         <button
           @click="addSolutionForm(obstIndex)"
           class="button_positive"
-          style="padding-left: 5em; margin-bottom: 10px"
+          style="padding-left: 36px; margin-bottom: 10px"
         >
           <i
             class="material-icons"
@@ -68,8 +116,18 @@
           >
             add_circle
           </i>
-          Solution
+          <div>
+            <i
+              class="material-icons"
+              style="font-size: 12px; vertical-align: -2px"
+              >lightbulb</i
+            >
+            Solution
+          </div>
         </button>
+        <br />
+        <br />
+        <br />
       </div>
 
       <!-- Add Obstacle Form -->
@@ -84,8 +142,17 @@
         >
           add_circle
         </i>
-        Obstacle
+        <div>
+          <i
+            class="material-icons"
+            style="font-size: 12px; vertical-align: -2px"
+            >hiking</i
+          >
+
+          Obstacle
+        </div>
       </button>
+
       <button @click="setCancel()" class="button_cancel">Cancel</button>
       <button @click="setObstacles()" class="button_register">Register</button>
     </template>
@@ -106,6 +173,9 @@ interface inputDataType {
 }
 
 export default Vue.extend({
+  props: {
+    isObstExist: { type: Boolean },
+  },
   data(): inputDataType {
     return {
       editMode: false,
@@ -222,36 +292,40 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
+hr {
+  border: 1px #d6d9da solid;
+  width: 90%;
+  text-align: left;
+  margin-left: 0px;
+}
 .click_me {
-  border: 10px dashed #d5d6d8;
+  border: 7px dashed #d5d6d8;
   background: none;
   width: 90%;
-  height: 8em;
+  height: 10em;
   border-radius: 10px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .add_it {
+  span {
     font-size: 3em;
     font-weight: 700;
     color: #d5d6d8;
   }
-
   &:focus {
-    border: 10px dashed #50c38f;
+    border: 7px dashed #50c38f;
     transition: 0.3s;
+    span {
+      color: #50c38f;
+      transition: 0.3s;
+    }
   }
   &:hover {
-    border: 10px dashed #50c38f;
+    border: 7px dashed #50c38f;
     transition: 0.3s;
   }
 }
-.click_me:focus .add_it {
-  color: #50c38f;
-  transition: 0.3s;
-}
-.click_me:hover .add_it {
+.click_me.click_me:hover span {
   color: #50c38f;
   transition: 0.3s;
 }

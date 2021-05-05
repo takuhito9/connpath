@@ -5,7 +5,7 @@
       ><button
         @click="displaySolution"
         class="button_positive"
-        style="margin-left: 1.7em; margin-bottom: 10px"
+        style="margin-left: 32px; margin-bottom: 0px"
       >
         <i
           class="material-icons"
@@ -14,7 +14,15 @@
         >
           add_circle
         </i>
-        Solution
+
+        <div style="margin: 0; padding: 0">
+          <i
+            class="material-icons"
+            style="font-size: 12px; vertical-align: -2px"
+            >lightbulb</i
+          >
+          Solution
+        </div>
       </button>
     </template>
     <template v-else>

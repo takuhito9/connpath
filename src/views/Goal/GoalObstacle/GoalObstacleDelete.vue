@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Obst Delete</h1>
     <div id="overlay">
       <div id="content">
         <h2>

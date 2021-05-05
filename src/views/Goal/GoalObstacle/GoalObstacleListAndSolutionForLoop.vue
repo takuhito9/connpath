@@ -140,12 +140,12 @@ export default Vue.extend({
   background: linear-gradient(transparent 70%, #c3505033 70%);
 }
 .block {
-  padding-bottom: 10px;
   padding-left: 1em;
   margin-left: 1em;
 }
 .obst_ul {
   list-style: none;
+  margin-bottom: 5px;
 
   .obst_li {
     margin-bottom: 10px;
