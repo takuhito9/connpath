@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="block obst_ul">
-      <button class="obstacle">
+      <button class="item_hover" style="padding: 7px 1em 10px 1.5em">
         <ul class="icon">
           <li>
             <button
@@ -159,53 +159,5 @@ export default Vue.extend({
       content: "hiking";
     }
   }
-}
-.obstacle {
-  font-family: "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #4c4c4c;
-  display: block;
-
-  width: 100%;
-  padding: 7px 1em 10px 1.5em;
-  border: none;
-  background: none;
-  font-size: 1em;
-  text-align: left;
-  &:hover {
-    transition: 0.2s;
-    background: #e5e8e9;
-    border-radius: 10px;
-  }
-  &:focus {
-    transition: 0.2s;
-    background: #e5e8e9;
-    border-radius: 10px;
-  }
-}
-
-.obstacle ul.icon {
-  list-style: none;
-  float: right;
-}
-.obstacle ul.icon li {
-  display: inline;
-  margin-left: 5px;
-}
-.obstacle ul.icon li {
-  opacity: 0;
-}
-.obstacle:focus ul.icon li {
-  opacity: 0.5;
-}
-.obstacle:hover ul.icon li {
-  opacity: 0.5;
-}
-.obstacle ul.icon li:focus {
-  opacity: 1;
-}
-.obstacle ul.icon li:hover {
-  opacity: 1;
 }
 </style>

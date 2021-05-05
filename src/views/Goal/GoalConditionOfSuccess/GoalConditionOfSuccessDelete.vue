@@ -6,8 +6,7 @@
         Delete it
       </h2>
 
-      <p>{{ sol.sol }}</p>
-      <p>{{ sol.ref }}</p>
+      <p>{{ condition.cond }}</p>
       <br />
       <button
         @click="$emit('closeDeleteOverlay')"
@@ -16,7 +15,9 @@
       >
         Cancel
       </button>
-      <button @click="deleteSolution" class="button_delete">Delete</button>
+      <button @click="deleteConditionOfSuccess" class="button_delete">
+        Delete
+      </button>
     </div>
   </div>
 </template>
@@ -25,16 +26,9 @@
 import Vue from "vue";
 import { db, firestore } from "@/main";
 
-interface solType {
-  sol: string;
-  ref: string;
-}
-
 export default Vue.extend({
   props: {
-    sol: { type: Object as () => solType },
-    solNth: { type: Number },
-    obstId: { type: String },
+    condition: { type: Object },
   },
 
   methods: {
@@ -42,21 +36,17 @@ export default Vue.extend({
       // @ts-ignore
       this.$refs.focus.focus();
     },
-    deleteSolution() {
+    deleteConditionOfSuccess() {
       const vm = this;
       const goalId = vm.$store.state.selectingGoal.docId;
       const userId = vm.$store.state.user.uid;
-      const obstId = vm.obstId;
-      const docRef = db.doc(
-        `users/${userId}/goals/${goalId}/obstacles/${obstId}`
-      );
+      const docRef = db.doc(`users/${userId}/goals/${goalId}`);
       docRef
-        .update({ sols: firestore.FieldValue.arrayRemove(vm.sol) })
-        .then((result) => {
+        .update({ coss: firestore.FieldValue.arrayRemove(vm.condition) })
+        .then(() => {
           vm.$emit("closeDeleteOverlay");
         });
     },
   },
 });
 </script>
-

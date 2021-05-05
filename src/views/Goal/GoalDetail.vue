@@ -23,7 +23,7 @@
     </div>
 
     <div class="category">
-      <GoalConditionOfSuccess :coss="goal.coss"></GoalConditionOfSuccess>
+      <GoalConditionOfSuccessForLoop :coss="goal.coss" />
     </div>
 
     <div class="category">
@@ -45,7 +45,7 @@ import { db } from "@/main";
 import TaskList from "@/views/Goal/Task/TaskList.vue";
 import GoalFeedback from "@/views/Goal/GoalFeedback.vue";
 import GoalObstacle from "@/views/Goal/GoalObstacle/GoalObstacle.vue";
-import GoalConditionOfSuccess from "@/views/Goal/GoalConditionOfSuccess.vue";
+import GoalConditionOfSuccessForLoop from "@/views/Goal/GoalConditionOfSuccess/GoalConditionOfSuccessForLoop.vue";
 
 interface goalObjectType {
   wish: string;
@@ -68,7 +68,12 @@ interface dataType {
 }
 
 export default Vue.extend({
-  components: { TaskList, GoalConditionOfSuccess, GoalFeedback, GoalObstacle },
+  components: {
+    TaskList,
+    GoalConditionOfSuccessForLoop,
+    GoalFeedback,
+    GoalObstacle,
+  },
   data(): dataType {
     return {
       goal: {

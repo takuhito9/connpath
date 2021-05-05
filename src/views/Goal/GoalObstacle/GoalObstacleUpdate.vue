@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Obst Update</h1>
     <div id="overlay">
       <div id="content">
         <h2>
@@ -14,13 +13,10 @@
           v-model="afterObst.obst"
           class="input_text"
           style="margin: 9.5px 2em 0 2em"
+          ref="focus"
         />
         <br />
-        <button
-          @click="$emit('closeUpdateOverlay')"
-          class="button_cancel"
-          ref="focus"
-        >
+        <button @click="$emit('closeUpdateOverlay')" class="button_cancel">
           Cancel
         </button>
         <button @click="updateObstacle" class="button_register">Update</button>

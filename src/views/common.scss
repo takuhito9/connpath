@@ -11,6 +11,31 @@ $input_border: #e1e3e8;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
 body {
   background: #f4f7f8;
   font-size: 1em;
@@ -211,4 +236,64 @@ body {
 
 #content > img {
   width: 95%;
+}
+
+// items
+.item_hover {
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #4c4c4c;
+  display: block;
+
+  width: 100%;
+  padding: 7px 20px 0.1px 0px;
+  border: none;
+  background: none;
+  font-size: 1em;
+  text-align: left;
+  &:hover {
+    transition: 0.2s;
+    background: #e5e8e9;
+    border-radius: 10px;
+  }
+  &:focus {
+    transition: 0.2s;
+    background: #e5e8e9;
+    border-radius: 10px;
+  }
+}
+
+.item_hover ul.icon {
+  list-style: none;
+  float: right;
+}
+.item_hover ul.icon li {
+  display: inline;
+  margin-left: 5px;
+}
+.item_hover ul.icon li {
+  opacity: 0;
+}
+.item_hover:focus ul.icon li {
+  opacity: 0.5;
+}
+.item_hover:hover ul.icon li {
+  opacity: 0.5;
+}
+.item_hover ul.icon li:focus {
+  opacity: 1;
+}
+.item_hover ul.icon li:hover {
+  opacity: 1;
+}
+
+.hover_icons {
+  vertical-align: 5px;
+  &:hover {
+    opacity: 1;
+  }
+  &:focus {
+    opacity: 1;
+  }
 }

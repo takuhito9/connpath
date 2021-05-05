@@ -13,26 +13,32 @@
     </h3>
     <div v-if="coss">
       <div v-for="(condition, index) in coss" :key="condition.id">
-        <div class="position_correction">
-          <template v-if="condition.cmplt">✔ : </template>
-          <template v-else>□</template>
-          <span style="position: relative"> {{ condition.cond }}</span>
-          <span style="position: absolute; right: 10%">
-            <button
-              @click="deleteCondition(condition)"
-              class="button_positive material-icons"
-            >
-              delete
-            </button>
+        <GoalConditionOfSuccessList
+          :condition="condition"
+          :coss="coss"
+          :nth="index"
+        />
 
-            <button
-              @click="showUpdateCondition(condition.cond, index)"
-              class="button_positive material-icons"
-            >
-              edit
-            </button>
-          </span>
-        </div>
+        <!-- <div class="position_correction"> -->
+        <!-- <template v-if="condition.cmplt">✔ : </template> -->
+        <!-- <template v-else>□</template> -->
+        <!-- <span style="position: relative"> {{ condition.cond }}</span> -->
+        <!-- <span style="position: absolute; right: 10%"> -->
+        <!--   <button -->
+        <!--     @click="deleteCondition(condition)" -->
+        <!--     class="button_positive material-icons" -->
+        <!--   > -->
+        <!--     delete -->
+        <!--   </button> -->
+
+        <!--   <button -->
+        <!--     @click="showUpdateCondition(condition.cond, index)" -->
+        <!--     class="button_positive material-icons" -->
+        <!--   > -->
+        <!--     edit -->
+        <!--   </button> -->
+        <!-- </span> -->
+        <!-- </div> -->
       </div>
     </div>
     <template v-else>
@@ -99,6 +105,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { db, firestore } from "@/main";
+import GoalConditionOfSuccessList from "@/views/Goal/GoalConditionOfSuccess/GoalConditionOfSuccessList.vue";
+
 interface conditionOfSuccessType {
   cond: string;
   cmplt: boolean;
@@ -113,6 +121,9 @@ interface dataType {
 }
 
 export default Vue.extend({
+  components: {
+    GoalConditionOfSuccessList,
+  },
   props: {
     coss: Array as Vue.PropType<Array<conditionOfSuccessType>>,
   },
