@@ -23,8 +23,11 @@
           <GoalObstacleCreate :isObstExist="isObstExist" />
         </template>
         <template v-else>
+          <GoalObstacleCreate
+            :isObstExist="isObstExist"
+            style="display: inline"
+          />
           <GoalObstacleForLoop :obsts="obsts" />
-          <GoalObstacleCreate :isObstExist="isObstExist" />
         </template>
       </div>
     </div>

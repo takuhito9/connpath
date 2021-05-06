@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div style="position: relative">
     <!-- First time after registering as Goal -->
     <!-- The Obstacle add button is not pressed. -->
     <template v-if="!editMode">
       <template>
         <template v-if="isObstExist">
           <button
-            class="button_positive"
+            class="button_positive position"
             @click="toInputMode"
             style="margin-left: -3em"
           >
@@ -23,7 +23,6 @@
                 style="font-size: 12px; vertical-align: -2px"
                 >hiking</i
               >
-              Obstacle
             </div>
           </button>
         </template>
@@ -37,7 +36,6 @@
 
     <!-- When the Add Obstacle button is pressed. -->
     <template v-else>
-      <hr />
       <br />
       <div v-for="(obstacle, obstIndex) in inputObstacles" :key="obstacle.id">
         <i
@@ -155,6 +153,7 @@
 
       <button @click="setCancel()" class="button_cancel">Cancel</button>
       <button @click="setObstacles()" class="button_register">Register</button>
+      <hr />
     </template>
   </div>
 </template>
@@ -328,6 +327,12 @@ hr {
 .click_me.click_me:hover span {
   color: #50c38f;
   transition: 0.3s;
+}
+
+.position {
+  position: absolute;
+  top: -5em;
+  left: 15.3em;
 }
 
 .solution_position {

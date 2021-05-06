@@ -42,7 +42,7 @@
             </button>
           </template>
           <span
-            class="line"
+            :class="[condition.cmplt ? 'strink' : '']"
             style="padding: 0 2em 0 2em; margin: 0; vertical-align: -5px"
           >
             {{ condition.cond }}
@@ -166,5 +166,9 @@ export default Vue.extend({
 ul {
   list-style: none;
   margin: 0;
+}
+.strink {
+  text-decoration: line-through;
+  color: #50c38f91;
 }
 </style>

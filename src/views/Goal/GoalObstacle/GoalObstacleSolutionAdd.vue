@@ -5,7 +5,7 @@
       ><button
         @click="displaySolution"
         class="button_positive"
-        style="margin-left: 32px; margin-bottom: 0px"
+        style="margin-left: 49px; margin-bottom: 0px"
       >
         <i
           class="material-icons"
@@ -21,7 +21,6 @@
             style="font-size: 12px; vertical-align: -2px"
             >lightbulb</i
           >
-          Solution
         </div>
       </button>
     </template>
