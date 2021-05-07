@@ -1059,8 +1059,7 @@ AccordionItem {
 }
 .solution-form {
   margin-left: 2em;
-  border-left: 2px solid #dedddd;
-  // border-bottom: 2px solid #dedddd;
+  border-left: 2px solid #e1e3e88f;
 }
 .solved__button {
   padding: 0.5em 2em;

@@ -8,29 +8,33 @@
           >hiking</i
         >Obstacles
       </h3>
-      <h3 class="solution_position">
-        <i
-          class="material-icons"
-          style="vertical-align: -5px; margin-right: 5px"
-          >lightbulb</i
-        >
-        Solutions
-      </h3>
 
-      <div class="position_correction">
-        <!-- If obstacle is unregistered -->
-        <template v-if="!obsts.length">
-          <GoalObstacleCreate :isObstExist="isObstExist" />
-        </template>
-        <template v-else>
-          <GoalObstacleCreate
-            :isObstExist="isObstExist"
-            style="display: inline"
-          />
-          <GoalObstacleForLoop :obsts="obsts" />
-        </template>
+      <div class="left_border">
+        <h3 class="solution_position">
+          <i
+            class="material-icons"
+            style="vertical-align: -5px; margin-right: 5px"
+            >lightbulb</i
+          >
+          Solutions
+        </h3>
+
+        <div class="position_correction">
+          <!-- If obstacle is unregistered -->
+          <template v-if="!obsts.length">
+            <GoalObstacleCreate :isObstExist="isObstExist" />
+          </template>
+          <template v-else>
+            <GoalObstacleForLoop :obsts="obsts" />
+            <GoalObstacleCreate
+              :isObstExist="isObstExist"
+              style="display: inline"
+            />
+          </template>
+        </div>
       </div>
     </div>
+    <br /><br />
   </div>
 </template>
 <script lang="ts">
@@ -107,5 +111,9 @@ export default Vue.extend({
 }
 .solution_position {
   margin: 0.5em 0em 1em 2em;
+}
+.left_border {
+  margin-left: 0.8em;
+  border-left: 3px solid #e1e3e88f;
 }
 </style>

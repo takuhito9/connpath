@@ -236,7 +236,7 @@ export default Vue.extend({
 </script>
 <style lang="scss" scoped>
 .frame {
-  border-left: 2px #e1e3e8 solid;
+  border-left: 3px #e1e3e88f solid;
 }
 .category {
   padding-bottom: 1em;

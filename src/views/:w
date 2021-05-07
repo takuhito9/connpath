@@ -2,7 +2,7 @@
   <div style="position: relative">
     <template v-if="!editMode">
       <template v-if="isCosExist">
-        <button class="button_positive add_button" @click="toInputMode">
+        <button class="button_positive" @click="toInputMode">
           <i
             class="material-icons"
             style="margin-right: 5%; vertical-align: -5px"
@@ -11,6 +11,8 @@
             add_circle
           </i>
         </button>
+
+        <p>データが存在する場合</p>
       </template>
       <template v-else>
         <p>データが存在しない場合</p>
@@ -36,8 +38,4 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
-.add_button {
-  position: absolute;
-  left: -19px;
-}
 </style>

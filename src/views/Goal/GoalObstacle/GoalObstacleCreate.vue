@@ -5,22 +5,18 @@
     <template v-if="!editMode">
       <template>
         <template v-if="isObstExist">
-          <button
-            class="button_positive position"
-            @click="toInputMode"
-            style="margin-left: -3em"
-          >
-            <i
-              class="material-icons"
-              style="margin-right: 5%; vertical-align: -5px"
-              add_solution_input
-            >
+          <button class="button_positive add_button" @click="toInputMode">
+            <i class="material-icons" style="vertical-align: -5px">
               add_circle
             </i>
-            <div style="margin: 0; padding: 0">
+            <div>
               <i
                 class="material-icons"
-                style="font-size: 12px; vertical-align: -2px"
+                style="
+                  vertical-align: -2px;
+                  font-size: 15px;
+                  margin-left: 0.1em;
+                "
                 >hiking</i
               >
             </div>
@@ -36,6 +32,7 @@
 
     <!-- When the Add Obstacle button is pressed. -->
     <template v-else>
+      <hr />
       <br />
       <div v-for="(obstacle, obstIndex) in inputObstacles" :key="obstacle.id">
         <i
@@ -131,29 +128,33 @@
       <!-- Add Obstacle Form -->
       <button
         @click="addObstacleForm"
-        class="button_positive"
-        style="padding-left: 1em; margin-bottom: 10px"
+        class="add_button button_positive"
+        style="padding-bottom: 20px; padding-top: 1em"
       >
-        <i
-          class="material-icons"
-          style="margin-right: 10%; vertical-align: -5px"
-        >
-          add_circle
-        </i>
+        <i class="material-icons" style="vertical-align: -5px"> add_circle </i>
         <div>
           <i
             class="material-icons"
-            style="font-size: 12px; vertical-align: -2px"
+            style="font-size: 16px; vertical-align: -2px"
             >hiking</i
           >
-
-          Obstacle
         </div>
       </button>
 
-      <button @click="setCancel()" class="button_cancel">Cancel</button>
-      <button @click="setObstacles()" class="button_register">Register</button>
-      <hr />
+      <button
+        @click="setCancel()"
+        class="button_cancel"
+        style="vertical-align: 20px"
+      >
+        Cancel
+      </button>
+      <button
+        @click="setObstacles()"
+        class="button_register"
+        style="vertical-align: 20px"
+      >
+        Register
+      </button>
     </template>
   </div>
 </template>
@@ -292,7 +293,7 @@ export default Vue.extend({
 </script>
 <style lang="scss" scoped>
 hr {
-  border: 1px #d6d9da solid;
+  border-top: 3px #e1e3e88f solid;
   width: 90%;
   text-align: left;
   margin-left: 0px;
@@ -324,15 +325,14 @@ hr {
     transition: 0.3s;
   }
 }
+.add_button {
+  position: absolute;
+  left: -67px;
+  background: #f4f7f8;
+}
 .click_me.click_me:hover span {
   color: #50c38f;
   transition: 0.3s;
-}
-
-.position {
-  position: absolute;
-  top: -5em;
-  left: 15.3em;
 }
 
 .solution_position {
@@ -340,7 +340,7 @@ hr {
   padding-left: 2em;
 }
 .frame {
-  border-left: 2px #e1e3e8 solid;
+  border-left: 3px #e1e3e88f solid;
 }
 .input_position_correction {
   font-weight: normal;

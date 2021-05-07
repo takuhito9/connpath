@@ -28,7 +28,7 @@
       </button>
 
       <!-- For Loop `Solution` -->
-      <div style="margin-left: 2em; border-left: 3px #e1e3e8 solid">
+      <div style="margin-left: 2em; border-left: 3px #e1e3e88f solid">
         <div
           v-for="(sol, index) in obst.sols"
           :key="sol.id"

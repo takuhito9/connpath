@@ -12,10 +12,10 @@ $input_border: #e1e3e8;
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px; /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -33,7 +33,13 @@ $input_border: #e1e3e8;
   -moz-osx-font-smoothing: grayscale;
 
   /* Support for IE. */
-  font-feature-settings: 'liga';
+  font-feature-settings: "liga";
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: gray;
+  }
 }
 
 body {
@@ -41,6 +47,7 @@ body {
   font-size: 1em;
   color: $text_right;
   margin: 0;
+  padding: 0;
 }
 
 /* heading */
@@ -297,3 +304,7 @@ body {
     opacity: 1;
   }
 }
+
+
+
+
