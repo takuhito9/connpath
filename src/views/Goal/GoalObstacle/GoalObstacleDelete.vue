@@ -4,7 +4,7 @@
       <div id="content">
         <h2>
           <i class="material-icons" style="vertical-align: -4px">delete</i>
-          Delete it
+          Delete the following ...
         </h2>
 
         <p>{{ obst.obst }}</p>

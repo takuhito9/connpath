@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul>
+    <ul style="padding-inline-start: 30px">
       <button class="item_hover">
         <ul class="icon">
           <li>
@@ -22,7 +22,7 @@
           </li>
         </ul>
 
-        <li class="obst_li">
+        <li class="indent">
           <template v-if="condition.cmplt">
             <button
               class="material-icons button_positive"
@@ -43,7 +43,7 @@
           </template>
           <span
             :class="[condition.cmplt ? 'strink' : '']"
-            style="padding: 0 2em 0 2em; margin: 0; vertical-align: -5px"
+            style="vertical-align: -5px"
           >
             {{ condition.cond }}
           </span>
@@ -170,5 +170,9 @@ ul {
 .strink {
   text-decoration: line-through;
   color: #50c38f91;
+}
+.indent {
+  padding-left: 2.7em;
+  text-indent: -2.5em;
 }
 </style>

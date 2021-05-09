@@ -5,7 +5,7 @@
     <template v-if="!editMode">
       <template>
         <template v-if="isObstExist">
-          <button class="button_positive add_button" @click="toInputMode">
+          <button class="button_positive add_button" @click="toEditMode">
             <i class="material-icons" style="vertical-align: -5px">
               add_circle
             </i>
@@ -23,7 +23,7 @@
           </button>
         </template>
         <template v-else>
-          <button class="click_me" @click="toInputMode">
+          <button class="click_me" @click="toEditMode">
             <span>Register the Obstacle.</span>
           </button>
         </template>
@@ -194,7 +194,7 @@ export default Vue.extend({
   },
   mounted() {},
   methods: {
-    toInputMode() {
+    toEditMode() {
       this.editMode = true;
       // @ts-ignore
       this.$nextTick(() => this.$refs.firstFocus[0].focus());

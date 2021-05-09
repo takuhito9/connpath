@@ -3,7 +3,7 @@
     <div id="content">
       <h2>
         <i class="material-icons" style="vertical-align: -4px">edit</i>
-        Update it
+        Update the following ...
       </h2>
       <p>{{ beforeCos.cond }}</p>
       <input

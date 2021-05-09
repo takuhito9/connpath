@@ -4,7 +4,7 @@
       <div id="content">
         <h2>
           <i class="material-icons" style="vertical-align: -4px">edit</i>
-          Update it
+          Update the following ...
         </h2>
 
         <p style="margin: 1em 4em; text-align: left">{{ obst.obst }}</p>
