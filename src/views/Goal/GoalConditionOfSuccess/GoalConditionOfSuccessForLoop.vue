@@ -3,23 +3,23 @@
     <h3>
       <i class="material-icons" style="vertical-align: -4px">rule</i>
       Condition of Success
-      {{ isCosExist }}
     </h3>
-
     <div class="left_border">
-      <template v-if="!coss">
-        <GoalConditionOfSuccessAdd :isCosExist="isCosExist" />
-      </template>
-      <template v-else>
-        <div v-for="(condition, index) in coss" :key="condition.id">
-          <GoalConditionOfSuccessList
-            :condition="condition"
-            :coss="coss"
-            :nth="index"
-          />
-        </div>
-        <GoalConditionOfSuccessAdd :isCosExist="isCosExist" />
-      </template>
+      <div class="position_correction">
+        <template v-if="!coss">
+          <GoalConditionOfSuccessAdd :isCosExist="coss.length >= 1" />
+        </template>
+        <template v-else>
+          <div v-for="(condition, index) in coss" :key="condition.id">
+            <GoalConditionOfSuccessList
+              :condition="condition"
+              :coss="coss"
+              :nth="index"
+            />
+          </div>
+          <GoalConditionOfSuccessAdd :isCosExist="coss.length >= 1" />
+        </template>
+      </div>
     </div>
     <br />
   </div>
@@ -36,7 +36,6 @@ interface conditionOfSuccessType {
 interface dataType {
   cosAddDialog: boolean;
   cosAddInput: string;
-  isCosExist: boolean;
 }
 
 export default Vue.extend({
@@ -45,13 +44,12 @@ export default Vue.extend({
     GoalConditionOfSuccessAdd,
   },
   props: {
-    coss: Array as Vue.PropType<Array<conditionOfSuccessType>>,
+    coss: { type: Array as () => Array<conditionOfSuccessType> },
   },
   data(): dataType {
     return {
       cosAddDialog: false,
       cosAddInput: "",
-      isCosExist: this.coss.length >= 1,
     };
   },
 });
@@ -59,7 +57,7 @@ export default Vue.extend({
 <style lg="scss" scoped>
 .position_correction {
   /* font-weight: 500; */
-  margin: 0em 0em 0.5em 3em;
+  margin: 0em 0em 0.5em 0em;
 }
 .left_border {
   margin-left: 0.8em;

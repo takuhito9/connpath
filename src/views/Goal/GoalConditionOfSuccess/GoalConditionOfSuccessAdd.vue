@@ -12,11 +12,21 @@
         </button>
       </template>
       <template v-else>
-        <p>データが存在しない場合の入力開始ボタンをデザインする</p>
+        <button class="click_me" @click="toEditMode">
+          <span
+            ><i
+              class="material-icons"
+              style="vertical-align: -6px; font-size: 1em"
+            >
+              add
+            </i>
+            Condition of Success</span
+          >
+        </button>
       </template>
     </template>
     <template v-else>
-      <div style="margin: 0.5em 0em 0 2.7em">
+      <div style="margin: 0.5em 0em 0 2.5em">
         <input
           v-model.trim="newCondition"
           class="input_text"
@@ -93,5 +103,36 @@ export default Vue.extend({
 .add_button {
   position: absolute;
   left: -19px;
+}
+.click_me {
+  border: 7px dashed #d5d6d8;
+  background: none;
+  width: 90%;
+  height: 10em;
+  border-radius: 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 3em;
+    font-weight: 700;
+    color: #d5d6d8;
+  }
+  &:focus {
+    border: 7px dashed #50c38f;
+    transition: 0.3s;
+    span {
+      color: #50c38f;
+      transition: 0.3s;
+    }
+  }
+  &:hover {
+    border: 7px dashed #50c38f;
+    transition: 0.3s;
+  }
+}
+.click_me.click_me:hover span {
+  color: #50c38f;
+  transition: 0.3s;
 }
 </style>

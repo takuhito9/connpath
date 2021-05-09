@@ -24,7 +24,15 @@
         </template>
         <template v-else>
           <button class="click_me" @click="toEditMode">
-            <span>Register the Obstacle.</span>
+            <span
+              ><i
+                class="material-icons"
+                style="vertical-align: -6px; font-size: 1em"
+              >
+                add
+              </i>
+              Obstacle</span
+            >
           </button>
         </template>
       </template>
@@ -307,6 +315,7 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
+
   span {
     font-size: 3em;
     font-weight: 700;
