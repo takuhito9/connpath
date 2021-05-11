@@ -10,12 +10,13 @@
 <script lang="ts">
 import Vue from "vue";
 import GoalObstacleListAndSolutionForLoop from "@/views/Goal/GoalObstacle/GoalObstacleListAndSolutionForLoop.vue";
+interface solType {
+  sol: string;
+  ref: string;
+}
 interface obstsType {
   obst: string;
-  sols: {
-    ref: string;
-    sol: string;
-  };
+  sols: Array<solType>;
 }
 export default Vue.extend({
   components: {

@@ -81,13 +81,15 @@ import GoalObstacleDelete from "@/views/Goal/GoalObstacle/GoalObstacleDelete.vue
 import GoalObstacleUpdate from "@/views/Goal/GoalObstacle/GoalObstacleUpdate.vue";
 import { FocusTrap } from "focus-trap-vue";
 
+interface solArray {
+  ref: string;
+  sol: string;
+}
+
 interface obstType {
   docId: string;
   obst: string;
-  sols: {
-    ref: string;
-    sol: string;
-  };
+  sols: Array<solArray>;
 }
 export default Vue.extend({
   components: {
@@ -98,7 +100,7 @@ export default Vue.extend({
     GoalObstacleUpdate,
   },
   props: {
-    obst: { type: Object as () => obstType },
+    obst: { type: Object as Vue.PropType<obstType> },
   },
   data() {
     return {

@@ -44,7 +44,7 @@ export default Vue.extend({
     GoalConditionOfSuccessAdd,
   },
   props: {
-    coss: { type: Array as () => Array<conditionOfSuccessType> },
+    coss: { type: Array as Vue.PropType<Array<conditionOfSuccessType>> },
   },
   data(): dataType {
     return {

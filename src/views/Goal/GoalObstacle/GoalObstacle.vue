@@ -42,14 +42,15 @@ import Vue from "vue";
 import { db } from "@/main";
 import GoalObstacleCreate from "@/views/Goal/GoalObstacle/GoalObstacleCreate.vue";
 import GoalObstacleForLoop from "@/views/Goal/GoalObstacle/GoalObstacleForLoop.vue";
+interface solType {
+  sol: string;
+  ref: string;
+}
 
 interface obstsType {
   docId: string;
   obst: string;
-  sols: {
-    ref: string;
-    sol: string;
-  };
+  sols: Array<solType>;
 }
 
 interface dataType {
@@ -71,10 +72,12 @@ export default Vue.extend({
         {
           docId: "",
           obst: "",
-          sols: {
-            ref: "",
-            sol: "",
-          },
+          sols: [
+            {
+              ref: "",
+              sol: "",
+            },
+          ],
         },
       ],
     };

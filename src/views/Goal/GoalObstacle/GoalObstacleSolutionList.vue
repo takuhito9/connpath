@@ -78,10 +78,10 @@ export default Vue.extend({
     GoalObstacleSolutionDelete,
   },
   props: {
-    sols: { type: Array as () => Array<solType> },
-    sol: { type: Object as () => solType },
-    solNth: { type: Number },
-    obstId: { type: String },
+    sols: Array as Vue.PropType<Array<solType>>,
+    sol: Object as Vue.PropType<solType>,
+    solNth: Number,
+    obstId: String,
   },
   data() {
     return {
