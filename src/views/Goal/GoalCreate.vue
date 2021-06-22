@@ -86,39 +86,6 @@
       </div>
     </div>
 
-    <div class="category">
-      <h4>
-        <i
-          class="material-icons"
-          style="vertical-align: -5px; margin-right: 5px"
-        >
-          hiking
-        </i>
-        Obstacle
-        <button
-          class="button_positive material-icons"
-          @click="addObstacleForm"
-          style="margin-right: 10%; vertical-align: -5px"
-        >
-          add_circle
-        </button>
-      </h4>
-      <div :class="[obsts.length >= 2 ? 'frame' : '']">
-        <div v-for="(obst, index) in obsts" :key="obst.id">
-          <input
-            class="input_text"
-            v-model="obsts[index]"
-            placeholder="Obstacle"
-          /><button
-            class="button_positive material-icons"
-            @click="deleteObstacleForm(index)"
-          >
-            delete
-          </button>
-        </div>
-      </div>
-    </div>
-
     <button class="button_register" @click="setGoal">Register</button>
     <router-view></router-view>
   </div>
@@ -138,7 +105,6 @@ interface DataType {
   goal: string;
   deets: string;
   fdbks: string[];
-  obsts: string[];
   coss: conditionOfSuccessType[];
 }
 
@@ -149,7 +115,6 @@ export default Vue.extend({
       goal: "",
       deets: "",
       fdbks: [""],
-      obsts: [""],
       coss: [{ cmplt: false, cond: "" }],
     };
   },
@@ -182,20 +147,6 @@ export default Vue.extend({
         alert("それ以上は消せません");
       }
     },
-    addObstacleForm() {
-      if (this.obsts.length <= 5) {
-        this.obsts.push("");
-      } else {
-        alert("多すぎ");
-      }
-    },
-    deleteObstacleForm(index: number) {
-      if (this.obsts.length != 1) {
-        this.obsts.splice(index, 1);
-      } else {
-        alert("それ以上は消せません");
-      }
-    },
 
     setGoal() {
       const vm = this;
@@ -212,7 +163,6 @@ export default Vue.extend({
           deets: vm.deets,
           coss: vm.coss,
           fdbks: vm.fdbks,
-          obsts: vm.obsts,
           cre_at: firestore.FieldValue.serverTimestamp(),
         };
         collectionRef

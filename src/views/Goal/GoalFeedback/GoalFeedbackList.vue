@@ -115,6 +115,5 @@ ul {
 }
 .indent {
   padding-left: 1em;
-  padding-bottom: 0.2em;
 }
 </style>
