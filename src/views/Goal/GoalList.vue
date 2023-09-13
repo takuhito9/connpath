@@ -124,7 +124,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lg="scss" scoped>
+<style lang="scss" scoped>
 .goal__grid {
   display: grid;
   gap: 10px;

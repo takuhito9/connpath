@@ -56,7 +56,7 @@
               <i class="material-icons" style="vertical-align: -5px">
                 bug_report
               </i>
-              When your motivation drops...
+              Please look at this when your motivation is low.
             </button>
           </div>
         </template>

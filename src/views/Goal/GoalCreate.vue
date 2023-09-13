@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="category">
-      <h4>Please enter your wishes and dreams.</h4>
-      <input class="input_text" v-model="wish" placeholder="Wish" />
+      <h4>Please enter your goal</h4>
+      <input class="input_text" v-model="wish" placeholder="Your Goal" />
     </div>
 
     <div class="category">
